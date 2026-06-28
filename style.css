@@ -1804,3 +1804,24 @@ body.gold-theme .game-wrapper {
         font-size: 0.85rem;
     }
 }
+
+/* ===== FORCE VISIBILITY FIX ===== */
+.feature-card,
+.testimonial-card {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+}
+
+.features-grid,
+.testimonials-grid {
+    display: grid !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* AOS override */
+[data-aos] {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}

@@ -1,9 +1,9 @@
 // ===== GSAP & AOS INIT =====
 gsap.registerPlugin(ScrollTrigger);
 AOS.init({
-    duration: 1000,
+    duration: 800,
     once: true,
-    offset: 100,
+    offset: 50,
     disable: 'mobile'
 });
 
@@ -58,6 +58,7 @@ const sound = new SoundFX();
 class ParticleSystem {
     constructor() {
         this.canvas = document.getElementById('particlesCanvas');
+        if (!this.canvas) return;
         this.ctx = this.canvas.getContext('2d');
         this.particles = [];
         this.mouse = { x: null, y: null };
@@ -145,12 +146,14 @@ const particles = new ParticleSystem();
 const themeToggle = document.getElementById('themeToggle');
 let isGoldTheme = false;
 
-themeToggle.addEventListener('click', () => {
-    isGoldTheme = !isGoldTheme;
-    document.body.classList.toggle('gold-theme');
-    themeToggle.innerHTML = isGoldTheme ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-    sound.click();
-});
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        isGoldTheme = !isGoldTheme;
+        document.body.classList.toggle('gold-theme');
+        themeToggle.innerHTML = isGoldTheme ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        sound.click();
+    });
+}
 
 // ============================================
 // 4. 360° BRICK VIEWER
@@ -203,15 +206,17 @@ window.addEventListener('scroll', () => {
     }
 });
 
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
-});
+if (hamburger) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+}
 
 document.querySelectorAll('.nav-menu a').forEach(link => {
     link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
+        if (hamburger) hamburger.classList.remove('active');
+        if (navMenu) navMenu.classList.remove('active');
     });
 });
 
@@ -267,6 +272,8 @@ function updateLiveCounter() {
     const stockLeft = document.getElementById('stockLeft');
     const soldToday = document.getElementById('soldToday');
     
+    if (!viewers || !stockLeft || !soldToday) return;
+    
     setInterval(() => {
         const currentViewers = parseInt(viewers.textContent);
         const change = Math.floor(Math.random() * 6) - 3;
@@ -286,12 +293,14 @@ function updateLiveCounter() {
 updateLiveCounter();
 
 // ============================================
-// 8. COUNTER ANIMATION
+// 8. COUNTER ANIMATION (FIXED)
 // ============================================
 function animateCounters() {
     const counters = document.querySelectorAll('.stat-number');
     counters.forEach(counter => {
         const target = parseInt(counter.getAttribute('data-target'));
+        if (!target) return;
+        
         const duration = 2000;
         const step = target / (duration / 16);
         let current = 0;
@@ -313,7 +322,7 @@ function animateCounters() {
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.3 });
 
         observer.observe(counter);
     });
@@ -327,16 +336,18 @@ animateCounters();
 const wishlistBtn = document.getElementById('wishlistBtn');
 let isWishlisted = false;
 
-wishlistBtn.addEventListener('click', () => {
-    isWishlisted = !isWishlisted;
-    wishlistBtn.classList.toggle('liked');
-    sound.click();
-    if (isWishlisted) {
-        showToast('❤️ Saved to Collection');
-    } else {
-        showToast('Removed from Collection');
-    }
-});
+if (wishlistBtn) {
+    wishlistBtn.addEventListener('click', () => {
+        isWishlisted = !isWishlisted;
+        wishlistBtn.classList.toggle('liked');
+        sound.click();
+        if (isWishlisted) {
+            showToast('❤️ Saved to Collection');
+        } else {
+            showToast('Removed from Collection');
+        }
+    });
+}
 
 // ============================================
 // 10. TOAST NOTIFICATION
@@ -368,7 +379,8 @@ document.querySelectorAll('.game-tab').forEach(tab => {
         
         this.classList.add('active');
         const gameId = this.dataset.game;
-        document.getElementById('game' + gameId.charAt(0).toUpperCase() + gameId.slice(1)).classList.add('active');
+        const targetPanel = document.getElementById('game' + gameId.charAt(0).toUpperCase() + gameId.slice(1));
+        if (targetPanel) targetPanel.classList.add('active');
         sound.click();
     });
 });
@@ -392,32 +404,34 @@ class BrickGame {
         this.startBtn = document.getElementById('startGame');
         this.resetBtn = document.getElementById('resetGame');
 
-        this.highScoreDisplay.textContent = this.highScore;
+        if (this.highScoreDisplay) this.highScoreDisplay.textContent = this.highScore;
         this.setupEventListeners();
     }
 
     setupEventListeners() {
-        this.startBtn.addEventListener('click', () => this.startGame());
-        this.resetBtn.addEventListener('click', () => this.resetGame());
+        if (this.startBtn) this.startBtn.addEventListener('click', () => this.startGame());
+        if (this.resetBtn) this.resetBtn.addEventListener('click', () => this.resetGame());
     }
 
     startGame() {
-        if (this.isPlaying) return;
+        if (this.isPlaying || !this.gameArea) return;
         this.isPlaying = true;
         this.score = 0;
         this.timeLeft = 30;
-        this.scoreDisplay.textContent = '0';
-        this.timerDisplay.textContent = '30';
-        this.messageDisplay.style.display = 'none';
-        this.startBtn.textContent = 'Playing...';
-        this.startBtn.style.opacity = '0.5';
-        this.startBtn.disabled = true;
+        if (this.scoreDisplay) this.scoreDisplay.textContent = '0';
+        if (this.timerDisplay) this.timerDisplay.textContent = '30';
+        if (this.messageDisplay) this.messageDisplay.style.display = 'none';
+        if (this.startBtn) {
+            this.startBtn.textContent = 'Playing...';
+            this.startBtn.style.opacity = '0.5';
+            this.startBtn.disabled = true;
+        }
 
         document.querySelectorAll('.game-brick').forEach(brick => brick.remove());
 
         this.gameInterval = setInterval(() => {
             this.timeLeft--;
-            this.timerDisplay.textContent = this.timeLeft;
+            if (this.timerDisplay) this.timerDisplay.textContent = this.timeLeft;
 
             if (this.timeLeft <= 0) {
                 this.endGame();
@@ -430,7 +444,7 @@ class BrickGame {
     }
 
     spawnBrick() {
-        if (!this.isPlaying) return;
+        if (!this.isPlaying || !this.gameArea) return;
 
         const brick = document.createElement('div');
         const types = ['normal', 'golden', 'broken'];
@@ -469,7 +483,7 @@ class BrickGame {
                 sound.error();
             }
             this.score += points;
-            this.scoreDisplay.textContent = this.score;
+            if (this.scoreDisplay) this.scoreDisplay.textContent = this.score;
             brick.remove();
         });
 
@@ -504,19 +518,23 @@ class BrickGame {
         if (this.score > this.highScore) {
             this.highScore = this.score;
             localStorage.setItem('brickHighScore', this.highScore);
-            this.highScoreDisplay.textContent = this.highScore;
+            if (this.highScoreDisplay) this.highScoreDisplay.textContent = this.highScore;
         }
 
-        this.messageDisplay.style.display = 'block';
-        this.messageDisplay.innerHTML = `
-            <h3>🏆 ${this.score >= 50 ? 'Legendary Builder!' : this.score >= 20 ? 'Great Effort!' : 'Keep Practicing!'}</h3>
-            <p style="font-size: 2rem; color: #FFD700; margin: 0.5rem 0;">Score: ${this.score}</p>
-            <p style="font-size: 0.9rem;">${this.score >= this.highScore ? '🎉 New High Score!' : 'High Score: ' + this.highScore}</p>
-        `;
+        if (this.messageDisplay) {
+            this.messageDisplay.style.display = 'block';
+            this.messageDisplay.innerHTML = `
+                <h3>🏆 ${this.score >= 50 ? 'Legendary Builder!' : this.score >= 20 ? 'Great Effort!' : 'Keep Practicing!'}</h3>
+                <p style="font-size: 2rem; color: #FFD700; margin: 0.5rem 0;">Score: ${this.score}</p>
+                <p style="font-size: 0.9rem;">${this.score >= this.highScore ? '🎉 New High Score!' : 'High Score: ' + this.highScore}</p>
+            `;
+        }
 
-        this.startBtn.textContent = 'Play Again';
-        this.startBtn.style.opacity = '1';
-        this.startBtn.disabled = false;
+        if (this.startBtn) {
+            this.startBtn.textContent = 'Play Again';
+            this.startBtn.style.opacity = '1';
+            this.startBtn.disabled = false;
+        }
 
         if (this.score >= 50) {
             this.createCelebration();
@@ -549,16 +567,20 @@ class BrickGame {
         document.querySelectorAll('.game-brick').forEach(brick => brick.remove());
         this.score = 0;
         this.timeLeft = 30;
-        this.scoreDisplay.textContent = '0';
-        this.timerDisplay.textContent = '30';
-        this.messageDisplay.style.display = 'block';
-        this.messageDisplay.innerHTML = `
-            <h3>Game Reset</h3>
-            <p>Click "Start Game" to begin</p>
-        `;
-        this.startBtn.textContent = 'Start Game';
-        this.startBtn.style.opacity = '1';
-        this.startBtn.disabled = false;
+        if (this.scoreDisplay) this.scoreDisplay.textContent = '0';
+        if (this.timerDisplay) this.timerDisplay.textContent = '30';
+        if (this.messageDisplay) {
+            this.messageDisplay.style.display = 'block';
+            this.messageDisplay.innerHTML = `
+                <h3>Game Reset</h3>
+                <p>Click "Start Game" to begin</p>
+            `;
+        }
+        if (this.startBtn) {
+            this.startBtn.textContent = 'Start Game';
+            this.startBtn.style.opacity = '1';
+            this.startBtn.disabled = false;
+        }
         sound.click();
     }
 }
@@ -585,9 +607,13 @@ class MemoryGame {
         this.startBtn = document.getElementById('startMemory');
         
         this.icons = ['🧱', '🏗️', '🏛️', '🕌', '🏰', '🗼', '🏯', '🏠'];
-        this.bestDisplay.textContent = this.bestScore === Infinity ? '∞' : this.bestScore;
+        if (this.bestDisplay) {
+            this.bestDisplay.textContent = this.bestScore === Infinity ? '∞' : this.bestScore;
+        }
         
-        this.startBtn.addEventListener('click', () => this.initGame());
+        if (this.startBtn) {
+            this.startBtn.addEventListener('click', () => this.initGame());
+        }
     }
     
     initGame() {
@@ -595,9 +621,9 @@ class MemoryGame {
         this.moves = 0;
         this.flippedCards = [];
         this.isLocked = false;
-        this.movesDisplay.textContent = '0';
-        this.matchesDisplay.textContent = '0';
-        this.messageDisplay.style.display = 'none';
+        if (this.movesDisplay) this.movesDisplay.textContent = '0';
+        if (this.matchesDisplay) this.matchesDisplay.textContent = '0';
+        if (this.messageDisplay) this.messageDisplay.style.display = 'none';
         
         const pairs = [...this.icons, ...this.icons];
         for (let i = pairs.length - 1; i > 0; i--) {
@@ -611,6 +637,7 @@ class MemoryGame {
     }
     
     renderCards() {
+        if (!this.grid) return;
         this.grid.innerHTML = '';
         this.cards.forEach((icon, index) => {
             const card = document.createElement('div');
@@ -647,7 +674,7 @@ class MemoryGame {
         
         if (this.flippedCards.length === 2) {
             this.moves++;
-            this.movesDisplay.textContent = this.moves;
+            if (this.movesDisplay) this.movesDisplay.textContent = this.moves;
             this.checkMatch();
         }
     }
@@ -662,7 +689,7 @@ class MemoryGame {
             card1.classList.add('matched');
             card2.classList.add('matched');
             this.matchedPairs++;
-            this.matchesDisplay.textContent = this.matchedPairs;
+            if (this.matchesDisplay) this.matchesDisplay.textContent = this.matchedPairs;
             sound.coin();
             
             this.flippedCards = [];
@@ -691,22 +718,24 @@ class MemoryGame {
         if (this.moves < best) {
             this.bestScore = this.moves;
             localStorage.setItem('memoryBest', this.bestScore);
-            this.bestDisplay.textContent = this.moves;
+            if (this.bestDisplay) this.bestDisplay.textContent = this.moves;
         }
         
-        this.messageDisplay.style.display = 'block';
-        this.messageDisplay.innerHTML = `
-            <h3>🧱 Master Builder Unlocked!</h3>
-            <p style="font-size: 1.5rem; color: #FFD700; margin: 0.5rem 0;">
-                ${this.moves} moves
-            </p>
-            <p style="font-size: 0.9rem; color: rgba(245,245,245,0.6);">
-                ${this.moves === this.bestScore ? '🏆 New Best Score!' : 'Best: ' + this.bestScore + ' moves'}
-            </p>
-            <button class="game-btn" onclick="memoryGame.initGame()" style="margin-top: 1rem;">
-                Play Again
-            </button>
-        `;
+        if (this.messageDisplay) {
+            this.messageDisplay.style.display = 'block';
+            this.messageDisplay.innerHTML = `
+                <h3>🧱 Master Builder Unlocked!</h3>
+                <p style="font-size: 1.5rem; color: #FFD700; margin: 0.5rem 0;">
+                    ${this.moves} moves
+                </p>
+                <p style="font-size: 0.9rem; color: rgba(245,245,245,0.6);">
+                    ${this.moves === this.bestScore ? '🏆 New Best Score!' : 'Best: ' + this.bestScore + ' moves'}
+                </p>
+                <button class="game-btn" onclick="memoryGame.initGame()" style="margin-top: 1rem;">
+                    Play Again
+                </button>
+            `;
+        }
         
         sound.success();
         confetti({
@@ -720,7 +749,7 @@ class MemoryGame {
 const memoryGame = new MemoryGame();
 
 // ============================================
-// 14. GAME 3: REACTION TEST - FIXED
+// 14. GAME 3: REACTION TEST
 // ============================================
 class ReactionTest {
     constructor() {
@@ -738,40 +767,54 @@ class ReactionTest {
         this.attemptsDisplay = document.getElementById('reactionAttempts');
         this.startBtn = document.getElementById('startReaction');
         
-        this.bestDisplay.textContent = this.bestTime === Infinity ? '--' : this.bestTime + 'ms';
-        this.startBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.startTest();
-        });
+        if (this.bestDisplay) {
+            this.bestDisplay.textContent = this.bestTime === Infinity ? '--' : this.bestTime + 'ms';
+        }
+        if (this.startBtn) {
+            this.startBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.startTest();
+            });
+        }
         
-        this.box.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.handleClick();
-        });
+        if (this.box) {
+            this.box.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.handleClick();
+            });
+        }
     }
     
     startTest() {
         if (this.state === 'waiting' || this.state === 'ready') return;
         
         this.attempts++;
-        this.attemptsDisplay.textContent = this.attempts;
+        if (this.attemptsDisplay) this.attemptsDisplay.textContent = this.attempts;
         this.state = 'waiting';
-        this.stateDisplay.innerHTML = `
-            <h3>⏳ Wait for it...</h3>
-            <p style="font-size: 0.8rem; color: rgba(245,245,245,0.5);">Don't click yet!</p>
-        `;
-        this.box.className = 'reaction-box waiting';
+        if (this.stateDisplay) {
+            this.stateDisplay.innerHTML = `
+                <h3>⏳ Wait for it...</h3>
+                <p style="font-size: 0.8rem; color: rgba(245,245,245,0.5);">Don't click yet!</p>
+            `;
+        }
+        if (this.box) {
+            this.box.className = 'reaction-box waiting';
+        }
         sound.click();
         
         const delay = 2000 + Math.random() * 3000;
         this.timeoutId = setTimeout(() => {
             this.state = 'ready';
             this.startTime = Date.now();
-            this.stateDisplay.innerHTML = `
-                <h3>🔥 Click Now!</h3>
-                <p style="font-size: 0.9rem; color: #FFD700;">Quick! Tap the golden brick!</p>
-            `;
-            this.box.className = 'reaction-box go';
+            if (this.stateDisplay) {
+                this.stateDisplay.innerHTML = `
+                    <h3>🔥 Click Now!</h3>
+                    <p style="font-size: 0.9rem; color: #FFD700;">Quick! Tap the golden brick!</p>
+                `;
+            }
+            if (this.box) {
+                this.box.className = 'reaction-box go';
+            }
             sound.coin();
         }, delay);
     }
@@ -782,14 +825,18 @@ class ReactionTest {
         if (this.state === 'waiting') {
             this.state = 'idle';
             clearTimeout(this.timeoutId);
-            this.stateDisplay.innerHTML = `
-                <h3>❌ Too Early!</h3>
-                <p style="font-size: 0.8rem; color: rgba(245,245,245,0.5);">Wait for the golden brick!</p>
-                <button class="game-btn" id="reactionRetry" style="margin-top: 0.5rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">
-                    Try Again
-                </button>
-            `;
-            this.box.className = 'reaction-box';
+            if (this.stateDisplay) {
+                this.stateDisplay.innerHTML = `
+                    <h3>❌ Too Early!</h3>
+                    <p style="font-size: 0.8rem; color: rgba(245,245,245,0.5);">Wait for the golden brick!</p>
+                    <button class="game-btn" id="reactionRetry" style="margin-top: 0.5rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">
+                        Try Again
+                    </button>
+                `;
+            }
+            if (this.box) {
+                this.box.className = 'reaction-box';
+            }
             sound.error();
             
             const retryBtn = document.getElementById('reactionRetry');
@@ -805,30 +852,34 @@ class ReactionTest {
         if (this.state === 'ready') {
             this.state = 'result';
             this.reactionTime = Date.now() - this.startTime;
-            this.timeDisplay.textContent = this.reactionTime + 'ms';
+            if (this.timeDisplay) this.timeDisplay.textContent = this.reactionTime + 'ms';
             
             if (this.reactionTime < this.bestTime) {
                 this.bestTime = this.reactionTime;
                 localStorage.setItem('reactionBest', this.bestTime);
-                this.bestDisplay.textContent = this.bestTime + 'ms';
+                if (this.bestDisplay) this.bestDisplay.textContent = this.bestTime + 'ms';
             }
             
             const isExcellent = this.reactionTime < 200;
             const isGood = this.reactionTime < 350;
             
-            this.stateDisplay.innerHTML = `
-                <h3>${isExcellent ? '🏆' : isGood ? '⭐' : '💪'} ${this.reactionTime}ms</h3>
-                <p style="color: ${isExcellent ? '#FFD700' : isGood ? '#2ECC71' : '#F5F5F5'}; font-size: 0.9rem;">
-                    ${isExcellent ? 'Legendary Reflexes!' : isGood ? 'Great Builder!' : 'Keep Practicing!'}
-                </p>
-                <p style="font-size: 0.7rem; color: rgba(245,245,245,0.3);">
-                    Best: ${this.bestTime}ms
-                </p>
-                <button class="game-btn" id="reactionAgain" style="margin-top: 0.5rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">
-                    Test Again
-                </button>
-            `;
-            this.box.className = 'reaction-box result';
+            if (this.stateDisplay) {
+                this.stateDisplay.innerHTML = `
+                    <h3>${isExcellent ? '🏆' : isGood ? '⭐' : '💪'} ${this.reactionTime}ms</h3>
+                    <p style="color: ${isExcellent ? '#FFD700' : isGood ? '#2ECC71' : '#F5F5F5'}; font-size: 0.9rem;">
+                        ${isExcellent ? 'Legendary Reflexes!' : isGood ? 'Great Builder!' : 'Keep Practicing!'}
+                    </p>
+                    <p style="font-size: 0.7rem; color: rgba(245,245,245,0.3);">
+                        Best: ${this.bestTime}ms
+                    </p>
+                    <button class="game-btn" id="reactionAgain" style="margin-top: 0.5rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">
+                        Test Again
+                    </button>
+                `;
+            }
+            if (this.box) {
+                this.box.className = 'reaction-box result';
+            }
             sound.success();
             
             const againBtn = document.getElementById('reactionAgain');
@@ -855,87 +906,91 @@ const reactionTest = new ReactionTest();
 // ============================================
 // 15. BUY BUTTON WITH FIREWORKS
 // ============================================
-document.getElementById('buyBtn').addEventListener('click', function() {
-    sound.success();
-    this.classList.add('buying');
-    
-    const duration = 4 * 1000;
-    const end = Date.now() + duration;
-    (function frame() {
-        confetti({
-            particleCount: 15,
-            startVelocity: 45,
-            spread: 360,
-            origin: { y: 0.6 }
-        });
-        if (Date.now() < end) {
-            requestAnimationFrame(frame);
-        }
-    })();
-    
-    setTimeout(() => {
-        for (let i = 0; i < 5; i++) {
-            setTimeout(() => {
-                const x = Math.random();
-                const y = Math.random() * 0.5;
-                confetti({
-                    particleCount: 50,
-                    spread: 100,
-                    origin: { x, y },
-                    colors: ['#FFD700', '#C0392B', '#F5F5F5', '#FF6B6B']
-                });
-            }, i * 300);
-        }
-    }, 500);
-    
-    document.body.style.animation = 'shake 0.5s ease';
-    setTimeout(() => {
-        document.body.style.animation = '';
-    }, 500);
+const buyBtn = document.getElementById('buyBtn');
+if (buyBtn) {
+    buyBtn.addEventListener('click', function() {
+        sound.success();
+        this.classList.add('buying');
+        
+        const duration = 4 * 1000;
+        const end = Date.now() + duration;
+        (function frame() {
+            confetti({
+                particleCount: 15,
+                startVelocity: 45,
+                spread: 360,
+                origin: { y: 0.6 }
+            });
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        })();
+        
+        setTimeout(() => {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const x = Math.random();
+                    const y = Math.random() * 0.5;
+                    confetti({
+                        particleCount: 50,
+                        spread: 100,
+                        origin: { x, y },
+                        colors: ['#FFD700', '#C0392B', '#F5F5F5', '#FF6B6B']
+                    });
+                }, i * 300);
+            }
+        }, 500);
+        
+        document.body.style.animation = 'shake 0.5s ease';
+        setTimeout(() => {
+            document.body.style.animation = '';
+        }, 500);
 
-    this.innerHTML = '✓ ORDER CONFIRMED!';
-    this.style.background = 'linear-gradient(135deg, #27AE60, #2ECC71)';
-    setTimeout(() => {
-        this.innerHTML = '<i class="fas fa-crown"></i> BUY THE LEGEND <i class="fas fa-arrow-right"></i>';
-        this.style.background = '';
-        this.classList.remove('buying');
-    }, 4000);
+        this.innerHTML = '✓ ORDER CONFIRMED!';
+        this.style.background = 'linear-gradient(135deg, #27AE60, #2ECC71)';
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-crown"></i> BUY THE LEGEND <i class="fas fa-arrow-right"></i>';
+            this.style.background = '';
+            this.classList.remove('buying');
+        }, 4000);
 
-    showToast('🎉 Order Confirmed! Welcome to the LUXBRICK family!');
-});
+        showToast('🎉 Order Confirmed! Welcome to the LUXBRICK family!');
+    });
+}
 
 // ============================================
-// ============================================
-// 16 SCRATCH CARD - সম্পূর্ণ ফিক্স
+// 16. SCRATCH CARD - FIXED
 // ============================================
 const scratchBtn = document.getElementById('scratchBtn');
 const scratchModal = document.getElementById('scratchModal');
 const scratchClose = document.getElementById('scratchClose');
-let scratchInitialized = false;
 
-// Modal খোলা
-scratchBtn.addEventListener('click', () => {
-    scratchModal.style.display = 'flex';
-    sound.click();
-    // একটু দেরি করে init করি যাতে DOM রেন্ডার হয়
-    setTimeout(() => {
-        initScratchCard();
-    }, 100);
-});
+if (scratchBtn) {
+    scratchBtn.addEventListener('click', () => {
+        if (scratchModal) {
+            scratchModal.style.display = 'flex';
+            sound.click();
+            setTimeout(() => {
+                initScratchCard();
+            }, 100);
+        }
+    });
+}
 
-// Modal বন্ধ
-scratchClose.addEventListener('click', () => {
-    scratchModal.style.display = 'none';
-});
+if (scratchClose) {
+    scratchClose.addEventListener('click', () => {
+        if (scratchModal) scratchModal.style.display = 'none';
+    });
+}
 
-// Modal এর বাইরে ক্লিক করলে বন্ধ
-scratchModal.addEventListener('click', (e) => {
-    if (e.target === scratchModal) {
-        scratchModal.style.display = 'none';
-    }
-});
+if (scratchModal) {
+    scratchModal.addEventListener('click', (e) => {
+        if (e.target === scratchModal) {
+            scratchModal.style.display = 'none';
+        }
+    });
+}
 
-// স্ক্র্যাচ কার্ড ইন্সিটিয়ালাইজ
 function initScratchCard() {
     const canvas = document.getElementById('scratchCanvas');
     const cover = document.getElementById('scratchCover');
@@ -943,7 +998,6 @@ function initScratchCard() {
     
     if (!canvas || !cover || !container) return;
     
-    // Canvas সাইজ সেট করা
     const rect = container.getBoundingClientRect();
     canvas.width = rect.width || 400;
     canvas.height = rect.height || 300;
@@ -953,11 +1007,9 @@ function initScratchCard() {
     let isDrawing = false;
     let hasRevealed = false;
     
-    // Canvas এ স্ক্র্যাচ লেয়ার তৈরি
     ctx.fillStyle = '#C0392B';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // কিছু টেক্সচার যোগ করা
     for (let i = 0; i < 150; i++) {
         ctx.fillStyle = `rgba(255,215,0,${Math.random() * 0.3})`;
         ctx.beginPath();
@@ -970,14 +1022,12 @@ function initScratchCard() {
         ctx.fill();
     }
     
-    // "SCRATCH HERE" লেখা
     ctx.fillStyle = 'rgba(255,255,255,0.15)';
     ctx.font = 'bold 30px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('✦ SCRATCH ✦', canvas.width / 2, canvas.height / 2);
     
-    // পজিশন পাওয়া
     function getPosition(e) {
         const rect = canvas.getBoundingClientRect();
         let clientX, clientY;
@@ -997,40 +1047,34 @@ function initScratchCard() {
         };
     }
     
-    // স্ক্র্যাচ করা
     function scratch(e) {
         e.preventDefault();
         if (!isDrawing || hasRevealed) return;
         
         const pos = getPosition(e);
         
-        // বড় ব্রাশ দিয়ে স্ক্র্যাচ
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
         ctx.arc(pos.x, pos.y, 30, 0, Math.PI * 2);
         ctx.fill();
         
-        // কতটুকু স্ক্র্যাচ হয়েছে চেক করা
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const pixels = imageData.data;
         let transparent = 0;
         const total = pixels.length / 4;
         
-        // প্রতি ৫ম পিক্সেল চেক করি (পারফর্মেন্সের জন্য)
         for (let i = 3; i < pixels.length; i += 20) {
             if (pixels[i] === 0) transparent++;
         }
         
         const percent = transparent / (total / 20);
         
-        // ৪০% স্ক্র্যাচ হলে রিভিল
         if (percent > 0.4 && !hasRevealed) {
             hasRevealed = true;
             cover.classList.add('revealed');
             sound.success();
             showToast('🎉 You unlocked 50% OFF!');
             
-            // কনফেটি
             confetti({
                 particleCount: 100,
                 spread: 70,
@@ -1039,7 +1083,6 @@ function initScratchCard() {
         }
     }
     
-    // মাউস ইভেন্ট
     canvas.addEventListener('mousedown', (e) => {
         isDrawing = true;
         scratch(e);
@@ -1057,7 +1100,6 @@ function initScratchCard() {
         isDrawing = false;
     });
     
-    // টাচ ইভেন্ট
     canvas.addEventListener('touchstart', (e) => {
         isDrawing = true;
         scratch(e);
@@ -1070,22 +1112,11 @@ function initScratchCard() {
     canvas.addEventListener('touchend', () => {
         isDrawing = false;
     });
-    
-    // রিসাইজ হলে আপডেট
-    window.addEventListener('resize', () => {
-        if (scratchModal.style.display === 'flex') {
-            const newRect = container.getBoundingClientRect();
-            canvas.width = newRect.width || 400;
-            canvas.height = newRect.height || 300;
-            // রি-ইনিট করতে হবে
-            initScratchCard();
-        }
-    });
 }
 
-// Modal বন্ধ করার ফাংশন (HTML থেকে কল)
 function closeScratchModal() {
-    scratchModal.style.display = 'none';
+    const modal = document.getElementById('scratchModal');
+    if (modal) modal.style.display = 'none';
     showToast('🎁 Use code LUX50 at checkout!');
 }
 
@@ -1106,9 +1137,14 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
-// 18. SCROLL ANIMATIONS
+// 18. SCROLL ANIMATIONS - FIXED
 // ============================================
-gsap.utils.toArray('.feature-card').forEach((card, i) => {
+// Features - Force visibility
+document.querySelectorAll('.feature-card').forEach((card, i) => {
+    // Ensure visibility
+    card.style.opacity = '1';
+    card.style.transform = 'translateY(0)';
+    
     gsap.from(card, {
         scrollTrigger: {
             trigger: card,
@@ -1123,7 +1159,12 @@ gsap.utils.toArray('.feature-card').forEach((card, i) => {
     });
 });
 
-gsap.utils.toArray('.testimonial-card').forEach((card, i) => {
+// Testimonials - Force visibility
+document.querySelectorAll('.testimonial-card').forEach((card, i) => {
+    // Ensure visibility
+    card.style.opacity = '1';
+    card.style.transform = 'translateY(0)';
+    
     gsap.from(card, {
         scrollTrigger: {
             trigger: card,
@@ -1143,10 +1184,10 @@ gsap.utils.toArray('.testimonial-card').forEach((card, i) => {
 // ============================================
 document.addEventListener('keydown', (e) => {
     if (e.key === 'g' || e.key === 'G') {
-        themeToggle.click();
+        if (themeToggle) themeToggle.click();
     }
     if (e.key === 'r' || e.key === 'R') {
-        if (document.getElementById('gameCatch').classList.contains('active')) {
+        if (document.getElementById('gameCatch') && document.getElementById('gameCatch').classList.contains('active')) {
             game.resetGame();
         }
     }
