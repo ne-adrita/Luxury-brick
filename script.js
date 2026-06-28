@@ -905,109 +905,188 @@ document.getElementById('buyBtn').addEventListener('click', function() {
 });
 
 // ============================================
-// 16. SCRATCH CARD
+// ============================================
+// 16 SCRATCH CARD - সম্পূর্ণ ফিক্স
 // ============================================
 const scratchBtn = document.getElementById('scratchBtn');
 const scratchModal = document.getElementById('scratchModal');
 const scratchClose = document.getElementById('scratchClose');
+let scratchInitialized = false;
 
+// Modal খোলা
 scratchBtn.addEventListener('click', () => {
     scratchModal.style.display = 'flex';
     sound.click();
-    initScratchCard();
+    // একটু দেরি করে init করি যাতে DOM রেন্ডার হয়
+    setTimeout(() => {
+        initScratchCard();
+    }, 100);
 });
 
+// Modal বন্ধ
 scratchClose.addEventListener('click', () => {
     scratchModal.style.display = 'none';
 });
 
+// Modal এর বাইরে ক্লিক করলে বন্ধ
 scratchModal.addEventListener('click', (e) => {
     if (e.target === scratchModal) {
         scratchModal.style.display = 'none';
     }
 });
 
+// স্ক্র্যাচ কার্ড ইন্সিটিয়ালাইজ
 function initScratchCard() {
     const canvas = document.getElementById('scratchCanvas');
     const cover = document.getElementById('scratchCover');
-    const ctx = canvas.getContext('2d');
+    const container = document.getElementById('scratchCardContainer');
     
-    canvas.width = canvas.parentElement.clientWidth;
-    canvas.height = canvas.parentElement.clientHeight;
+    if (!canvas || !cover || !container) return;
+    
+    // Canvas সাইজ সেট করা
+    const rect = container.getBoundingClientRect();
+    canvas.width = rect.width || 400;
+    canvas.height = rect.height || 300;
+    
+    const ctx = canvas.getContext('2d');
     
     let isDrawing = false;
     let hasRevealed = false;
     
+    // Canvas এ স্ক্র্যাচ লেয়ার তৈরি
     ctx.fillStyle = '#C0392B';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    for (let i = 0; i < 100; i++) {
-        ctx.fillStyle = `rgba(255,215,0,${Math.random() * 0.2})`;
+    // কিছু টেক্সচার যোগ করা
+    for (let i = 0; i < 150; i++) {
+        ctx.fillStyle = `rgba(255,215,0,${Math.random() * 0.3})`;
         ctx.beginPath();
         ctx.arc(
             Math.random() * canvas.width,
             Math.random() * canvas.height,
-            Math.random() * 5,
+            Math.random() * 8 + 2,
             0, Math.PI * 2
         );
         ctx.fill();
     }
     
+    // "SCRATCH HERE" লেখা
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    ctx.font = 'bold 30px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('✦ SCRATCH ✦', canvas.width / 2, canvas.height / 2);
+    
+    // পজিশন পাওয়া
     function getPosition(e) {
         const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
-        const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
-        return { x, y };
+        let clientX, clientY;
+        
+        if (e.touches) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+            e.preventDefault();
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
+        
+        return {
+            x: (clientX - rect.left) * (canvas.width / rect.width),
+            y: (clientY - rect.top) * (canvas.height / rect.height)
+        };
     }
     
+    // স্ক্র্যাচ করা
     function scratch(e) {
         e.preventDefault();
         if (!isDrawing || hasRevealed) return;
         
         const pos = getPosition(e);
+        
+        // বড় ব্রাশ দিয়ে স্ক্র্যাচ
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, 25, 0, Math.PI * 2);
+        ctx.arc(pos.x, pos.y, 30, 0, Math.PI * 2);
         ctx.fill();
         
+        // কতটুকু স্ক্র্যাচ হয়েছে চেক করা
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const pixels = imageData.data;
         let transparent = 0;
         const total = pixels.length / 4;
         
-        for (let i = 3; i < pixels.length; i += 4) {
+        // প্রতি ৫ম পিক্সেল চেক করি (পারফর্মেন্সের জন্য)
+        for (let i = 3; i < pixels.length; i += 20) {
             if (pixels[i] === 0) transparent++;
         }
         
-        if (transparent / total > 0.4) {
+        const percent = transparent / (total / 20);
+        
+        // ৪০% স্ক্র্যাচ হলে রিভিল
+        if (percent > 0.4 && !hasRevealed) {
             hasRevealed = true;
             cover.classList.add('revealed');
             sound.success();
             showToast('🎉 You unlocked 50% OFF!');
             
+            // কনফেটি
             confetti({
-                particleCount: 80,
+                particleCount: 100,
                 spread: 70,
                 origin: { y: 0.6 }
             });
         }
     }
     
+    // মাউস ইভেন্ট
     canvas.addEventListener('mousedown', (e) => {
         isDrawing = true;
         scratch(e);
     });
     
-    canvas.addEventListener('mousemove', scratch);
-    canvas.addEventListener('mouseup', () => { isDrawing = false; });
-    canvas.addEventListener('mouseleave', () => { isDrawing = false; });
+    canvas.addEventListener('mousemove', (e) => {
+        if (isDrawing) scratch(e);
+    });
     
+    canvas.addEventListener('mouseup', () => {
+        isDrawing = false;
+    });
+    
+    canvas.addEventListener('mouseleave', () => {
+        isDrawing = false;
+    });
+    
+    // টাচ ইভেন্ট
     canvas.addEventListener('touchstart', (e) => {
         isDrawing = true;
         scratch(e);
+    }, { passive: false });
+    
+    canvas.addEventListener('touchmove', (e) => {
+        if (isDrawing) scratch(e);
+    }, { passive: false });
+    
+    canvas.addEventListener('touchend', () => {
+        isDrawing = false;
     });
-    canvas.addEventListener('touchmove', scratch);
-    canvas.addEventListener('touchend', () => { isDrawing = false; });
+    
+    // রিসাইজ হলে আপডেট
+    window.addEventListener('resize', () => {
+        if (scratchModal.style.display === 'flex') {
+            const newRect = container.getBoundingClientRect();
+            canvas.width = newRect.width || 400;
+            canvas.height = newRect.height || 300;
+            // রি-ইনিট করতে হবে
+            initScratchCard();
+        }
+    });
+}
+
+// Modal বন্ধ করার ফাংশন (HTML থেকে কল)
+function closeScratchModal() {
+    scratchModal.style.display = 'none';
+    showToast('🎁 Use code LUX50 at checkout!');
 }
 
 // ============================================
