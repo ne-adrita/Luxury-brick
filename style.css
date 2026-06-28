@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    cursor: none;
+    cursor: default !important;
 }
 
 html {
@@ -43,37 +43,13 @@ body.gold-theme .game-wrapper {
     border-color: rgba(255, 215, 0, 0.2);
 }
 
-/* ===== CUSTOM CURSOR ===== */
+/* ===== CUSTOM CURSOR - DISABLED ===== */
 .custom-cursor {
-    position: fixed;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 2px solid #FFD700;
-    pointer-events: none;
-    z-index: 99999;
-    transition: all 0.1s ease;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-}
-
-.custom-cursor.hover {
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 215, 0, 0.15);
-    border-color: #C0392B;
+    display: none !important;
 }
 
 .cursor-trail {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: radial-gradient(circle, #FFD700, transparent);
-    pointer-events: none;
-    z-index: 99998;
-    transform: translate(-50%, -50%);
-    opacity: 0.6;
+    display: none !important;
 }
 
 /* ===== PARTICLES BACKGROUND ===== */
@@ -205,6 +181,7 @@ body.gold-theme .game-wrapper {
     font-weight: 500;
     transition: all 0.3s ease;
     position: relative;
+    cursor: pointer;
 }
 
 .nav-menu a::after {
@@ -831,19 +808,19 @@ body.gold-theme .game-wrapper {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .game-stat {
     background: rgba(255, 255, 255, 0.05);
-    padding: 1rem;
+    padding: 0.8rem;
     border-radius: 12px;
     text-align: center;
 }
 
 .game-stat .stat-label {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     color: rgba(245, 245, 245, 0.5);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -851,7 +828,7 @@ body.gold-theme .game-wrapper {
 
 .game-stat .stat-value {
     display: block;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 800;
     color: #FFD700;
 }
@@ -859,10 +836,10 @@ body.gold-theme .game-wrapper {
 .game-area {
     background: rgba(0, 0, 0, 0.5);
     border-radius: 16px;
-    height: 400px;
+    height: 350px;
     position: relative;
     overflow: hidden;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     border: 2px solid rgba(255, 215, 0, 0.1);
 }
 
@@ -876,7 +853,7 @@ body.gold-theme .game-wrapper {
 }
 
 .game-message h3 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin-bottom: 0.5rem;
     color: #F5F5F5;
 }
@@ -884,13 +861,13 @@ body.gold-theme .game-wrapper {
 .game-brick {
     position: absolute;
     cursor: pointer;
-    width: 60px;
-    height: 40px;
+    width: 55px;
+    height: 38px;
     border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     transition: transform 0.1s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     z-index: 10;
@@ -923,15 +900,15 @@ body.gold-theme .game-wrapper {
     display: flex;
     gap: 1rem;
     justify-content: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .game-btn {
-    padding: 0.8rem 2.5rem;
+    padding: 0.6rem 2rem;
     border: none;
     border-radius: 50px;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.3s ease;
     background: linear-gradient(135deg, #C0392B, #FFD700);
@@ -950,52 +927,54 @@ body.gold-theme .game-wrapper {
 .game-rules {
     display: flex;
     justify-content: center;
-    gap: 2rem;
+    gap: 1.5rem;
     flex-wrap: wrap;
 }
 
 .rule-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     color: rgba(245, 245, 245, 0.7);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .rule-icon {
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
-/* ===== MEMORY GAME ===== */
+/* ===== MEMORY GAME - FIXED ===== */
 .memory-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    padding: 20px;
+    gap: 8px;
+    padding: 15px;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 16px;
-    min-height: 400px;
+    min-height: 320px;
     align-content: center;
+    max-width: 450px;
+    margin: 0 auto;
 }
 
 .memory-card {
     aspect-ratio: 1;
     background: linear-gradient(135deg, #C0392B, #A93226);
-    border-radius: 12px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     position: relative;
     transform-style: preserve-3d;
+    min-height: 55px;
 }
 
-.memory-card:hover:not(.matched) {
-    transform: scale(1.05);
-    box-shadow: 0 8px 30px rgba(192, 57, 43, 0.4);
+.memory-card .card-back {
+    font-size: 1.2rem;
 }
 
 .memory-card.flipped {
@@ -1019,23 +998,22 @@ body.gold-theme .game-wrapper {
 .memory-card .card-back {
     position: absolute;
     backface-visibility: hidden;
-    font-size: 1.5rem;
     color: rgba(245, 245, 245, 0.3);
 }
 
-/* ===== REACTION TEST ===== */
+/* ===== REACTION TEST - FIXED ===== */
 .reaction-area {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 400px;
+    min-height: 350px;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 16px;
 }
 
 .reaction-box {
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -1045,7 +1023,7 @@ body.gold-theme .game-wrapper {
     background: linear-gradient(135deg, #555, #333);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .reaction-box.waiting {
@@ -1058,20 +1036,10 @@ body.gold-theme .game-wrapper {
     animation: pulseReady 0.5s ease-in-out infinite alternate;
 }
 
-@keyframes pulseReady {
-    from { transform: scale(1); }
-    to { transform: scale(1.05); }
-}
-
 .reaction-box.go {
     background: linear-gradient(135deg, #FFD700, #F39C12);
     animation: pulseGo 0.3s ease-in-out infinite alternate;
     cursor: pointer;
-}
-
-@keyframes pulseGo {
-    from { transform: scale(1); box-shadow: 0 0 40px rgba(255, 215, 0, 0.3); }
-    to { transform: scale(1.03); box-shadow: 0 0 80px rgba(255, 215, 0, 0.6); }
 }
 
 .reaction-box.result {
@@ -1079,13 +1047,25 @@ body.gold-theme .game-wrapper {
 }
 
 .reaction-state h3 {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     margin-bottom: 0.5rem;
+    color: #F5F5F5;
 }
 
 .reaction-state p {
     color: rgba(245, 245, 245, 0.7);
-    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+}
+
+@keyframes pulseReady {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+@keyframes pulseGo {
+    from { transform: scale(1); box-shadow: 0 0 40px rgba(255, 215, 0, 0.3); }
+    to { transform: scale(1.03); box-shadow: 0 0 80px rgba(255, 215, 0, 0.6); }
 }
 
 /* ===== TESTIMONIALS ===== */
@@ -1103,7 +1083,7 @@ body.gold-theme .game-wrapper {
 
 .testimonials-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
     margin-top: 3rem;
 }
@@ -1112,7 +1092,7 @@ body.gold-theme .game-wrapper {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 215, 0, 0.1);
     border-radius: 20px;
-    padding: 2.5rem;
+    padding: 2rem;
     transition: all 0.4s ease;
 }
 
@@ -1124,15 +1104,15 @@ body.gold-theme .game-wrapper {
 
 .testimonial-rating {
     color: #FFD700;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
 }
 
 .testimonial-text {
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1.8;
     color: rgba(245, 245, 245, 0.8);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
     font-style: italic;
 }
 
@@ -1143,24 +1123,24 @@ body.gold-theme .game-wrapper {
 }
 
 .author-avatar {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     background: linear-gradient(135deg, #C0392B, #FFD700);
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .author-info h4 {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
 }
 
 .author-info span {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: rgba(245, 245, 245, 0.5);
 }
 
@@ -1185,36 +1165,36 @@ body.gold-theme .game-wrapper {
     display: inline-block;
     background: rgba(192, 57, 43, 0.2);
     color: #C0392B;
-    padding: 0.4rem 1.2rem;
+    padding: 0.3rem 1rem;
     border-radius: 50px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 2px;
     text-transform: uppercase;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
 }
 
 .buy-title {
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 800;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .buy-price {
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .original-price {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: rgba(245, 245, 245, 0.3);
     text-decoration: line-through;
 }
 
 .current-price {
-    font-size: 3rem;
+    font-size: 2.8rem;
     font-weight: 800;
     background: linear-gradient(135deg, #FFD700, #C0392B);
     -webkit-background-clip: text;
@@ -1223,8 +1203,8 @@ body.gold-theme .game-wrapper {
 
 .buy-desc {
     color: rgba(245, 245, 245, 0.7);
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
     line-height: 1.8;
 }
 
@@ -1232,21 +1212,21 @@ body.gold-theme .game-wrapper {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .buy-btn {
-    padding: 1rem 3rem;
+    padding: 0.8rem 2.5rem;
     background: linear-gradient(135deg, #C0392B, #FFD700);
     border: none;
     border-radius: 50px;
     color: #F5F5F5;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.8rem;
     transition: all 0.3s ease;
     box-shadow: 0 0 40px rgba(192, 57, 43, 0.3);
 }
@@ -1256,17 +1236,8 @@ body.gold-theme .game-wrapper {
     box-shadow: 0 0 60px rgba(192, 57, 43, 0.5);
 }
 
-.buy-btn.buying {
-    animation: buyPulse 0.5s ease;
-}
-
-@keyframes buyPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(0.95); }
-}
-
 .scratch-btn {
-    padding: 1rem 2rem;
+    padding: 0.8rem 1.5rem;
     background: rgba(255, 215, 0, 0.1);
     border: 2px solid rgba(255, 215, 0, 0.3);
     border-radius: 50px;
@@ -1274,6 +1245,7 @@ body.gold-theme .game-wrapper {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 0.95rem;
 }
 
 .scratch-btn:hover {
@@ -1283,7 +1255,7 @@ body.gold-theme .game-wrapper {
 
 .buy-features {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
     flex-wrap: wrap;
 }
 
@@ -1292,7 +1264,7 @@ body.gold-theme .game-wrapper {
     align-items: center;
     gap: 0.5rem;
     color: rgba(245, 245, 245, 0.6);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .buy-features i {
@@ -1303,11 +1275,11 @@ body.gold-theme .game-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .premium-tag {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 700;
     color: #FFD700;
     letter-spacing: 3px;
@@ -1337,8 +1309,8 @@ body.gold-theme .game-wrapper {
 .modal-content {
     background: #1A1A1A;
     border-radius: 30px;
-    padding: 2rem;
-    max-width: 500px;
+    padding: 1.5rem;
+    max-width: 450px;
     width: 90%;
     position: relative;
     border: 1px solid rgba(255, 215, 0, 0.2);
@@ -1346,9 +1318,9 @@ body.gold-theme .game-wrapper {
 
 .modal-close {
     position: absolute;
-    top: 1rem;
-    right: 1.5rem;
-    font-size: 2rem;
+    top: 0.8rem;
+    right: 1.2rem;
+    font-size: 1.8rem;
     color: rgba(245, 245, 245, 0.5);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -1362,7 +1334,7 @@ body.gold-theme .game-wrapper {
 .scratch-card {
     position: relative;
     width: 100%;
-    height: 300px;
+    height: 280px;
     border-radius: 20px;
     overflow: hidden;
 }
@@ -1399,7 +1371,7 @@ body.gold-theme .game-wrapper {
 
 .scratch-instruction {
     color: #F5F5F5;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
     text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     z-index: 3;
@@ -1420,44 +1392,44 @@ body.gold-theme .game-wrapper {
 
 .scratch-prize {
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .prize-icon {
-    font-size: 3rem;
+    font-size: 2.5rem;
     display: block;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .scratch-prize h3 {
     color: #FFD700;
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
 }
 
 .scratch-prize p {
     color: rgba(245, 245, 245, 0.6);
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .prize-amount {
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 900;
     background: linear-gradient(135deg, #FFD700, #C0392B);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin: 0.5rem 0;
+    margin: 0.3rem 0;
 }
 
 .prize-code {
     color: rgba(255, 215, 0, 0.6);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     letter-spacing: 2px;
-    margin: 0.5rem 0 1.5rem;
+    margin: 0.3rem 0 1rem;
 }
 
 .prize-btn {
-    padding: 0.8rem 2.5rem;
+    padding: 0.6rem 2rem;
     background: linear-gradient(135deg, #FFD700, #C0392B);
     border: none;
     border-radius: 50px;
@@ -1476,7 +1448,7 @@ body.gold-theme .game-wrapper {
 .footer {
     background: #0B0B0B;
     border-top: 1px solid rgba(255, 215, 0, 0.1);
-    padding: 3rem 2rem 1.5rem;
+    padding: 2.5rem 2rem 1rem;
     position: relative;
     z-index: 1;
 }
@@ -1491,31 +1463,32 @@ body.gold-theme .game-wrapper {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 2rem;
-    margin-bottom: 2rem;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .footer-brand .footer-logo {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 800;
     color: #FFD700;
 }
 
 .footer-tagline {
     color: rgba(245, 245, 245, 0.5);
-    font-size: 0.95rem;
-    margin-top: 0.3rem;
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
 }
 
 .footer-links {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 .footer-links a {
     color: rgba(245, 245, 245, 0.6);
     text-decoration: none;
     transition: color 0.3s ease;
+    cursor: pointer;
 }
 
 .footer-links a:hover {
@@ -1524,12 +1497,12 @@ body.gold-theme .game-wrapper {
 
 .footer-social {
     display: flex;
-    gap: 1rem;
+    gap: 0.8rem;
 }
 
 .footer-social a {
     color: rgba(245, 245, 245, 0.4);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     transition: all 0.3s ease;
 }
 
@@ -1540,13 +1513,13 @@ body.gold-theme .game-wrapper {
 
 .footer-bottom {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding-top: 1.5rem;
+    padding-top: 1rem;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.8rem;
     color: rgba(245, 245, 245, 0.3);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 .footer-bottom i {
@@ -1573,12 +1546,13 @@ body.gold-theme .game-wrapper {
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 215, 0, 0.2);
     color: #F5F5F5;
-    padding: 1rem 2rem;
+    padding: 0.8rem 1.5rem;
     border-radius: 12px;
     font-weight: 600;
     z-index: 10001;
     animation: toastSlide 0.4s ease;
     box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    font-size: 0.95rem;
 }
 
 @keyframes toastSlide {
@@ -1676,7 +1650,7 @@ body.gold-theme .game-wrapper {
     
     .buy-features {
         flex-direction: column;
-        gap: 0.8rem;
+        gap: 0.5rem;
     }
     
     .footer-content {
@@ -1687,17 +1661,12 @@ body.gold-theme .game-wrapper {
     .live-counter {
         flex-direction: row;
         flex-wrap: wrap;
-        gap: 1rem;
+        gap: 0.8rem;
     }
     
     .counter-item {
         flex: 1;
-        min-width: 80px;
-    }
-    
-    .custom-cursor,
-    .cursor-trail {
-        display: none;
+        min-width: 70px;
     }
     
     .game-tabs {
@@ -1710,24 +1679,25 @@ body.gold-theme .game-wrapper {
     }
     
     .memory-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
+        gap: 6px;
         padding: 10px;
-        min-height: 300px;
+        min-height: 250px;
+        max-width: 340px;
     }
     
     .memory-card {
-        font-size: 1.8rem;
+        font-size: 1.3rem;
+        min-height: 45px;
     }
     
     .reaction-box {
-        width: 200px;
-        height: 200px;
+        width: 160px;
+        height: 160px;
         padding: 1rem;
     }
     
     .reaction-state h3 {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 }
 
@@ -1775,20 +1745,29 @@ body.gold-theme .game-wrapper {
     }
     
     .scratch-card {
-        height: 250px;
+        height: 220px;
     }
     
     .memory-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 6px;
+        gap: 5px;
+        padding: 8px;
+        min-height: 200px;
+        max-width: 280px;
     }
     
     .memory-card {
-        font-size: 1.5rem;
+        font-size: 1rem;
+        min-height: 38px;
+        border-radius: 6px;
     }
     
     .reaction-box {
-        width: 160px;
-        height: 160px;
+        width: 130px;
+        height: 130px;
+    }
+    
+    .game-btn {
+        padding: 0.5rem 1.5rem;
+        font-size: 0.85rem;
     }
 }

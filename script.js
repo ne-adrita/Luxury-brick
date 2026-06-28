@@ -53,33 +53,7 @@ class SoundFX {
 const sound = new SoundFX();
 
 // ============================================
-// 2. CUSTOM CURSOR
-// ============================================
-const cursor = document.querySelector('.custom-cursor');
-const cursorTrail = document.querySelector('.cursor-trail');
-let trailPositions = [];
-
-document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-    
-    trailPositions.push({ x: e.clientX, y: e.clientY });
-    if (trailPositions.length > 10) trailPositions.shift();
-    
-    if (trailPositions.length > 0) {
-        const last = trailPositions[trailPositions.length - 1];
-        cursorTrail.style.left = last.x + 'px';
-        cursorTrail.style.top = last.y + 'px';
-    }
-});
-
-document.querySelectorAll('a, button, .feature-card, .testimonial-card, .game-brick').forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-});
-
-// ============================================
-// 3. PARTICLES BACKGROUND
+// 2. PARTICLES BACKGROUND
 // ============================================
 class ParticleSystem {
     constructor() {
@@ -107,15 +81,15 @@ class ParticleSystem {
     }
 
     createParticles() {
-        const count = Math.min(80, Math.floor(window.innerWidth / 20));
+        const count = Math.min(60, Math.floor(window.innerWidth / 25));
         for (let i = 0; i < count; i++) {
             this.particles.push({
                 x: Math.random() * this.canvas.width,
                 y: Math.random() * this.canvas.height,
-                size: Math.random() * 3 + 1,
-                speedX: (Math.random() - 0.5) * 0.5,
-                speedY: (Math.random() - 0.5) * 0.5,
-                opacity: Math.random() * 0.5 + 0.2,
+                size: Math.random() * 2.5 + 0.5,
+                speedX: (Math.random() - 0.5) * 0.4,
+                speedY: (Math.random() - 0.5) * 0.4,
+                opacity: Math.random() * 0.4 + 0.1,
                 color: Math.random() > 0.7 ? '#FFD700' : '#C0392B'
             });
         }
@@ -153,7 +127,7 @@ class ParticleSystem {
             
             if (p.color === '#FFD700') {
                 this.ctx.shadowColor = '#FFD700';
-                this.ctx.shadowBlur = 10;
+                this.ctx.shadowBlur = 8;
                 this.ctx.fill();
                 this.ctx.shadowBlur = 0;
             }
@@ -166,7 +140,7 @@ class ParticleSystem {
 const particles = new ParticleSystem();
 
 // ============================================
-// 4. THEME TOGGLE
+// 3. THEME TOGGLE
 // ============================================
 const themeToggle = document.getElementById('themeToggle');
 let isGoldTheme = false;
@@ -179,7 +153,7 @@ themeToggle.addEventListener('click', () => {
 });
 
 // ============================================
-// 5. 360° BRICK VIEWER
+// 4. 360° BRICK VIEWER
 // ============================================
 const brickViewer = document.getElementById('brickViewer');
 let isDragging = false;
@@ -215,7 +189,7 @@ if (brickViewer) {
 }
 
 // ============================================
-// 6. NAVIGATION
+// 5. NAVIGATION
 // ============================================
 const navbar = document.querySelector('.navbar');
 const hamburger = document.querySelector('.hamburger');
@@ -242,7 +216,7 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
 });
 
 // ============================================
-// 7. HERO ANIMATION
+// 6. HERO ANIMATION
 // ============================================
 gsap.from('.hero-title', {
     duration: 1.5,
@@ -286,7 +260,7 @@ gsap.from('.floating-brick', {
 });
 
 // ============================================
-// 8. LIVE COUNTER
+// 7. LIVE COUNTER
 // ============================================
 function updateLiveCounter() {
     const viewers = document.getElementById('viewers');
@@ -312,7 +286,7 @@ function updateLiveCounter() {
 updateLiveCounter();
 
 // ============================================
-// 9. COUNTER ANIMATION
+// 8. COUNTER ANIMATION
 // ============================================
 function animateCounters() {
     const counters = document.querySelectorAll('.stat-number');
@@ -348,7 +322,7 @@ function animateCounters() {
 animateCounters();
 
 // ============================================
-// 10. WISHLIST BUTTON
+// 9. WISHLIST BUTTON
 // ============================================
 const wishlistBtn = document.getElementById('wishlistBtn');
 let isWishlisted = false;
@@ -365,7 +339,7 @@ wishlistBtn.addEventListener('click', () => {
 });
 
 // ============================================
-// 11. TOAST NOTIFICATION
+// 10. TOAST NOTIFICATION
 // ============================================
 function showToast(message) {
     const existing = document.querySelector('.toast-notification');
@@ -385,7 +359,7 @@ function showToast(message) {
 }
 
 // ============================================
-// 12. GAME TABS SWITCHING
+// 11. GAME TABS SWITCHING
 // ============================================
 document.querySelectorAll('.game-tab').forEach(tab => {
     tab.addEventListener('click', function() {
@@ -400,7 +374,7 @@ document.querySelectorAll('.game-tab').forEach(tab => {
 });
 
 // ============================================
-// 13. GAME 1: CATCH THE GOLDEN BRICK
+// 12. GAME 1: CATCH THE GOLDEN BRICK
 // ============================================
 class BrickGame {
     constructor() {
@@ -475,8 +449,8 @@ class BrickGame {
         brick.className = `game-brick ${type}`;
         brick.textContent = type === 'golden' ? '🌟' : type === 'broken' ? '💔' : '🧱';
 
-        const maxX = this.gameArea.clientWidth - 80;
-        const maxY = this.gameArea.clientHeight - 60;
+        const maxX = this.gameArea.clientWidth - 70;
+        const maxY = this.gameArea.clientHeight - 50;
         brick.style.left = Math.random() * maxX + 'px';
         brick.style.top = Math.random() * maxY + 'px';
 
@@ -537,7 +511,7 @@ class BrickGame {
         this.messageDisplay.innerHTML = `
             <h3>🏆 ${this.score >= 50 ? 'Legendary Builder!' : this.score >= 20 ? 'Great Effort!' : 'Keep Practicing!'}</h3>
             <p style="font-size: 2rem; color: #FFD700; margin: 0.5rem 0;">Score: ${this.score}</p>
-            <p style="font-size: 0.9rem;">${this.score >= this.highScore ? '🎉 New High Score!' : 'High Score: ${this.highScore}'}</p>
+            <p style="font-size: 0.9rem;">${this.score >= this.highScore ? '🎉 New High Score!' : 'High Score: ' + this.highScore}</p>
         `;
 
         this.startBtn.textContent = 'Play Again';
@@ -592,7 +566,7 @@ class BrickGame {
 const game = new BrickGame();
 
 // ============================================
-// 14. GAME 2: MEMORY MATCH
+// 13. GAME 2: MEMORY MATCH
 // ============================================
 class MemoryGame {
     constructor() {
@@ -746,7 +720,7 @@ class MemoryGame {
 const memoryGame = new MemoryGame();
 
 // ============================================
-// 15. GAME 3: REACTION TEST
+// 14. GAME 3: REACTION TEST - FIXED
 // ============================================
 class ReactionTest {
     constructor() {
@@ -756,7 +730,6 @@ class ReactionTest {
         this.bestTime = parseInt(localStorage.getItem('reactionBest')) || Infinity;
         this.attempts = 0;
         this.timeoutId = null;
-        this.isWaiting = false;
         
         this.box = document.getElementById('reactionBox');
         this.stateDisplay = document.getElementById('reactionState');
@@ -766,9 +739,15 @@ class ReactionTest {
         this.startBtn = document.getElementById('startReaction');
         
         this.bestDisplay.textContent = this.bestTime === Infinity ? '--' : this.bestTime + 'ms';
-        this.startBtn.addEventListener('click', () => this.startTest());
+        this.startBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.startTest();
+        });
         
-        this.box.addEventListener('click', () => this.handleClick());
+        this.box.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.handleClick();
+        });
     }
     
     startTest() {
@@ -777,10 +756,9 @@ class ReactionTest {
         this.attempts++;
         this.attemptsDisplay.textContent = this.attempts;
         this.state = 'waiting';
-        this.isWaiting = true;
         this.stateDisplay.innerHTML = `
             <h3>⏳ Wait for it...</h3>
-            <p>Don't click yet!</p>
+            <p style="font-size: 0.8rem; color: rgba(245,245,245,0.5);">Don't click yet!</p>
         `;
         this.box.className = 'reaction-box waiting';
         sound.click();
@@ -788,11 +766,10 @@ class ReactionTest {
         const delay = 2000 + Math.random() * 3000;
         this.timeoutId = setTimeout(() => {
             this.state = 'ready';
-            this.isWaiting = false;
             this.startTime = Date.now();
             this.stateDisplay.innerHTML = `
                 <h3>🔥 Click Now!</h3>
-                <p>Quick! Tap the golden brick!</p>
+                <p style="font-size: 0.9rem; color: #FFD700;">Quick! Tap the golden brick!</p>
             `;
             this.box.className = 'reaction-box go';
             sound.coin();
@@ -804,15 +781,24 @@ class ReactionTest {
         
         if (this.state === 'waiting') {
             this.state = 'idle';
-            this.isWaiting = false;
             clearTimeout(this.timeoutId);
             this.stateDisplay.innerHTML = `
                 <h3>❌ Too Early!</h3>
-                <p>Wait for the golden brick!</p>
-                <button class="game-btn" onclick="reactionTest.startTest()">Try Again</button>
+                <p style="font-size: 0.8rem; color: rgba(245,245,245,0.5);">Wait for the golden brick!</p>
+                <button class="game-btn" id="reactionRetry" style="margin-top: 0.5rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">
+                    Try Again
+                </button>
             `;
             this.box.className = 'reaction-box';
             sound.error();
+            
+            const retryBtn = document.getElementById('reactionRetry');
+            if (retryBtn) {
+                retryBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.startTest();
+                });
+            }
             return;
         }
         
@@ -832,16 +818,26 @@ class ReactionTest {
             
             this.stateDisplay.innerHTML = `
                 <h3>${isExcellent ? '🏆' : isGood ? '⭐' : '💪'} ${this.reactionTime}ms</h3>
-                <p style="color: ${isExcellent ? '#FFD700' : isGood ? '#2ECC71' : '#F5F5F5'};">
+                <p style="color: ${isExcellent ? '#FFD700' : isGood ? '#2ECC71' : '#F5F5F5'}; font-size: 0.9rem;">
                     ${isExcellent ? 'Legendary Reflexes!' : isGood ? 'Great Builder!' : 'Keep Practicing!'}
                 </p>
-                <p style="font-size: 0.8rem; color: rgba(245,245,245,0.4);">
+                <p style="font-size: 0.7rem; color: rgba(245,245,245,0.3);">
                     Best: ${this.bestTime}ms
                 </p>
-                <button class="game-btn" onclick="reactionTest.startTest()">Test Again</button>
+                <button class="game-btn" id="reactionAgain" style="margin-top: 0.5rem; padding: 0.5rem 1.5rem; font-size: 0.8rem;">
+                    Test Again
+                </button>
             `;
             this.box.className = 'reaction-box result';
             sound.success();
+            
+            const againBtn = document.getElementById('reactionAgain');
+            if (againBtn) {
+                againBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.startTest();
+                });
+            }
             
             if (isExcellent) {
                 confetti({
@@ -857,7 +853,7 @@ class ReactionTest {
 const reactionTest = new ReactionTest();
 
 // ============================================
-// 16. BUY BUTTON WITH FIREWORKS
+// 15. BUY BUTTON WITH FIREWORKS
 // ============================================
 document.getElementById('buyBtn').addEventListener('click', function() {
     sound.success();
@@ -909,7 +905,7 @@ document.getElementById('buyBtn').addEventListener('click', function() {
 });
 
 // ============================================
-// 17. SCRATCH CARD
+// 16. SCRATCH CARD
 // ============================================
 const scratchBtn = document.getElementById('scratchBtn');
 const scratchModal = document.getElementById('scratchModal');
@@ -959,8 +955,8 @@ function initScratchCard() {
     
     function getPosition(e) {
         const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX || e.touches[0].clientX) - rect.left;
-        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+        const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+        const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
         return { x, y };
     }
     
@@ -1015,7 +1011,7 @@ function initScratchCard() {
 }
 
 // ============================================
-// 18. SMOOTH SCROLL
+// 17. SMOOTH SCROLL
 // ============================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -1031,7 +1027,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
-// 19. SCROLL ANIMATIONS
+// 18. SCROLL ANIMATIONS
 // ============================================
 gsap.utils.toArray('.feature-card').forEach((card, i) => {
     gsap.from(card, {
@@ -1064,15 +1060,13 @@ gsap.utils.toArray('.testimonial-card').forEach((card, i) => {
 });
 
 // ============================================
-// 20. KEYBOARD SHORTCUTS (Bonus)
+// 19. KEYBOARD SHORTCUTS
 // ============================================
 document.addEventListener('keydown', (e) => {
     if (e.key === 'g' || e.key === 'G') {
-        // Toggle gold theme
         themeToggle.click();
     }
     if (e.key === 'r' || e.key === 'R') {
-        // Reset game if on game section
         if (document.getElementById('gameCatch').classList.contains('active')) {
             game.resetGame();
         }
@@ -1080,16 +1074,6 @@ document.addEventListener('keydown', (e) => {
 });
 
 console.log('🧱 LUXBRICK™ - The Brick That Built Legends');
-console.log('✦ Premium Features:');
-console.log('  • 360° Brick Viewer');
-console.log('  • Live Counter');
-console.log('  • Theme Toggle (Press G)');
-console.log('  • Particle System');
-console.log('  • Custom Cursor');
-console.log('  • Scratch Card');
-console.log('  • Wishlist');
-console.log('  • Sound Effects');
-console.log('  • 3 Games in 1');
-console.log('  • Fireworks & Confetti');
+console.log('✦ Features: 360° Viewer, Live Counter, Theme Toggle (G), 3 Games');
+console.log('✦ Keyboard: G = Theme Toggle, R = Reset Game');
 console.log('✦ Built for Grameenphone Academy - Top 80!');
-console.log('✦ Keyboard Shortcuts: G = Theme Toggle, R = Reset Game');
