@@ -1847,7 +1847,6 @@ body.gold-theme .game-wrapper {
     visibility: visible !important;
     opacity: 1 !important;
 }
-
 /* AOS override */
 [data-aos] {
     opacity: 1 !important;

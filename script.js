@@ -1185,16 +1185,18 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ============================================
 // 18. SCROLL ANIMATIONS - FIXED
 // ============================================
-// Features - Force visibility
+// SCROLL ANIMATIONS - ফিক্সড
+// ============================================
+// Features - ফোর্স ভিজিবিলিটি
 document.querySelectorAll('.feature-card').forEach((card, i) => {
-    // Ensure visibility
+    // ভিজিবল করে দিন
     card.style.opacity = '1';
     card.style.transform = 'translateY(0)';
     
     gsap.from(card, {
         scrollTrigger: {
             trigger: card,
-            start: 'top 90%',
+            start: 'top 95%',
             toggleActions: 'play none none none'
         },
         duration: 0.8,
@@ -1205,16 +1207,16 @@ document.querySelectorAll('.feature-card').forEach((card, i) => {
     });
 });
 
-// Testimonials - Force visibility
+// Testimonials - ফোর্স ভিজিবিলিটি
 document.querySelectorAll('.testimonial-card').forEach((card, i) => {
-    // Ensure visibility
+    // ভিজিবল করে দিন
     card.style.opacity = '1';
     card.style.transform = 'translateY(0)';
     
     gsap.from(card, {
         scrollTrigger: {
             trigger: card,
-            start: 'top 90%',
+            start: 'top 95%',
             toggleActions: 'play none none none'
         },
         duration: 0.8,
