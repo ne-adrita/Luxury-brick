@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXBRICK™ - The Brick That Built Legends</title>
+    
+    <!-- External Libraries -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ===== CURSOR EFFECT ===== -->
+    <div class="custom-cursor"></div>
+    <div class="cursor-trail"></div>
+
+    <!-- ===== PARTICLES BACKGROUND ===== -->
+    <canvas id="particlesCanvas"></canvas>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">🧱</span>
+                <span class="logo-text">LUXBRICK</span>
+            </div>
+            <div class="nav-controls">
+                <div class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#story">The Story</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#game">Game</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#buy" class="nav-cta">Buy Now</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== SECTION 1: HERO ===== -->
+    <section id="hero" class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">✦ PREMIUM COLLECTION</div>
+                <h1 class="hero-title">
+                    <span class="title-line">LUXBRICK</span>
+                    <span class="title-line">™</span>
+                </h1>
+                <p class="hero-subtitle">The world's most prestigious brick.</p>
+                
+                <!-- ===== LIVE COUNTER ===== -->
+                <div class="live-counter">
+                    <div class="counter-item">
+                        <span class="counter-label"><i class="fas fa-eye"></i> People Viewing</span>
+                        <span class="counter-value" id="viewers">254</span>
+                    </div>
+                    <div class="counter-item">
+                        <span class="counter-label"><i class="fas fa-box"></i> Only Left</span>
+                        <span class="counter-value" id="stockLeft">3</span>
+                    </div>
+                    <div class="counter-item">
+                        <span class="counter-label"><i class="fas fa-shopping-cart"></i> Sold Today</span>
+                        <span class="counter-value" id="soldToday">927</span>
+                    </div>
+                </div>
+
+                <div class="hero-actions">
+                    <a href="#story" class="hero-btn primary-btn">
+                        Discover the Legacy
+                        <i class="fas fa-arrow-down"></i>
+                    </a>
+                    <button class="hero-btn secondary-btn wishlist-btn" id="wishlistBtn">
+                        <i class="fas fa-heart"></i>
+                        <span>Wishlist</span>
+                    </button>
+                </div>
+            </div>
+            <div class="hero-brick-container">
+                <div class="floating-brick" id="brickViewer">
+                    <div class="brick-3d interactive">
+                        <div class="brick-face front"></div>
+                        <div class="brick-face back"></div>
+                        <div class="brick-face left"></div>
+                        <div class="brick-face right"></div>
+                        <div class="brick-face top"></div>
+                        <div class="brick-face bottom"></div>
+                    </div>
+                    <div class="brick-hint">🖱 Drag to rotate</div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll to explore</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- ===== SECTION 2: STORY ===== -->
+    <section id="story" class="story-section">
+        <div class="story-container">
+            <div class="story-content">
+                <div class="story-badge" data-aos="fade-up">✦ THE LEGACY</div>
+                <h2 class="story-title" data-aos="fade-up" data-aos-delay="100">
+                    Not every brick<br>
+                    <span class="highlight">becomes history.</span>
+                </h2>
+                <div class="story-text" data-aos="fade-up" data-aos-delay="200">
+                    <p class="story-paragraph">Some bricks build homes.</p>
+                    <p class="story-paragraph highlight-text">One brick builds empires.</p>
+                </div>
+                <div class="story-stats" data-aos="fade-up" data-aos-delay="300">
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="125">0</span>
+                        <span class="stat-label">Years of Legacy</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="5000">0</span>
+                        <span class="stat-label">Premium Projects</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="99">0</span>
+                        <span class="stat-label">% Satisfaction</span>
+                    </div>
+                </div>
+            </div>
+            <div class="story-visual" data-aos="fade-left" data-aos-delay="200">
+                <div class="rotating-brick">
+                    <div class="brick-3d rotating">
+                        <div class="brick-face front"></div>
+                        <div class="brick-face back"></div>
+                        <div class="brick-face left"></div>
+                        <div class="brick-face right"></div>
+                        <div class="brick-face top"></div>
+                        <div class="brick-face bottom"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION 3: FEATURES ===== -->
+    <section id="features" class="features-section">
+        <div class="features-container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">✦ PREMIUM QUALITY</span>
+                <h2 class="section-title">Why It's <span class="highlight">Premium?</span></h2>
+                <p class="section-subtitle">Every brick tells a story of excellence</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">🏆</div>
+                    <h3 class="feature-title">Lifetime Strength</h3>
+                    <p class="feature-desc">Engineered to last for generations with unmatched durability</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">🔥</div>
+                    <h3 class="feature-title">Fire Resistant</h3>
+                    <p class="feature-desc">Advanced ceramic coating that withstands extreme temperatures</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">💎</div>
+                    <h3 class="feature-title">Handcrafted Finish</h3>
+                    <p class="feature-desc">Each brick is meticulously crafted by master artisans</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">👑</div>
+                    <h3 class="feature-title">Used by Legends</h3>
+                    <p class="feature-desc">Chosen by the world's most iconic architects and builders</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION 4: MINI GAME ===== -->
+    <section id="game" class="game-section">
+        <div class="game-container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">✦ INTERACTIVE</span>
+                <h2 class="section-title">Catch the <span class="highlight">Golden Brick</span></h2>
+                <p class="section-subtitle">Test your reflexes and claim your legacy</p>
+            </div>
+            <div class="game-wrapper" data-aos="fade-up" data-aos-delay="100">
+                <div class="game-stats">
+                    <div class="game-stat">
+                        <span class="stat-label">Score</span>
+                        <span class="stat-value" id="score">0</span>
+                    </div>
+                    <div class="game-stat">
+                        <span class="stat-label">Time</span>
+                        <span class="stat-value" id="timer">30</span>
+                    </div>
+                    <div class="game-stat">
+                        <span class="stat-label">High Score</span>
+                        <span class="stat-value" id="highScore">0</span>
+                    </div>
+                </div>
+                <div class="game-area" id="gameArea">
+                    <div class="game-message" id="gameMessage">
+                        <h3>Click "Start Game" to begin</h3>
+                        <p>Golden Brick: +10 | Normal: +2 | Broken: -5</p>
+                    </div>
+                </div>
+                <div class="game-controls">
+                    <button class="game-btn" id="startGame">Start Game</button>
+                    <button class="game-btn reset-btn" id="resetGame">Reset</button>
+                </div>
+                <div class="game-rules">
+                    <div class="rule-item">
+                        <span class="rule-icon">🌟</span>
+                        <span>Golden Brick: +10 points</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">🧱</span>
+                        <span>Normal Brick: +2 points</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">💔</span>
+                        <span>Broken Brick: -5 points</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION 5: TESTIMONIALS ===== -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="testimonials-container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">✦ TESTIMONIALS</span>
+                <h2 class="section-title">What Our <span class="highlight">Legends</span> Say</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"My life changed after owning this brick. It's not just a brick, it's a statement."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">EM</div>
+                        <div class="author-info">
+                            <h4>Elon Musk</h4>
+                            <span>Tech Visionary</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Worth every dollar. The quality and craftsmanship are unparalleled in the industry."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JB</div>
+                        <div class="author-info">
+                            <h4>Jeff Bezos</h4>
+                            <span>Business Magnate</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"The LUXBRICK represents everything we stand for - excellence, innovation, and timeless design."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SN</div>
+                        <div class="author-info">
+                            <h4>Steve Jobs</h4>
+                            <span>Design Legend</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION 6: BUY ===== -->
+    <section id="buy" class="buy-section">
+        <div class="buy-container">
+            <div class="buy-content" data-aos="fade-up">
+                <div class="buy-badge">✦ LIMITED OFFER</div>
+                <h2 class="buy-title">Own the <span class="highlight">Legend</span></h2>
+                <div class="buy-price">
+                    <span class="original-price">$999</span>
+                    <span class="current-price">$499</span>
+                </div>
+                <p class="buy-desc">Experience the pinnacle of craftsmanship. Each brick comes with a certificate of authenticity and lifetime warranty.</p>
+                <div class="buy-actions">
+                    <button class="buy-btn" id="buyBtn">
+                        <i class="fas fa-crown"></i>
+                        BUY THE LEGEND
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="scratch-btn" id="scratchBtn">
+                        🎁 Scratch for Surprise
+                    </button>
+                </div>
+                <div class="buy-features">
+                    <span><i class="fas fa-check"></i> Lifetime Warranty</span>
+                    <span><i class="fas fa-check"></i> Free Delivery</span>
+                    <span><i class="fas fa-check"></i> Certificate of Authenticity</span>
+                </div>
+            </div>
+            <div class="buy-visual" data-aos="fade-left" data-aos-delay="200">
+                <div class="premium-brick">
+                    <div class="brick-3d premium">
+                        <div class="brick-face front"></div>
+                        <div class="brick-face back"></div>
+                        <div class="brick-face left"></div>
+                        <div class="brick-face right"></div>
+                        <div class="brick-face top"></div>
+                        <div class="brick-face bottom"></div>
+                    </div>
+                    <div class="premium-tag">✦ PREMIUM</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SCRATCH CARD MODAL ===== -->
+    <div class="modal" id="scratchModal">
+        <div class="modal-content">
+            <div class="modal-close" id="scratchClose">&times;</div>
+            <div class="scratch-card">
+                <div class="scratch-cover" id="scratchCover">
+                    <div class="scratch-instruction">🖱 Click & drag to scratch</div>
+                    <canvas id="scratchCanvas"></canvas>
+                </div>
+                <div class="scratch-reveal">
+                    <div class="scratch-prize">
+                        <span class="prize-icon">🎉</span>
+                        <h3>Congratulations!</h3>
+                        <p>You unlocked</p>
+                        <div class="prize-amount">50% OFF</div>
+                        <p class="prize-code">Code: LUX50</p>
+                        <button class="prize-btn" onclick="document.getElementById('scratchModal').style.display='none'">Claim Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">🧱 LUXBRICK</span>
+                    <p class="footer-tagline">Luxury begins with one brick.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#story">Story</a>
+                    <a href="#features">Features</a>
+                    <a href="#game">Game</a>
+                    <a href="#buy">Shop</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 LUXBRICK™. All rights reserved.</p>
+                <p>Made with <i class="fas fa-heart"></i> for Grameenphone Academy</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== CONFETTI CANVAS ===== -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- ===== AUDIO (Optional - using Web Audio API) ===== -->
+    <script>
+        // Audio context for sound effects
+        class SoundFX {
+            constructor() {
+                this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            playTone(frequency, duration, type = 'sine', volume = 0.3) {
+                try {
+                    const oscillator = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    oscillator.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    oscillator.type = type;
+                    oscillator.frequency.value = frequency;
+                    gain.gain.setValueAtTime(volume, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                    oscillator.start(this.ctx.currentTime);
+                    oscillator.stop(this.ctx.currentTime + duration);
+                } catch (e) {}
+            }
+
+            click() {
+                this.playTone(800, 0.1, 'sine', 0.2);
+            }
+
+            coin() {
+                this.playTone(1200, 0.1, 'sine', 0.3);
+                setTimeout(() => this.playTone(1500, 0.1, 'sine', 0.2), 100);
+            }
+
+            success() {
+                [523, 659, 784].forEach((freq, i) => {
+                    setTimeout(() => this.playTone(freq, 0.15, 'sine', 0.2), i * 100);
+                });
+            }
+
+            error() {
+                this.playTone(300, 0.3, 'sawtooth', 0.15);
+            }
+        }
+
+        const sound = new SoundFX();
+    </script>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+    <script src="script.js"></script>
+</body>
+</html>
