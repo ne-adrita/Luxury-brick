@@ -430,11 +430,6 @@ body.gold-theme .game-wrapper {
     background: rgba(255, 215, 0, 0.1);
 }
 
-.wishlist-btn {
-    position: relative;
-    overflow: hidden;
-}
-
 .wishlist-btn.liked i {
     color: #C0392B;
     animation: heartBeat 0.5s ease;
@@ -785,6 +780,53 @@ body.gold-theme .game-wrapper {
     padding: 2rem;
 }
 
+/* ===== GAME TABS ===== */
+.game-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.game-tab {
+    padding: 0.6rem 1.5rem;
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    border-radius: 50px;
+    background: transparent;
+    color: rgba(245, 245, 245, 0.5);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.game-tab:hover {
+    border-color: rgba(255, 215, 0, 0.4);
+    color: #F5F5F5;
+}
+
+.game-tab.active {
+    background: linear-gradient(135deg, #C0392B, #FFD700);
+    border-color: transparent;
+    color: #F5F5F5;
+    box-shadow: 0 0 30px rgba(192, 57, 43, 0.3);
+}
+
+.game-panel {
+    display: none;
+    animation: panelFade 0.4s ease;
+}
+
+.game-panel.active {
+    display: block;
+}
+
+@keyframes panelFade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .game-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -922,6 +964,128 @@ body.gold-theme .game-wrapper {
 
 .rule-icon {
     font-size: 1.2rem;
+}
+
+/* ===== MEMORY GAME ===== */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    min-height: 400px;
+    align-content: center;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #C0392B, #A93226);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+.memory-card:hover:not(.matched) {
+    transform: scale(1.05);
+    box-shadow: 0 8px 30px rgba(192, 57, 43, 0.4);
+}
+
+.memory-card.flipped {
+    background: linear-gradient(135deg, #FFD700, #F39C12);
+    transform: rotateY(180deg);
+}
+
+.memory-card.matched {
+    background: rgba(46, 204, 113, 0.3);
+    border: 2px solid #2ECC71;
+    cursor: default;
+    opacity: 0.7;
+    transform: scale(0.95);
+}
+
+.memory-card .card-content {
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+.memory-card .card-back {
+    position: absolute;
+    backface-visibility: hidden;
+    font-size: 1.5rem;
+    color: rgba(245, 245, 245, 0.3);
+}
+
+/* ===== REACTION TEST ===== */
+.reaction-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+}
+
+.reaction-box {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #555, #333);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    padding: 2rem;
+}
+
+.reaction-box.waiting {
+    background: linear-gradient(135deg, #555, #333);
+    cursor: default;
+}
+
+.reaction-box.ready {
+    background: linear-gradient(135deg, #C0392B, #E74C3C);
+    animation: pulseReady 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulseReady {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+.reaction-box.go {
+    background: linear-gradient(135deg, #FFD700, #F39C12);
+    animation: pulseGo 0.3s ease-in-out infinite alternate;
+    cursor: pointer;
+}
+
+@keyframes pulseGo {
+    from { transform: scale(1); box-shadow: 0 0 40px rgba(255, 215, 0, 0.3); }
+    to { transform: scale(1.03); box-shadow: 0 0 80px rgba(255, 215, 0, 0.6); }
+}
+
+.reaction-box.result {
+    background: linear-gradient(135deg, #27AE60, #2ECC71);
+}
+
+.reaction-state h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.reaction-state p {
+    color: rgba(245, 245, 245, 0.7);
+    margin-bottom: 1rem;
 }
 
 /* ===== TESTIMONIALS ===== */
@@ -1400,6 +1564,28 @@ body.gold-theme .game-wrapper {
     z-index: 9999;
 }
 
+/* ===== TOAST NOTIFICATION ===== */
+.toast-notification {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: rgba(11, 11, 11, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    color: #F5F5F5;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    z-index: 10001;
+    animation: toastSlide 0.4s ease;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+@keyframes toastSlide {
+    from { transform: translateX(100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
     .hero-container {
@@ -1509,11 +1695,39 @@ body.gold-theme .game-wrapper {
         min-width: 80px;
     }
     
-    .custom-cursor {
-        display: none;
-    }
+    .custom-cursor,
     .cursor-trail {
         display: none;
+    }
+    
+    .game-tabs {
+        gap: 0.3rem;
+    }
+    
+    .game-tab {
+        padding: 0.4rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .memory-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        padding: 10px;
+        min-height: 300px;
+    }
+    
+    .memory-card {
+        font-size: 1.8rem;
+    }
+    
+    .reaction-box {
+        width: 200px;
+        height: 200px;
+        padding: 1rem;
+    }
+    
+    .reaction-state h3 {
+        font-size: 1.2rem;
     }
 }
 
@@ -1562,5 +1776,19 @@ body.gold-theme .game-wrapper {
     
     .scratch-card {
         height: 250px;
+    }
+    
+    .memory-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+    
+    .memory-card {
+        font-size: 1.5rem;
+    }
+    
+    .reaction-box {
+        width: 160px;
+        height: 160px;
     }
 }

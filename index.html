@@ -34,7 +34,7 @@
                 <ul class="nav-menu">
                     <li><a href="#story">The Story</a></li>
                     <li><a href="#features">Features</a></li>
-                    <li><a href="#game">Game</a></li>
+                    <li><a href="#game">Games</a></li>
                     <li><a href="#testimonials">Testimonials</a></li>
                     <li><a href="#buy" class="nav-cta">Buy Now</a></li>
                 </ul>
@@ -58,7 +58,7 @@
                 </h1>
                 <p class="hero-subtitle">The world's most prestigious brick.</p>
                 
-                <!-- ===== LIVE COUNTER ===== -->
+                <!-- LIVE COUNTER -->
                 <div class="live-counter">
                     <div class="counter-item">
                         <span class="counter-label"><i class="fas fa-eye"></i> People Viewing</span>
@@ -117,6 +117,9 @@
                 <div class="story-text" data-aos="fade-up" data-aos-delay="200">
                     <p class="story-paragraph">Some bricks build homes.</p>
                     <p class="story-paragraph highlight-text">One brick builds empires.</p>
+                    <p class="story-paragraph" style="font-size: 1rem; color: rgba(245,245,245,0.5); margin-top: 1rem;">
+                        "From ancient wonders to modern skylines, every masterpiece began with a single brick."
+                    </p>
                 </div>
                 <div class="story-stats" data-aos="fade-up" data-aos-delay="300">
                     <div class="stat-item">
@@ -181,53 +184,117 @@
         </div>
     </section>
 
-    <!-- ===== SECTION 4: MINI GAME ===== -->
+    <!-- ===== SECTION 4: GAMES ===== -->
     <section id="game" class="game-section">
         <div class="game-container">
             <div class="section-header" data-aos="fade-up">
                 <span class="section-badge">✦ INTERACTIVE</span>
-                <h2 class="section-title">Catch the <span class="highlight">Golden Brick</span></h2>
-                <p class="section-subtitle">Test your reflexes and claim your legacy</p>
+                <h2 class="section-title">Choose Your <span class="highlight">Challenge</span></h2>
+                <p class="section-subtitle">Three unique games to test your skills</p>
             </div>
             <div class="game-wrapper" data-aos="fade-up" data-aos-delay="100">
-                <div class="game-stats">
-                    <div class="game-stat">
-                        <span class="stat-label">Score</span>
-                        <span class="stat-value" id="score">0</span>
+                
+                <!-- Game Tabs -->
+                <div class="game-tabs">
+                    <button class="game-tab active" data-game="catch">🏃 Catch & Click</button>
+                    <button class="game-tab" data-game="memory">🧠 Memory Match</button>
+                    <button class="game-tab" data-game="reaction">⚡ Reaction Test</button>
+                </div>
+
+                <!-- GAME 1: Catch the Golden Brick -->
+                <div class="game-panel active" id="gameCatch">
+                    <div class="game-stats">
+                        <div class="game-stat">
+                            <span class="stat-label">Score</span>
+                            <span class="stat-value" id="score">0</span>
+                        </div>
+                        <div class="game-stat">
+                            <span class="stat-label">Time</span>
+                            <span class="stat-value" id="timer">30</span>
+                        </div>
+                        <div class="game-stat">
+                            <span class="stat-label">High Score</span>
+                            <span class="stat-value" id="highScore">0</span>
+                        </div>
                     </div>
-                    <div class="game-stat">
-                        <span class="stat-label">Time</span>
-                        <span class="stat-value" id="timer">30</span>
+                    <div class="game-area" id="gameArea">
+                        <div class="game-message" id="gameMessage">
+                            <h3>Click "Start Game" to begin</h3>
+                            <p>Golden Brick: +10 | Normal: +2 | Broken: -5</p>
+                        </div>
                     </div>
-                    <div class="game-stat">
-                        <span class="stat-label">High Score</span>
-                        <span class="stat-value" id="highScore">0</span>
+                    <div class="game-controls">
+                        <button class="game-btn" id="startGame">Start Game</button>
+                        <button class="game-btn reset-btn" id="resetGame">Reset</button>
+                    </div>
+                    <div class="game-rules">
+                        <div class="rule-item">
+                            <span class="rule-icon">🌟</span>
+                            <span>Golden Brick: +10 points</span>
+                        </div>
+                        <div class="rule-item">
+                            <span class="rule-icon">🧱</span>
+                            <span>Normal Brick: +2 points</span>
+                        </div>
+                        <div class="rule-item">
+                            <span class="rule-icon">💔</span>
+                            <span>Broken Brick: -5 points</span>
+                        </div>
                     </div>
                 </div>
-                <div class="game-area" id="gameArea">
-                    <div class="game-message" id="gameMessage">
-                        <h3>Click "Start Game" to begin</h3>
-                        <p>Golden Brick: +10 | Normal: +2 | Broken: -5</p>
+
+                <!-- GAME 2: Memory Match -->
+                <div class="game-panel" id="gameMemory">
+                    <div class="game-stats">
+                        <div class="game-stat">
+                            <span class="stat-label">Moves</span>
+                            <span class="stat-value" id="memoryMoves">0</span>
+                        </div>
+                        <div class="game-stat">
+                            <span class="stat-label">Matches</span>
+                            <span class="stat-value" id="memoryMatches">0</span>
+                        </div>
+                        <div class="game-stat">
+                            <span class="stat-label">Best Score</span>
+                            <span class="stat-value" id="memoryBest">∞</span>
+                        </div>
+                    </div>
+                    <div class="game-area memory-grid" id="memoryGrid">
+                        <div class="game-message" id="memoryMessage">
+                            <h3>🧱 Memory Match</h3>
+                            <p>Find the matching brick pairs!</p>
+                            <button class="game-btn" id="startMemory">Start Game</button>
+                        </div>
                     </div>
                 </div>
-                <div class="game-controls">
-                    <button class="game-btn" id="startGame">Start Game</button>
-                    <button class="game-btn reset-btn" id="resetGame">Reset</button>
+
+                <!-- GAME 3: Reaction Test -->
+                <div class="game-panel" id="gameReaction">
+                    <div class="game-stats">
+                        <div class="game-stat">
+                            <span class="stat-label">Reaction Time</span>
+                            <span class="stat-value" id="reactionTime">--</span>
+                        </div>
+                        <div class="game-stat">
+                            <span class="stat-label">Best</span>
+                            <span class="stat-value" id="reactionBest">--</span>
+                        </div>
+                        <div class="game-stat">
+                            <span class="stat-label">Attempts</span>
+                            <span class="stat-value" id="reactionAttempts">0</span>
+                        </div>
+                    </div>
+                    <div class="game-area reaction-area" id="reactionArea">
+                        <div class="reaction-box" id="reactionBox">
+                            <div class="reaction-state" id="reactionState">
+                                <h3>⚡ Reaction Test</h3>
+                                <p>Click when the brick turns <span style="color: #FFD700;">golden</span>!</p>
+                                <button class="game-btn" id="startReaction">Start Test</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="game-rules">
-                    <div class="rule-item">
-                        <span class="rule-icon">🌟</span>
-                        <span>Golden Brick: +10 points</span>
-                    </div>
-                    <div class="rule-item">
-                        <span class="rule-icon">🧱</span>
-                        <span>Normal Brick: +2 points</span>
-                    </div>
-                    <div class="rule-item">
-                        <span class="rule-icon">💔</span>
-                        <span>Broken Brick: -5 points</span>
-                    </div>
-                </div>
+
             </div>
         </div>
     </section>
@@ -354,7 +421,7 @@
                 <div class="footer-links">
                     <a href="#story">Story</a>
                     <a href="#features">Features</a>
-                    <a href="#game">Game</a>
+                    <a href="#game">Games</a>
                     <a href="#buy">Shop</a>
                 </div>
                 <div class="footer-social">
@@ -374,53 +441,7 @@
     <!-- ===== CONFETTI CANVAS ===== -->
     <canvas id="confettiCanvas"></canvas>
 
-    <!-- ===== AUDIO (Optional - using Web Audio API) ===== -->
-    <script>
-        // Audio context for sound effects
-        class SoundFX {
-            constructor() {
-                this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-
-            playTone(frequency, duration, type = 'sine', volume = 0.3) {
-                try {
-                    const oscillator = this.ctx.createOscillator();
-                    const gain = this.ctx.createGain();
-                    oscillator.connect(gain);
-                    gain.connect(this.ctx.destination);
-                    oscillator.type = type;
-                    oscillator.frequency.value = frequency;
-                    gain.gain.setValueAtTime(volume, this.ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
-                    oscillator.start(this.ctx.currentTime);
-                    oscillator.stop(this.ctx.currentTime + duration);
-                } catch (e) {}
-            }
-
-            click() {
-                this.playTone(800, 0.1, 'sine', 0.2);
-            }
-
-            coin() {
-                this.playTone(1200, 0.1, 'sine', 0.3);
-                setTimeout(() => this.playTone(1500, 0.1, 'sine', 0.2), 100);
-            }
-
-            success() {
-                [523, 659, 784].forEach((freq, i) => {
-                    setTimeout(() => this.playTone(freq, 0.15, 'sine', 0.2), i * 100);
-                });
-            }
-
-            error() {
-                this.playTone(300, 0.3, 'sawtooth', 0.15);
-            }
-        }
-
-        const sound = new SoundFX();
-    </script>
-
-    <!-- Scripts -->
+    <!-- ===== SCRIPTS ===== -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
