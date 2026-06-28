@@ -1292,7 +1292,7 @@ body.gold-theme .game-wrapper {
     margin-top: 0.5rem;
 }
 
-/* ===== SCRATCH CARD MODAL - ফিক্স ===== */
+/* ===== SCRATCH CARD MODAL - ফিক্সড ===== */
 .modal {
     display: none;
     position: fixed;
@@ -1339,13 +1339,21 @@ body.gold-theme .game-wrapper {
     transform: rotate(90deg);
 }
 
+.scratch-card-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 .scratch-card {
     position: relative;
     width: 100%;
+    max-width: 400px;
     height: 300px;
     border-radius: 20px;
     overflow: hidden;
     background: #0B0B0B;
+    margin: 0 auto;
 }
 
 .scratch-cover {
@@ -1374,11 +1382,12 @@ body.gold-theme .game-wrapper {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
     cursor: pointer;
     touch-action: none;
     z-index: 1;
+    display: block !important;
 }
 
 .scratch-instruction {
@@ -1456,6 +1465,25 @@ body.gold-theme .game-wrapper {
 .prize-btn:hover {
     transform: scale(1.05);
     box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 1.5rem;
+    }
+    
+    .scratch-card {
+        height: 250px;
+    }
+    
+    .prize-amount {
+        font-size: 2.8rem;
+    }
+    
+    .scratch-prize h3 {
+        font-size: 1.4rem;
+    }
 }
 
 /* ===== RESPONSIVE ===== */

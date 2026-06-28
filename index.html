@@ -387,24 +387,26 @@
         </div>
     </section>
 
- <!-- ===== SCRATCH CARD MODAL - আপডেটেড ===== -->
+<!-- ===== SCRATCH CARD MODAL - ফিক্সড ===== -->
 <div class="modal" id="scratchModal">
     <div class="modal-content">
         <div class="modal-close" id="scratchClose">&times;</div>
         <h3 style="text-align: center; color: #FFD700; margin-bottom: 1rem;">🎁 Scratch to Reveal</h3>
-        <div class="scratch-card" id="scratchCardContainer">
-            <div class="scratch-cover" id="scratchCover">
-                <div class="scratch-instruction">🖱 Click & drag to scratch</div>
-                <canvas id="scratchCanvas"></canvas>
-            </div>
-            <div class="scratch-reveal">
-                <div class="scratch-prize">
-                    <span class="prize-icon">🎉</span>
-                    <h3>Congratulations!</h3>
-                    <p>You unlocked</p>
-                    <div class="prize-amount">50% OFF</div>
-                    <p class="prize-code">Code: LUX50</p>
-                    <button class="prize-btn" onclick="closeScratchModal()">Claim Now</button>
+        <div class="scratch-card-wrapper">
+            <div class="scratch-card" id="scratchCardContainer">
+                <div class="scratch-cover" id="scratchCover">
+                    <div class="scratch-instruction">🖱 Click & drag to scratch</div>
+                    <canvas id="scratchCanvas"></canvas>
+                </div>
+                <div class="scratch-reveal">
+                    <div class="scratch-prize">
+                        <span class="prize-icon">🎉</span>
+                        <h3>Congratulations!</h3>
+                        <p>You unlocked</p>
+                        <div class="prize-amount">50% OFF</div>
+                        <p class="prize-code">Code: LUX50</p>
+                        <button class="prize-btn" onclick="closeScratchModal()">Claim Now</button>
+                    </div>
                 </div>
             </div>
         </div>
