@@ -1288,3 +1288,13 @@ window.addEventListener('load', function() {
         }
     }, 1500);
 });
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('successModal');
+        if (modal && modal.style.display === 'flex') {
+            modal.style.display = 'none';
+        }
+    }
+});
