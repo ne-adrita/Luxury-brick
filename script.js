@@ -631,7 +631,7 @@ class BrickGame {
 const game = new BrickGame();
 
 // ============================================
-// 13. GAME 2: MEMORY MATCH
+// 13. GAME 2: MEMORY MATCH (পুরোপুরি ফিক্সড)
 // ============================================
 class MemoryGame {
     constructor() {
@@ -641,13 +641,15 @@ class MemoryGame {
         this.moves = 0;
         this.isLocked = false;
         this.bestScore = parseInt(localStorage.getItem('memoryBest')) || Infinity;
+        this.isGameActive = false;
         
         this.grid = document.getElementById('memoryGrid');
         this.movesDisplay = document.getElementById('memoryMoves');
         this.matchesDisplay = document.getElementById('memoryMatches');
         this.bestDisplay = document.getElementById('memoryBest');
         this.messageDisplay = document.getElementById('memoryMessage');
-        this.startBtn = document.getElementById('startMemory');
+        this.startBtn = document.getElementById('startMemoryBtn');
+        this.resetBtn = document.getElementById('resetMemoryBtn');
         
         this.icons = ['🧱', '🏗️', '🏛️', '🕌', '🏰', '🗼', '🏯', '🏠'];
         if (this.bestDisplay) {
@@ -657,9 +659,14 @@ class MemoryGame {
         if (this.startBtn) {
             this.startBtn.addEventListener('click', () => this.initGame());
         }
+        
+        if (this.resetBtn) {
+            this.resetBtn.addEventListener('click', () => this.resetGame());
+        }
     }
     
     initGame() {
+        this.isGameActive = true;
         this.matchedPairs = 0;
         this.moves = 0;
         this.flippedCards = [];
@@ -667,6 +674,13 @@ class MemoryGame {
         if (this.movesDisplay) this.movesDisplay.textContent = '0';
         if (this.matchesDisplay) this.matchesDisplay.textContent = '0';
         if (this.messageDisplay) this.messageDisplay.style.display = 'none';
+        
+        // Start button change - Game 1 এর মত
+        if (this.startBtn) {
+            this.startBtn.textContent = 'Playing...';
+            this.startBtn.style.opacity = '0.5';
+            this.startBtn.disabled = true;
+        }
         
         const pairs = [...this.icons, ...this.icons];
         for (let i = pairs.length - 1; i > 0; i--) {
@@ -705,6 +719,7 @@ class MemoryGame {
     }
     
     flipCard(card) {
+        if (!this.isGameActive) return;
         if (this.isLocked) return;
         if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
         
@@ -757,6 +772,7 @@ class MemoryGame {
     }
     
     winGame() {
+        this.isGameActive = false;
         const best = this.bestScore;
         if (this.moves < best) {
             this.bestScore = this.moves;
@@ -764,19 +780,23 @@ class MemoryGame {
             if (this.bestDisplay) this.bestDisplay.textContent = this.moves;
         }
         
+        // Game 1 এর মত Start Button কে "Play Again" এ পরিবর্তন
+        if (this.startBtn) {
+            this.startBtn.textContent = 'Play Again';
+            this.startBtn.style.opacity = '1';
+            this.startBtn.disabled = false;
+        }
+        
         if (this.messageDisplay) {
             this.messageDisplay.style.display = 'block';
             this.messageDisplay.innerHTML = `
                 <h3>🧱 Master Builder Unlocked!</h3>
-                <p style="font-size: 1.5rem; color: #FFD700; margin: 0.5rem 0;">
+                <p style="font-size: 2rem; color: #FFD700; margin: 0.5rem 0;">
                     ${this.moves} moves
                 </p>
                 <p style="font-size: 0.9rem; color: rgba(245,245,245,0.6);">
-                    ${this.moves === this.bestScore ? '🏆 New Best Score!' : 'Best: ' + this.bestScore + ' moves'}
+                    ${this.moves === this.bestScore || this.bestScore === Infinity ? '🏆 New Best Score!' : 'Best: ' + this.bestScore + ' moves'}
                 </p>
-                <button class="game-btn" onclick="memoryGame.initGame()" style="margin-top: 1rem;">
-                    Play Again
-                </button>
             `;
         }
         
@@ -786,6 +806,35 @@ class MemoryGame {
             spread: 70,
             origin: { y: 0.6 }
         });
+    }
+    
+    resetGame() {
+        if (this.isGameActive) {
+            this.isGameActive = false;
+        }
+        // Reset all cards
+        if (this.grid) {
+            this.grid.innerHTML = '';
+        }
+        if (this.movesDisplay) this.movesDisplay.textContent = '0';
+        if (this.matchesDisplay) this.matchesDisplay.textContent = '0';
+        
+        // Game 1 এর মত Start Button কে "Start Game" এ পরিবর্তন
+        if (this.startBtn) {
+            this.startBtn.textContent = 'Start Game';
+            this.startBtn.style.opacity = '1';
+            this.startBtn.disabled = false;
+        }
+        
+        // Show start message
+        if (this.messageDisplay) {
+            this.messageDisplay.style.display = 'block';
+            this.messageDisplay.innerHTML = `
+                <h3>🧱 Memory Match</h3>
+                <p>Find the matching brick pairs!</p>
+            `;
+        }
+        sound.click();
     }
 }
 

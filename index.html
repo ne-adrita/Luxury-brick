@@ -253,30 +253,37 @@
                     </div>
                 </div>
 
-                <!-- GAME 2: Memory Match -->
-                <div class="game-panel" id="gameMemory">
-                    <div class="game-stats">
-                        <div class="game-stat">
-                            <span class="stat-label">Moves</span>
-                            <span class="stat-value" id="memoryMoves">0</span>
-                        </div>
-                        <div class="game-stat">
-                            <span class="stat-label">Matches</span>
-                            <span class="stat-value" id="memoryMatches">0</span>
-                        </div>
-                        <div class="game-stat">
-                            <span class="stat-label">Best Score</span>
-                            <span class="stat-value" id="memoryBest">∞</span>
-                        </div>
-                    </div>
-                    <div class="game-area memory-grid" id="memoryGrid">
-                        <div class="game-message" id="memoryMessage">
-                            <h3>🧱 Memory Match</h3>
-                            <p>Find the matching brick pairs!</p>
-                            <button class="game-btn" id="startMemory">Start Game</button>
-                        </div>
-                    </div>
-                </div>
+             <!-- GAME 2: Memory Match -->
+<div class="game-panel" id="gameMemory">
+    <div class="game-stats">
+        <div class="game-stat">
+            <span class="stat-label">Moves</span>
+            <span class="stat-value" id="memoryMoves">0</span>
+        </div>
+        <div class="game-stat">
+            <span class="stat-label">Matches</span>
+            <span class="stat-value" id="memoryMatches">0</span>
+        </div>
+        <div class="game-stat">
+            <span class="stat-label">Best Score</span>
+            <span class="stat-value" id="memoryBest">∞</span>
+        </div>
+    </div>
+    <div class="game-area" style="height: auto; min-height: 350px; padding: 10px;">
+        <div class="memory-grid" id="memoryGrid">
+            <div class="game-message" id="memoryMessage">
+                <h3>🧱 Memory Match</h3>
+                <p>Find the matching brick pairs!</p>
+            </div>
+        </div>
+    </div>
+    <!-- Memory Game Controls - Game 1 এর মত -->
+    <div class="game-controls">
+        <button class="game-btn" id="startMemoryBtn">Start Game</button>
+        <button class="game-btn reset-btn" id="resetMemoryBtn">Reset</button>
+    </div>
+</div>
+
 
                 <!-- GAME 3: Reaction Test -->
                 <div class="game-panel" id="gameReaction">

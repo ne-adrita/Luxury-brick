@@ -1229,13 +1229,13 @@ body.gold-theme .memory-card.matched {
 .memory-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 12px;
     padding: 20px;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 16px;
     min-height: 320px;
     align-content: center;
-    max-width: 400px;
+    max-width: 420px;
     margin: 0 auto;
 }
 
@@ -1246,24 +1246,30 @@ body.gold-theme .memory-card.matched {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
+    font-size: 2rem;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     position: relative;
     transform-style: preserve-3d;
     width: 100%;
-    max-width: 80px;
-    margin: 0 auto;
+    height: 100%;
+    min-height: 70px;
+    max-height: 80px;
 }
 
 .memory-card .card-back {
-    font-size: 1.2rem;
-    color: rgba(245, 245, 245, 0.3);
+    font-size: 1.5rem;
+    color: rgba(245, 245, 245, 0.4);
+    position: absolute;
+    backface-visibility: hidden;
 }
 
 .memory-card .card-content {
-    font-size: 1.8rem;
+    font-size: 2rem;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+    display: none;
 }
 
 .memory-card.flipped {
@@ -1271,12 +1277,21 @@ body.gold-theme .memory-card.matched {
     transform: rotateY(180deg);
 }
 
+.memory-card.flipped .card-content {
+    display: block !important;
+}
+
 .memory-card.matched {
-    background: rgba(46, 204, 113, 0.2);
+    background: rgba(46, 204, 113, 0.25) !important;
     border: 2px solid #2ECC71;
     cursor: default;
-    opacity: 0.7;
-    transform: scale(0.95);
+    opacity: 0.8;
+    transform: scale(0.92);
+    pointer-events: none;
+}
+
+.memory-card.matched .card-content {
+    display: block !important;
 }
 
 /* ===== REACTION TEST ===== */
