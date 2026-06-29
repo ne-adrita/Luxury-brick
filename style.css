@@ -57,6 +57,19 @@ body.gold-theme .nav-cta:hover {
 }
 
 /* Hero Section */
+/* Gold Theme - Hero Title (TM Red) */
+body.gold-theme .hero-title .title-line:first-child {
+    background: linear-gradient(135deg, #B8860B, #FFD700, #C49A3A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 40px rgba(184, 134, 11, 0.15);
+}
+
+body.gold-theme .hero-title .title-line:last-child {
+    color: #C0392B !important;
+    text-shadow: 0 0 40px rgba(192, 57, 43, 0.15);
+}
+
 body.gold-theme .hero-section {
     background: linear-gradient(180deg, #FFFDF8, #F7F2E8);
 }
