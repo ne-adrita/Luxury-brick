@@ -1287,13 +1287,13 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ============================================
-// 20. LOADING SCREEN
+// 20. LOADING SCREEN WITH ZOOM-OUT
 // ============================================
 window.addEventListener('load', function() {
     setTimeout(function() {
         const loader = document.getElementById('loader');
         if (loader) {
-            loader.style.opacity = '0';
+            loader.classList.add('hide');
             setTimeout(function() {
                 loader.style.display = 'none';
             }, 800);

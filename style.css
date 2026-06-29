@@ -1220,24 +1220,62 @@ body.gold-theme .game-wrapper {
 }
 
 .buy-btn {
-    padding: 0.8rem 2.5rem;
+    padding: 1rem 3rem;
     background: linear-gradient(135deg, #C0392B, #FFD700);
     border: none;
     border-radius: 50px;
     color: #F5F5F5;
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 1rem;
     transition: all 0.3s ease;
+    box-shadow: 0 0 40px rgba(192, 57, 43, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Golden Glow on Hover */
+.buy-btn:hover {
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 0 80px rgba(255, 215, 0, 0.6), 0 0 120px rgba(255, 215, 0, 0.3);
+}
+
+/* Glow Pulsing Animation on Hover */
+.buy-btn:hover::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.15), transparent 70%);
+    animation: glowPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+    0%, 100% { transform: scale(0.8); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 1; }
+}
+
+.buy-btn:active {
+    transform: scale(0.95);
+}
+
+.buy-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.buy-btn:disabled:hover {
     box-shadow: 0 0 40px rgba(192, 57, 43, 0.3);
 }
 
-.buy-btn:hover {
-    transform: scale(1.05) translateY(-3px);
-    box-shadow: 0 0 60px rgba(192, 57, 43, 0.5);
+.buy-btn:disabled:hover::before {
+    display: none;
 }
 
 .scratch-btn {
