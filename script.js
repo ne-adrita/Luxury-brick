@@ -146,7 +146,7 @@ class ParticleSystem {
 const particles = new ParticleSystem();
 
 // ============================================
-// 3. THEME TOGGLE
+// 3. THEME TOGGLE (Dark ↔ Gold)
 // ============================================
 const themeToggle = document.getElementById('themeToggle');
 let isGoldTheme = false;
@@ -157,6 +157,12 @@ if (themeToggle) {
         document.body.classList.toggle('gold-theme');
         themeToggle.innerHTML = isGoldTheme ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         sound.click();
+        
+        // Update loader color if visible
+        const loader = document.getElementById('loader');
+        if (loader && loader.style.display !== 'none') {
+            loader.style.background = isGoldTheme ? '#FFF8F0' : '#0B0B0B';
+        }
     });
 }
 
