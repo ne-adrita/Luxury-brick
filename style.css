@@ -1895,3 +1895,78 @@ body.gold-theme .game-wrapper {
     0%, 100% { opacity: 0.4; }
     50% { opacity: 1; }
 }
+
+/* ===== BUY SUCCESS MODAL ===== */
+.success-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(20px);
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    animation: modalFade 0.5s ease;
+}
+
+.success-modal-box {
+    background: linear-gradient(145deg, #1A1A1A, #0B0B0B);
+    padding: 3rem 4rem;
+    border-radius: 30px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 0 80px rgba(255, 215, 0, 0.1);
+}
+
+.success-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.success-modal-box h2 {
+    color: #FFD700;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.success-modal-box p {
+    color: rgba(245, 245, 245, 0.7);
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.success-highlight {
+    color: #FFD700 !important;
+    font-size: 1.2rem !important;
+    font-weight: 700;
+}
+
+.success-sub {
+    font-size: 0.85rem !important;
+    color: rgba(245, 245, 245, 0.4) !important;
+    margin-top: 0.5rem;
+}
+
+.success-btn {
+    margin-top: 1.5rem;
+    padding: 0.8rem 2.5rem;
+    background: linear-gradient(135deg, #FFD700, #C0392B);
+    border: none;
+    border-radius: 50px;
+    color: #F5F5F5;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.success-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+}

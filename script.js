@@ -904,7 +904,8 @@ class ReactionTest {
 const reactionTest = new ReactionTest();
 
 // ============================================
-// 15. BUY BUTTON WITH FIREWORKS
+// ============================================
+// 15. BUY BUTTON WITH FIREWORKS & MODAL
 // ============================================
 const buyBtn = document.getElementById('buyBtn');
 if (buyBtn) {
@@ -912,6 +913,7 @@ if (buyBtn) {
         sound.success();
         this.classList.add('buying');
         
+        // Confetti
         const duration = 4 * 1000;
         const end = Date.now() + duration;
         (function frame() {
@@ -926,6 +928,7 @@ if (buyBtn) {
             }
         })();
         
+        // Fireworks
         setTimeout(() => {
             for (let i = 0; i < 5; i++) {
                 setTimeout(() => {
@@ -941,11 +944,19 @@ if (buyBtn) {
             }
         }, 500);
         
+        // Screen shake
         document.body.style.animation = 'shake 0.5s ease';
         setTimeout(() => {
             document.body.style.animation = '';
         }, 500);
 
+        // ===== SUCCESS MODAL =====
+        const modal = document.getElementById('successModal');
+        if (modal) {
+            modal.style.display = 'flex';
+        }
+        
+        // Update button
         this.innerHTML = '✓ ORDER CONFIRMED!';
         this.style.background = 'linear-gradient(135deg, #27AE60, #2ECC71)';
         setTimeout(() => {
@@ -957,6 +968,24 @@ if (buyBtn) {
         showToast('🎉 Order Confirmed! Welcome to the LUXBRICK family!');
     });
 }
+
+// ===== CLOSE SUCCESS MODAL =====
+function closeSuccessModal() {
+    const modal = document.getElementById('successModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// ===== ESCAPE KEY TO CLOSE MODAL =====
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('successModal');
+        if (modal && modal.style.display === 'flex') {
+            modal.style.display = 'none';
+        }
+    }
+});
 
 // ============================================
 // ============================================
