@@ -1110,212 +1110,107 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ============================================
-// 16. SCRATCH CARD - সম্পূর্ণ ফিক্সড
+// SPIN WHEEL - সম্পূর্ণ ফাংশনাল
 // ============================================
-const scratchBtn = document.getElementById('scratchBtn');
-const scratchModal = document.getElementById('scratchModal');
-const scratchClose = document.getElementById('scratchClose');
+const spinBtn = document.getElementById('spinBtn');
+const spinModal = document.getElementById('spinModal');
+const spinClose = document.getElementById('spinClose');
+const wheel = document.getElementById('wheel');
+const spinWheelBtn = document.getElementById('spinWheelBtn');
+const spinResult = document.getElementById('spinResult');
 
-// Modal খোলা
-if (scratchBtn) {
-    scratchBtn.addEventListener('click', function(e) {
+let isSpinning = false;
+
+// Spin Button - Modal খোলা
+if (spinBtn) {
+    spinBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        if (scratchModal) {
-            scratchModal.style.display = 'flex';
+        if (spinModal) {
+            spinModal.style.display = 'flex';
             sound.click();
-            // DOM রেন্ডার হওয়ার জন্য একটু দেরি করে init করি
-            setTimeout(function() {
-                initScratchCard();
-            }, 300);
+            // Reset wheel
+            wheel.style.transform = 'rotate(0deg)';
+            spinResult.textContent = '';
+            spinWheelBtn.disabled = false;
+            spinWheelBtn.textContent = '🎰 SPIN';
         }
     });
 }
 
 // Modal বন্ধ
-if (scratchClose) {
-    scratchClose.addEventListener('click', function() {
-        if (scratchModal) scratchModal.style.display = 'none';
+if (spinClose) {
+    spinClose.addEventListener('click', function() {
+        if (spinModal) spinModal.style.display = 'none';
     });
 }
 
-// Modal এর বাইরে ক্লিক করলে বন্ধ
-if (scratchModal) {
-    scratchModal.addEventListener('click', function(e) {
-        if (e.target === scratchModal) {
-            scratchModal.style.display = 'none';
+if (spinModal) {
+    spinModal.addEventListener('click', function(e) {
+        if (e.target === spinModal) {
+            spinModal.style.display = 'none';
         }
     });
 }
 
-// স্ক্র্যাচ কার্ড ইন্সিটিয়ালাইজ
-function initScratchCard() {
-    console.log('Scratch card initializing...');
-    
-    const canvas = document.getElementById('scratchCanvas');
-    const cover = document.getElementById('scratchCover');
-    const container = document.getElementById('scratchCardContainer');
-    
-    if (!canvas) {
-        console.error('Canvas not found!');
-        return;
-    }
-    if (!cover) {
-        console.error('Cover not found!');
-        return;
-    }
-    if (!container) {
-        console.error('Container not found!');
-        return;
-    }
-    
-    // Canvas সাইজ সেট করা
-    const rect = container.getBoundingClientRect();
-    const width = rect.width || 400;
-    const height = rect.height || 300;
-    
-    canvas.width = width;
-    canvas.height = height;
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';
-    
-    console.log('Canvas size:', width, 'x', height);
-    
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-        console.error('Cannot get canvas context!');
-        return;
-    }
-    
-    let isDrawing = false;
-    let hasRevealed = false;
-    
-    // Canvas এ স্ক্র্যাচ লেয়ার তৈরি
-    ctx.fillStyle = '#C0392B';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // টেক্সচার যোগ করা
-    for (let i = 0; i < 200; i++) {
-        ctx.fillStyle = `rgba(255,215,0,${Math.random() * 0.3})`;
-        ctx.beginPath();
-        ctx.arc(
-            Math.random() * canvas.width,
-            Math.random() * canvas.height,
-            Math.random() * 10 + 3,
-            0, Math.PI * 2
-        );
-        ctx.fill();
-    }
-    
-    // "SCRATCH" লেখা
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.font = 'bold 40px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('✦ SCRATCH ✦', canvas.width / 2, canvas.height / 2);
-    
-    // পজিশন পাওয়া
-    function getPosition(e) {
-        const rect = canvas.getBoundingClientRect();
-        let clientX, clientY;
+// Spin Wheel - ঘোরানো
+if (spinWheelBtn) {
+    spinWheelBtn.addEventListener('click', function() {
+        if (isSpinning) return;
         
-        if (e.touches && e.touches.length > 0) {
-            clientX = e.touches[0].clientX;
-            clientY = e.touches[0].clientY;
-            e.preventDefault();
-        } else {
-            clientX = e.clientX;
-            clientY = e.clientY;
-        }
+        isSpinning = true;
+        this.disabled = true;
+        this.textContent = '⏳ Spinning...';
+        spinResult.textContent = '';
+        sound.click();
         
-        return {
-            x: (clientX - rect.left) * (canvas.width / rect.width),
-            y: (clientY - rect.top) * (canvas.height / rect.height)
-        };
-    }
-    
-    // স্ক্র্যাচ করা
-    function scratch(e) {
-        e.preventDefault();
-        if (!isDrawing || hasRevealed) return;
+        // র‍্যান্ডম কোণ (কমপক্ষে 5 বার ঘুরবে)
+        const randomSpin = 1800 + Math.random() * 1800;
+        const currentRotation = parseInt(wheel.dataset.rotation || 0);
+        const totalRotation = currentRotation + randomSpin;
+        wheel.dataset.rotation = totalRotation;
         
-        const pos = getPosition(e);
+        wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+        wheel.style.transform = `rotate(${totalRotation}deg)`;
         
-        // বড় ব্রাশ
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(pos.x, pos.y, 35, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // কতটুকু স্ক্র্যাচ হয়েছে চেক করা
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const pixels = imageData.data;
-        let transparent = 0;
-        const total = pixels.length / 4;
-        
-        // প্রতি ১০ম পিক্সেল চেক
-        for (let i = 3; i < pixels.length; i += 10) {
-            if (pixels[i] === 0) transparent++;
-        }
-        
-        const percent = transparent / (total / 10);
-        
-        // ৩৫% স্ক্র্যাচ হলে রিভিল
-        if (percent > 0.35 && !hasRevealed) {
-            hasRevealed = true;
-            cover.classList.add('revealed');
-            sound.success();
-            showToast('🎉 You unlocked 50% OFF!');
+        // 4 সেকেন্ড পর রেজাল্ট দেখান
+        setTimeout(() => {
+            // বিজয়ী সেগমেন্ট বের করা (360 ডিগ্রিকে 8 ভাগে ভাগ)
+            const normalized = totalRotation % 360;
+            const segmentIndex = Math.floor((360 - normalized) / 45) % 8;
             
+            const prizes = [
+                '🎁 10% OFF',
+                '🌟 Free Shipping',
+                '💎 20% OFF',
+                '🏆 VIP Pass',
+                '🎉 50% OFF',
+                '🎁 Gift Box',
+                '✨ 15% OFF',
+                '👑 Premium Badge'
+            ];
+            
+            const winMessage = prizes[segmentIndex];
+            spinResult.textContent = '🎊 ' + winMessage + '!';
+            
+            sound.success();
+            
+            // Confetti
             confetti({
-                particleCount: 120,
-                spread: 80,
+                particleCount: 80,
+                spread: 70,
                 origin: { y: 0.6 }
             });
-        }
-    }
-    
-    // ===== মাউস ইভেন্ট =====
-    canvas.addEventListener('mousedown', function(e) {
-        isDrawing = true;
-        scratch(e);
+            
+            // Toast
+            showToast('🎊 You won: ' + winMessage + '!');
+            
+            isSpinning = false;
+            this.disabled = false;
+            this.textContent = '🎰 SPIN AGAIN';
+            
+        }, 4200);
     });
-    
-    canvas.addEventListener('mousemove', function(e) {
-        if (isDrawing) scratch(e);
-    });
-    
-    canvas.addEventListener('mouseup', function() {
-        isDrawing = false;
-    });
-    
-    canvas.addEventListener('mouseleave', function() {
-        isDrawing = false;
-    });
-    
-    // ===== টাচ ইভেন্ট =====
-    canvas.addEventListener('touchstart', function(e) {
-        isDrawing = true;
-        scratch(e);
-    }, { passive: false });
-    
-    canvas.addEventListener('touchmove', function(e) {
-        if (isDrawing) scratch(e);
-    }, { passive: false });
-    
-    canvas.addEventListener('touchend', function() {
-        isDrawing = false;
-    });
-    
-    console.log('Scratch card initialized successfully!');
 }
-
-// Modal বন্ধ করার ফাংশন
-function closeScratchModal() {
-    const modal = document.getElementById('scratchModal');
-    if (modal) modal.style.display = 'none';
-    showToast('🎁 Use code LUX50 at checkout!');
-}
-
 // ============================================
 // 17. SMOOTH SCROLL
 // ============================================

@@ -2851,3 +2851,107 @@ body.gold-theme .theme-toggle .fa-moon {
         font-size: 1.4rem;
     }
 }
+
+/* ===== SPIN WHEEL - ফিক্সড ===== */
+.spin-modal {
+    max-width: 500px !important;
+}
+
+.wheel-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+}
+
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    border: 4px solid #FFD700;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+    transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+}
+
+.wheel-segment {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    left: 50%;
+    top: 50%;
+    transform-origin: 0% 0%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    padding-left: 25px;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* প্রতিটি সেগমেন্টের জন্য রঙ এবং ঘূর্ণন */
+.wheel-segment[data-index="0"] { background: #E74C3C; transform: rotate(0deg); }
+.wheel-segment[data-index="1"] { background: #F39C12; transform: rotate(45deg); }
+.wheel-segment[data-index="2"] { background: #2ECC71; transform: rotate(90deg); }
+.wheel-segment[data-index="3"] { background: #3498DB; transform: rotate(135deg); }
+.wheel-segment[data-index="4"] { background: #9B59B6; transform: rotate(180deg); }
+.wheel-segment[data-index="5"] { background: #1ABC9C; transform: rotate(225deg); }
+.wheel-segment[data-index="6"] { background: #E67E22; transform: rotate(270deg); }
+.wheel-segment[data-index="7"] { background: #C0392B; transform: rotate(315deg); }
+
+.wheel-pointer {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5rem;
+    color: #FFD700;
+    z-index: 10;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.spin-btn {
+    display: block;
+    margin: 1.5rem auto 0;
+    padding: 0.8rem 2.5rem;
+    background: linear-gradient(135deg, #FFD700, #C0392B);
+    border: none;
+    border-radius: 50px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.spin-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+}
+
+.spin-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+@media (max-width: 480px) {
+    .wheel-container {
+        width: 220px;
+        height: 220px;
+    }
+    .wheel-segment {
+        font-size: 0.5rem;
+        padding-left: 18px;
+    }
+    .wheel-pointer {
+        font-size: 1.8rem;
+        top: -14px;
+    }
+}

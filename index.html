@@ -396,8 +396,8 @@
                         BUY THE LEGEND
                         <i class="fas fa-arrow-right"></i>
                     </button>
-                    <button class="scratch-btn" id="scratchBtn">
-                        🎁 Scratch for Surprise
+                    <button class="scratch-btn" id="spinBtn">
+                        <i class="fas fa-gift"></i> Spin & Win
                     </button>
                 </div>
                 <div class="buy-features">
@@ -492,6 +492,29 @@
 
     <!-- ===== CONFETTI CANVAS ===== -->
     <canvas id="confettiCanvas"></canvas>
+
+   <!-- ===== SPIN WHEEL MODAL ===== -->
+<div class="modal" id="spinModal">
+    <div class="modal-content spin-modal">
+        <div class="modal-close" id="spinClose">&times;</div>
+        <h3 style="text-align: center; color: #FFD700; margin-bottom: 1rem;">🎡 Spin to Win!</h3>
+        <div class="wheel-container">
+            <div class="wheel" id="wheel">
+                <div class="wheel-segment" data-index="0">10% OFF</div>
+                <div class="wheel-segment" data-index="1">Free Ship</div>
+                <div class="wheel-segment" data-index="2">20% OFF</div>
+                <div class="wheel-segment" data-index="3">VIP Pass</div>
+                <div class="wheel-segment" data-index="4">50% OFF</div>
+                <div class="wheel-segment" data-index="5">Gift Box</div>
+                <div class="wheel-segment" data-index="6">15% OFF</div>
+                <div class="wheel-segment" data-index="7">Premium</div>
+            </div>
+            <div class="wheel-pointer">▼</div>
+        </div>
+        <button class="spin-btn" id="spinWheelBtn">🎰 SPIN</button>
+        <p id="spinResult" style="text-align: center; color: #FFD700; font-size: 1.2rem; margin-top: 1rem; min-height: 2rem;"></p>
+    </div>
+</div>
 
     <!-- ===== SCRIPTS ===== -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
