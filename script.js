@@ -1110,107 +1110,147 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ============================================
-// SPIN WHEEL - সম্পূর্ণ ফাংশনাল
+// MYSTERY BOX - সম্পূর্ণ ফাংশনাল
 // ============================================
-const spinBtn = document.getElementById('spinBtn');
-const spinModal = document.getElementById('spinModal');
-const spinClose = document.getElementById('spinClose');
-const wheel = document.getElementById('wheel');
-const spinWheelBtn = document.getElementById('spinWheelBtn');
-const spinResult = document.getElementById('spinResult');
+const mysteryBtn = document.getElementById('mysteryBtn');
+const mysteryModal = document.getElementById('mysteryModal');
+const mysteryClose = document.getElementById('mysteryClose');
+const mysteryBox = document.getElementById('mysteryBox');
+const mysteryRevealBtn = document.getElementById('mysteryRevealBtn');
+const mysteryResult = document.getElementById('mysteryResult');
+const mysteryPrizeIcon = document.getElementById('mysteryPrizeIcon');
+const mysteryPrizeText = document.getElementById('mysteryPrizeText');
 
-let isSpinning = false;
+const mysteryPrizes = [
+    { icon: '🎉', label: '50% OFF', color: '#FFD700' },
+    { icon: '💎', label: '20% OFF', color: '#2ECC71' },
+    { icon: '📦', label: 'Free Shipping', color: '#3498DB' },
+    { icon: '👑', label: 'VIP Pass', color: '#9B59B6' },
+    { icon: '🎁', label: 'Gift Box', color: '#E67E22' },
+    { icon: '🏆', label: 'Premium Badge', color: '#C0392B' },
+    { icon: '✨', label: '15% OFF', color: '#1ABC9C' },
+    { icon: '🌟', label: '10% OFF', color: '#F39C12' }
+];
 
-// Spin Button - Modal খোলা
-if (spinBtn) {
-    spinBtn.addEventListener('click', function(e) {
+let isRevealed = false;
+let hasClaimed = localStorage.getItem('luxbrick-mystery') === 'done';
+
+// Open Modal
+if (mysteryBtn) {
+    mysteryBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        if (spinModal) {
-            spinModal.style.display = 'flex';
+        if (mysteryModal) {
+            mysteryModal.style.display = 'flex';
             sound.click();
-            // Reset wheel
-            wheel.style.transform = 'rotate(0deg)';
-            spinResult.textContent = '';
-            spinWheelBtn.disabled = false;
-            spinWheelBtn.textContent = '🎰 SPIN';
+            
+            // Reset state
+            isRevealed = false;
+            mysteryBox.classList.remove('flipped');
+            mysteryRevealBtn.disabled = hasClaimed;
+            mysteryRevealBtn.textContent = hasClaimed ? '✓ Claimed' : '🔮 Reveal Prize';
+            mysteryResult.textContent = '';
+            
+            if (hasClaimed) {
+                mysteryRevealBtn.classList.add('claimed');
+            } else {
+                mysteryRevealBtn.classList.remove('claimed');
+            }
         }
     });
 }
 
-// Modal বন্ধ
-if (spinClose) {
-    spinClose.addEventListener('click', function() {
-        if (spinModal) spinModal.style.display = 'none';
+// Close Modal
+if (mysteryClose) {
+    mysteryClose.addEventListener('click', function() {
+        if (mysteryModal) mysteryModal.style.display = 'none';
     });
 }
 
-if (spinModal) {
-    spinModal.addEventListener('click', function(e) {
-        if (e.target === spinModal) {
-            spinModal.style.display = 'none';
+if (mysteryModal) {
+    mysteryModal.addEventListener('click', function(e) {
+        if (e.target === mysteryModal) {
+            mysteryModal.style.display = 'none';
         }
     });
 }
 
-// Spin Wheel - ঘোরানো
-if (spinWheelBtn) {
-    spinWheelBtn.addEventListener('click', function() {
-        if (isSpinning) return;
-        
-        isSpinning = true;
-        this.disabled = true;
-        this.textContent = '⏳ Spinning...';
-        spinResult.textContent = '';
-        sound.click();
-        
-        // র‍্যান্ডম কোণ (কমপক্ষে 5 বার ঘুরবে)
-        const randomSpin = 1800 + Math.random() * 1800;
-        const currentRotation = parseInt(wheel.dataset.rotation || 0);
-        const totalRotation = currentRotation + randomSpin;
-        wheel.dataset.rotation = totalRotation;
-        
-        wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
-        wheel.style.transform = `rotate(${totalRotation}deg)`;
-        
-        // 4 সেকেন্ড পর রেজাল্ট দেখান
-        setTimeout(() => {
-            // বিজয়ী সেগমেন্ট বের করা (360 ডিগ্রিকে 8 ভাগে ভাগ)
-            const normalized = totalRotation % 360;
-            const segmentIndex = Math.floor((360 - normalized) / 45) % 8;
-            
-            const prizes = [
-                '🎁 10% OFF',
-                '🌟 Free Shipping',
-                '💎 20% OFF',
-                '🏆 VIP Pass',
-                '🎉 50% OFF',
-                '🎁 Gift Box',
-                '✨ 15% OFF',
-                '👑 Premium Badge'
-            ];
-            
-            const winMessage = prizes[segmentIndex];
-            spinResult.textContent = '🎊 ' + winMessage + '!';
-            
-            sound.success();
-            
-            // Confetti
-            confetti({
-                particleCount: 80,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-            
-            // Toast
-            showToast('🎊 You won: ' + winMessage + '!');
-            
-            isSpinning = false;
-            this.disabled = false;
-            this.textContent = '🎰 SPIN AGAIN';
-            
-        }, 4200);
+// Click on box to flip
+if (mysteryBox) {
+    mysteryBox.addEventListener('click', function() {
+        if (isRevealed || hasClaimed) return;
+        revealPrize();
     });
 }
+
+// Reveal Button
+if (mysteryRevealBtn) {
+    mysteryRevealBtn.addEventListener('click', function() {
+        if (isRevealed || hasClaimed) return;
+        revealPrize();
+    });
+}
+
+function revealPrize() {
+    if (isRevealed || hasClaimed) return;
+    
+    isRevealed = true;
+    mysteryRevealBtn.disabled = true;
+    mysteryRevealBtn.textContent = '⏳ Revealing...';
+    sound.click();
+    
+    // Random prize
+    const prizeIndex = Math.floor(Math.random() * mysteryPrizes.length);
+    const prize = mysteryPrizes[prizeIndex];
+    
+    // Set prize content
+    mysteryPrizeIcon.textContent = prize.icon;
+    mysteryPrizeText.textContent = prize.label;
+    mysteryPrizeText.style.color = prize.color;
+    
+    // Flip box after short delay
+    setTimeout(() => {
+        mysteryBox.classList.add('flipped');
+        sound.coin();
+        
+        // Show result
+        mysteryResult.innerHTML = `🎊 You won: ${prize.icon} ${prize.label}!`;
+        mysteryResult.style.color = '#FFD700';
+        
+        // Confetti
+        confetti({
+            particleCount: 80,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+        
+        showToast(`🎊 You won: ${prize.icon} ${prize.label}!`);
+        
+        // Mark as claimed
+        hasClaimed = true;
+        localStorage.setItem('luxbrick-mystery', 'done');
+        
+        mysteryRevealBtn.disabled = true;
+        mysteryRevealBtn.textContent = '✓ Claimed';
+        mysteryRevealBtn.classList.add('claimed');
+        
+    }, 600);
+}
+
+// Reset for testing
+function resetMystery() {
+    localStorage.removeItem('luxbrick-mystery');
+    hasClaimed = false;
+    isRevealed = false;
+    mysteryBox.classList.remove('flipped');
+    mysteryRevealBtn.disabled = false;
+    mysteryRevealBtn.textContent = '🔮 Reveal Prize';
+    mysteryRevealBtn.classList.remove('claimed');
+    mysteryResult.textContent = '';
+}
+
+console.log('🎁 Mystery Box loaded successfully!');
+  
+
 // ============================================
 // 17. SMOOTH SCROLL
 // ============================================

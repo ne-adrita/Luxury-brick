@@ -396,8 +396,8 @@
                         BUY THE LEGEND
                         <i class="fas fa-arrow-right"></i>
                     </button>
-                    <button class="scratch-btn" id="spinBtn">
-                        <i class="fas fa-gift"></i> Spin & Win
+                    <button class="scratch-btn" id="mysteryBtn">
+                        <i class="fas fa-gift"></i> Mystery Box
                     </button>
                 </div>
                 <div class="buy-features">
@@ -493,26 +493,26 @@
     <!-- ===== CONFETTI CANVAS ===== -->
     <canvas id="confettiCanvas"></canvas>
 
-   <!-- ===== SPIN WHEEL MODAL ===== -->
-<div class="modal" id="spinModal">
-    <div class="modal-content spin-modal">
-        <div class="modal-close" id="spinClose">&times;</div>
-        <h3 style="text-align: center; color: #FFD700; margin-bottom: 1rem;">🎡 Spin to Win!</h3>
-        <div class="wheel-container">
-            <div class="wheel" id="wheel">
-                <div class="wheel-segment" data-index="0">10% OFF</div>
-                <div class="wheel-segment" data-index="1">Free Ship</div>
-                <div class="wheel-segment" data-index="2">20% OFF</div>
-                <div class="wheel-segment" data-index="3">VIP Pass</div>
-                <div class="wheel-segment" data-index="4">50% OFF</div>
-                <div class="wheel-segment" data-index="5">Gift Box</div>
-                <div class="wheel-segment" data-index="6">15% OFF</div>
-                <div class="wheel-segment" data-index="7">Premium</div>
+   <!-- ===== MYSTERY BOX MODAL ===== -->
+<div class="modal" id="mysteryModal">
+    <div class="modal-content mystery-modal">
+        <div class="modal-close" id="mysteryClose">&times;</div>
+        <h3 style="text-align: center; color: #FFD700; margin-bottom: 0.5rem;">🎁 Mystery Box</h3>
+        <p style="text-align: center; color: rgba(255,255,255,0.4); font-size: 0.85rem; margin-bottom: 1.5rem;">Click the box to reveal your prize!</p>
+        
+        <div class="mystery-box" id="mysteryBox">
+            <div class="mystery-box-front">
+                <span class="mystery-icon">🎁</span>
+                <span class="mystery-label">Click Me!</span>
             </div>
-            <div class="wheel-pointer">▼</div>
+            <div class="mystery-box-back">
+                <span class="prize-icon" id="mysteryPrizeIcon">🎉</span>
+                <span class="prize-text" id="mysteryPrizeText">50% OFF</span>
+            </div>
         </div>
-        <button class="spin-btn" id="spinWheelBtn">🎰 SPIN</button>
-        <p id="spinResult" style="text-align: center; color: #FFD700; font-size: 1.2rem; margin-top: 1rem; min-height: 2rem;"></p>
+        
+        <button class="mystery-btn" id="mysteryRevealBtn">🔮 Reveal Prize</button>
+        <p id="mysteryResult" style="text-align: center; color: #FFD700; font-size: 1.2rem; margin-top: 1rem; min-height: 2rem; font-weight: 700;"></p>
     </div>
 </div>
 
