@@ -1160,78 +1160,209 @@ body.gold-theme .theme-toggle .fa-moon {
     letter-spacing: 1px;
 }
 
-/* ===== BRICK 3D ===== */
-.brick-3d {
+/* ===== BRICK 3D - নতুন অ্যানিমেশন ===== */
+
+/* Hero Brick - Floating + Rotation */
+.hero-brick {
     width: 200px;
     height: 120px;
     position: relative;
     transform-style: preserve-3d;
-    transform: rotateX(-20deg) rotateY(30deg);
-    transition: transform 0.5s ease;
+    animation: heroFloat 4s ease-in-out infinite;
 }
 
-.brick-3d.interactive {
-    transition: none;
+@keyframes heroFloat {
+    0% { transform: rotateX(-15deg) rotateY(0deg) translateY(0px); }
+    25% { transform: rotateX(-15deg) rotateY(90deg) translateY(-15px); }
+    50% { transform: rotateX(-15deg) rotateY(180deg) translateY(0px); }
+    75% { transform: rotateX(-15deg) rotateY(270deg) translateY(-15px); }
+    100% { transform: rotateX(-15deg) rotateY(360deg) translateY(0px); }
 }
 
-.brick-3d.rotating {
-    animation: rotateBrick 20s linear infinite;
+/* Story Brick - Smooth Continuous Rotation */
+.story-brick {
+    width: 250px;
+    height: 150px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: storyRotate 15s linear infinite;
 }
 
-@keyframes rotateBrick {
-    from { transform: rotateX(-20deg) rotateY(0deg); }
-    to { transform: rotateX(-20deg) rotateY(360deg); }
+@keyframes storyRotate {
+    0% { transform: rotateX(-10deg) rotateY(0deg); }
+    100% { transform: rotateX(-10deg) rotateY(360deg); }
 }
 
-.brick-face {
-    position: absolute;
+/* Premium Brick - Glow + Rotation */
+.premium-brick-3d {
     width: 200px;
     height: 120px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: premiumRotate 8s ease-in-out infinite;
+}
+
+@keyframes premiumRotate {
+    0% { transform: rotateX(-15deg) rotateY(0deg) scale(1); }
+    25% { transform: rotateX(-15deg) rotateY(90deg) scale(1.05); }
+    50% { transform: rotateX(-15deg) rotateY(180deg) scale(1); }
+    75% { transform: rotateX(-15deg) rotateY(270deg) scale(1.05); }
+    100% { transform: rotateX(-15deg) rotateY(360deg) scale(1); }
+}
+
+/* Interactive Brick - Mouse Follow (Hero) */
+.hero-brick.interactive {
+    animation: none;
+    transition: transform 0.1s ease-out;
+}
+
+/* ===== BRICK FACES (সব ব্রিকের জন্য) ===== */
+.brick-face {
+    position: absolute;
     border-radius: 8px;
     backface-visibility: visible;
 }
 
-.brick-face.front {
+/* Hero Brick Faces */
+.hero-brick .brick-face.front {
     background: linear-gradient(135deg, #C0392B, #E74C3C);
+    width: 200px;
+    height: 120px;
     transform: translateZ(60px);
     box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
 }
-.brick-face.back {
+.hero-brick .brick-face.back {
     background: linear-gradient(135deg, #A93226, #C0392B);
+    width: 200px;
+    height: 120px;
     transform: rotateY(180deg) translateZ(60px);
 }
-.brick-face.left {
+.hero-brick .brick-face.left {
     background: linear-gradient(135deg, #922B21, #A93226);
     width: 120px;
     height: 120px;
     transform: rotateY(-90deg) translateZ(60px);
 }
-.brick-face.right {
+.hero-brick .brick-face.right {
     background: linear-gradient(135deg, #A93226, #C0392B);
     width: 120px;
     height: 120px;
     transform: rotateY(90deg) translateZ(140px);
 }
-.brick-face.top {
+.hero-brick .brick-face.top {
     background: linear-gradient(135deg, #C0392B, #E74C3C);
     width: 200px;
     height: 120px;
     transform: rotateX(90deg) translateZ(60px);
 }
-.brick-face.bottom {
+.hero-brick .brick-face.bottom {
     background: linear-gradient(135deg, #922B21, #A93226);
     width: 200px;
     height: 120px;
     transform: rotateX(-90deg) translateZ(60px);
 }
 
-.brick-3d.premium .brick-face.front,
-.brick-3d.premium .brick-face.back,
-.brick-3d.premium .brick-face.left,
-.brick-3d.premium .brick-face.right,
-.brick-3d.premium .brick-face.top,
-.brick-3d.premium .brick-face.bottom {
+/* Story Brick Faces */
+.story-brick .brick-face.front {
+    background: linear-gradient(135deg, #C0392B, #E74C3C);
+    width: 250px;
+    height: 150px;
+    transform: translateZ(75px);
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+}
+.story-brick .brick-face.back {
+    background: linear-gradient(135deg, #A93226, #C0392B);
+    width: 250px;
+    height: 150px;
+    transform: rotateY(180deg) translateZ(75px);
+}
+.story-brick .brick-face.left {
+    background: linear-gradient(135deg, #922B21, #A93226);
+    width: 150px;
+    height: 150px;
+    transform: rotateY(-90deg) translateZ(75px);
+}
+.story-brick .brick-face.right {
+    background: linear-gradient(135deg, #A93226, #C0392B);
+    width: 150px;
+    height: 150px;
+    transform: rotateY(90deg) translateZ(175px);
+}
+.story-brick .brick-face.top {
+    background: linear-gradient(135deg, #C0392B, #E74C3C);
+    width: 250px;
+    height: 150px;
+    transform: rotateX(90deg) translateZ(75px);
+}
+.story-brick .brick-face.bottom {
+    background: linear-gradient(135deg, #922B21, #A93226);
+    width: 250px;
+    height: 150px;
+    transform: rotateX(-90deg) translateZ(75px);
+}
+
+/* Premium Brick Faces - Golden */
+.premium-brick-3d .brick-face.front,
+.premium-brick-3d .brick-face.back,
+.premium-brick-3d .brick-face.left,
+.premium-brick-3d .brick-face.right,
+.premium-brick-3d .brick-face.top,
+.premium-brick-3d .brick-face.bottom {
     background: linear-gradient(135deg, #FFD700, #F39C12) !important;
+}
+
+.premium-brick-3d .brick-face.front {
+    width: 200px;
+    height: 120px;
+    transform: translateZ(60px);
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.2), 0 0 40px rgba(255,215,0,0.2);
+}
+.premium-brick-3d .brick-face.back {
+    width: 200px;
+    height: 120px;
+    transform: rotateY(180deg) translateZ(60px);
+}
+.premium-brick-3d .brick-face.left {
+    width: 120px;
+    height: 120px;
+    transform: rotateY(-90deg) translateZ(60px);
+}
+.premium-brick-3d .brick-face.right {
+    width: 120px;
+    height: 120px;
+    transform: rotateY(90deg) translateZ(140px);
+}
+.premium-brick-3d .brick-face.top {
+    width: 200px;
+    height: 120px;
+    transform: rotateX(90deg) translateZ(60px);
+}
+.premium-brick-3d .brick-face.bottom {
+    width: 200px;
+    height: 120px;
+    transform: rotateX(-90deg) translateZ(60px);
+}
+
+/* ===== FLOATING BRICK CONTAINER ===== */
+.floating-brick {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+/* ===== ROTATING BRICK CONTAINER (Story) ===== */
+.rotating-brick {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ===== PREMIUM BRICK CONTAINER (Buy) ===== */
+.premium-brick {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1rem;
 }
 
 /* ===== SCROLL INDICATOR ===== */

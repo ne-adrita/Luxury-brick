@@ -276,34 +276,31 @@ gsap.from('.floating-brick', {
 });
 
 // ============================================
-// HERO BRICK - MOUSE FOLLOW
+// HERO BRICK - MOUSE FOLLOW (নতুন)
 // ============================================
 const heroContainer = document.querySelector('.hero-brick-container');
-const floatingBrick = document.querySelector('.floating-brick');
+const heroBrick = document.querySelector('.hero-brick');
 
-if (heroContainer && floatingBrick) {
-    const brick3d = floatingBrick.querySelector('.brick-3d');
+if (heroContainer && heroBrick) {
+    // Remove the float animation when interacting
+    heroBrick.style.animation = 'none';
     
     heroContainer.addEventListener('mousemove', (e) => {
         const rect = heroContainer.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
         
-        // Subtle rotation - maximum 10 degrees
-        const rotateY = x * 15;
-        const rotateX = -y * 10;
+        const rotateY = x * 20;
+        const rotateX = -y * 15;
+        const translateY = -y * 10;
         
-        brick3d.style.transform = `rotateX(${-20 + rotateX}deg) rotateY(${30 + rotateY}deg)`;
+        heroBrick.style.transform = `rotateX(${-10 + rotateX}deg) rotateY(${rotateY}deg) translateY(${translateY}px)`;
+        heroBrick.style.transition = 'transform 0.1s ease-out';
     });
     
     heroContainer.addEventListener('mouseleave', () => {
-        // Smooth return to original position
-        brick3d.style.transform = 'rotateX(-20deg) rotateY(30deg)';
-        brick3d.style.transition = 'transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        
-        setTimeout(() => {
-            brick3d.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        }, 800);
+        heroBrick.style.transform = 'rotateX(-10deg) rotateY(0deg) translateY(0px)';
+        heroBrick.style.transition = 'transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
     });
 }
 
