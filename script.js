@@ -1245,3 +1245,17 @@ console.log('🧱 LUXBRICK™ - The Brick That Built Legends');
 console.log('✦ Features: 360° Viewer, Live Counter, Theme Toggle (G), 3 Games');
 console.log('✦ Keyboard: G = Theme Toggle, R = Reset Game');
 console.log('✦ Built for Grameenphone Academy - Top 80!');
+// ============================================
+// LOADING SCREEN
+// ============================================
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        const loader = document.getElementById('loader');
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(function() {
+                loader.style.display = 'none';
+            }, 800);
+        }
+    }, 1500);
+});
