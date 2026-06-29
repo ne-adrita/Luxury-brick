@@ -329,6 +329,21 @@ body.gold-theme .game-wrapper {
     margin-bottom: 2.5rem;
 }
 
+/* Hero Brick Mouse Follow */
+.hero-brick-container {
+    perspective: 1000px;
+    transition: transform 0.1s ease-out;
+}
+
+.floating-brick {
+    transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+}
+
+.floating-brick .brick-3d {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 /* ===== LIVE COUNTER ===== */
 .live-counter {
     display: flex;

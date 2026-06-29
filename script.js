@@ -270,6 +270,38 @@ gsap.from('.floating-brick', {
 });
 
 // ============================================
+// HERO BRICK - MOUSE FOLLOW
+// ============================================
+const heroContainer = document.querySelector('.hero-brick-container');
+const floatingBrick = document.querySelector('.floating-brick');
+
+if (heroContainer && floatingBrick) {
+    const brick3d = floatingBrick.querySelector('.brick-3d');
+    
+    heroContainer.addEventListener('mousemove', (e) => {
+        const rect = heroContainer.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        
+        // Subtle rotation - maximum 10 degrees
+        const rotateY = x * 15;
+        const rotateX = -y * 10;
+        
+        brick3d.style.transform = `rotateX(${-20 + rotateX}deg) rotateY(${30 + rotateY}deg)`;
+    });
+    
+    heroContainer.addEventListener('mouseleave', () => {
+        // Smooth return to original position
+        brick3d.style.transform = 'rotateX(-20deg) rotateY(30deg)';
+        brick3d.style.transition = 'transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        
+        setTimeout(() => {
+            brick3d.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        }, 800);
+    });
+}
+
+// ============================================
 // 7. LIVE COUNTER
 // ============================================
 function updateLiveCounter() {
@@ -914,20 +946,25 @@ const reactionTest = new ReactionTest();
 const buyBtn = document.getElementById('buyBtn');
 if (buyBtn) {
     buyBtn.addEventListener('click', function() {
-        // Disable button immediately
+        // Step 1: Disable & Show Processing
         this.disabled = true;
         this.innerHTML = '⏳ Processing...';
         this.style.opacity = '0.7';
-        
-        // Show processing toast
         showToast('⏳ Processing your order...');
         
-        // After 500ms, show success
+        // Step 2: After 800ms - Brick rotates + Confetti starts
         setTimeout(() => {
             sound.success();
             this.classList.add('buying');
             
-            // Confetti
+            // Rotate the premium brick
+            const premiumBrick = document.querySelector('.premium-brick .brick-3d');
+            if (premiumBrick) {
+                premiumBrick.style.transition = 'transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                premiumBrick.style.transform = 'rotateX(360deg) rotateY(720deg) scale(1.1)';
+            }
+            
+            // Confetti starts
             const duration = 4 * 1000;
             const end = Date.now() + duration;
             (function frame() {
@@ -942,50 +979,61 @@ if (buyBtn) {
                 }
             })();
             
-            // Fireworks
-            setTimeout(() => {
-                for (let i = 0; i < 5; i++) {
-                    setTimeout(() => {
-                        const x = Math.random();
-                        const y = Math.random() * 0.5;
-                        confetti({
-                            particleCount: 50,
-                            spread: 100,
-                            origin: { x, y },
-                            colors: ['#FFD700', '#C0392B', '#F5F5F5', '#FF6B6B']
-                        });
-                    }, i * 300);
-                }
-            }, 500);
+        }, 800);
             
-            // Screen shake
-            document.body.style.animation = 'shake 0.5s ease';
-            setTimeout(() => {
-                document.body.style.animation = '';
-            }, 500);
+              // Step 3: After 1200ms - Fireworks + Screen Shake
+        setTimeout(() => {
+            // Fireworks
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const x = Math.random();
+                    const y = Math.random() * 0.5;
+                    confetti({
+                        particleCount: 50,
+                        spread: 100,
+                        origin: { x, y },
+                        colors: ['#FFD700', '#C0392B', '#F5F5F5', '#FF6B6B']
+                    });
+                }, i * 300);
+            }
+            
+               // Screen shake
+               document.body.style.animation = 'shake 0.5s ease';
+               setTimeout(() => {
+                   document.body.style.animation = '';
+               }, 500);
+               
+           }, 1200);
 
-            // ===== SUCCESS MODAL =====
+           // Step 4: After 1800ms - Success Modal
+        setTimeout(() => {
             const modal = document.getElementById('successModal');
             if (modal) {
                 modal.style.display = 'flex';
             }
             
-            // Update button
-            this.innerHTML = '✓ ORDER CONFIRMED!';
-            this.style.background = 'linear-gradient(135deg, #27AE60, #2ECC71)';
-            this.style.opacity = '1';
+        // Update button
+        this.innerHTML = '✓ ORDER CONFIRMED!';
+        this.style.background = 'linear-gradient(135deg, #27AE60, #2ECC71)';
+        this.style.opacity = '1';
+        
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-crown"></i> BUY THE LEGEND <i class="fas fa-arrow-right"></i>';
+            this.style.background = '';
+            this.classList.remove('buying');
+            this.disabled = false;
             
-            setTimeout(() => {
-                this.innerHTML = '<i class="fas fa-crown"></i> BUY THE LEGEND <i class="fas fa-arrow-right"></i>';
-                this.style.background = '';
-                this.classList.remove('buying');
-                this.disabled = false;
-            }, 4000);
-
-            showToast('🎉 Order Confirmed! Welcome to the LUXBRICK family!');
+            // Reset brick rotation
+            const premiumBrick = document.querySelector('.premium-brick .brick-3d');
+            if (premiumBrick) {
+                premiumBrick.style.transition = 'transform 1s ease';
+                premiumBrick.style.transform = 'rotateX(-20deg) rotateY(30deg)';
+            }
+        }, 4000);
+        showToast('🎉 Order Confirmed! Welcome to the LUXBRICK family!');
             
-        }, 500); // 500ms delay for processing
-    });
+    }, 1800);
+});
 }
 
 // ===== CLOSE SUCCESS MODAL =====
