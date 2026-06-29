@@ -7,6 +7,11 @@ AOS.init({
     disable: 'mobile'
 });
 
+// AOS রিফ্রেশ (নিশ্চিত করে যে সব element visible)
+setTimeout(() => {
+    AOS.refresh();
+}, 100);
+
 // ============================================
 // 1. SOUND EFFECTS
 // ============================================
@@ -293,7 +298,7 @@ function updateLiveCounter() {
 updateLiveCounter();
 
 // ============================================
-// 8. COUNTER ANIMATION (FIXED)
+// 8. COUNTER ANIMATION
 // ============================================
 function animateCounters() {
     const counters = document.querySelectorAll('.stat-number');
@@ -904,68 +909,82 @@ class ReactionTest {
 const reactionTest = new ReactionTest();
 
 // ============================================
-// ============================================
-// 15. BUY BUTTON WITH FIREWORKS & MODAL
+// 15. BUY BUTTON WITH PROCESSING & MODAL
 // ============================================
 const buyBtn = document.getElementById('buyBtn');
 if (buyBtn) {
     buyBtn.addEventListener('click', function() {
-        sound.success();
-        this.classList.add('buying');
+        // Disable button immediately
+        this.disabled = true;
+        this.innerHTML = '⏳ Processing...';
+        this.style.opacity = '0.7';
         
-        // Confetti
-        const duration = 4 * 1000;
-        const end = Date.now() + duration;
-        (function frame() {
-            confetti({
-                particleCount: 15,
-                startVelocity: 45,
-                spread: 360,
-                origin: { y: 0.6 }
-            });
-            if (Date.now() < end) {
-                requestAnimationFrame(frame);
-            }
-        })();
+        // Show processing toast
+        showToast('⏳ Processing your order...');
         
-        // Fireworks
+        // After 500ms, show success
         setTimeout(() => {
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => {
-                    const x = Math.random();
-                    const y = Math.random() * 0.5;
-                    confetti({
-                        particleCount: 50,
-                        spread: 100,
-                        origin: { x, y },
-                        colors: ['#FFD700', '#C0392B', '#F5F5F5', '#FF6B6B']
-                    });
-                }, i * 300);
-            }
-        }, 500);
-        
-        // Screen shake
-        document.body.style.animation = 'shake 0.5s ease';
-        setTimeout(() => {
-            document.body.style.animation = '';
-        }, 500);
+            sound.success();
+            this.classList.add('buying');
+            
+            // Confetti
+            const duration = 4 * 1000;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({
+                    particleCount: 15,
+                    startVelocity: 45,
+                    spread: 360,
+                    origin: { y: 0.6 }
+                });
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+            
+            // Fireworks
+            setTimeout(() => {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const x = Math.random();
+                        const y = Math.random() * 0.5;
+                        confetti({
+                            particleCount: 50,
+                            spread: 100,
+                            origin: { x, y },
+                            colors: ['#FFD700', '#C0392B', '#F5F5F5', '#FF6B6B']
+                        });
+                    }, i * 300);
+                }
+            }, 500);
+            
+            // Screen shake
+            document.body.style.animation = 'shake 0.5s ease';
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 500);
 
-        // ===== SUCCESS MODAL =====
-        const modal = document.getElementById('successModal');
-        if (modal) {
-            modal.style.display = 'flex';
-        }
-        
-        // Update button
-        this.innerHTML = '✓ ORDER CONFIRMED!';
-        this.style.background = 'linear-gradient(135deg, #27AE60, #2ECC71)';
-        setTimeout(() => {
-            this.innerHTML = '<i class="fas fa-crown"></i> BUY THE LEGEND <i class="fas fa-arrow-right"></i>';
-            this.style.background = '';
-            this.classList.remove('buying');
-        }, 4000);
+            // ===== SUCCESS MODAL =====
+            const modal = document.getElementById('successModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+            
+            // Update button
+            this.innerHTML = '✓ ORDER CONFIRMED!';
+            this.style.background = 'linear-gradient(135deg, #27AE60, #2ECC71)';
+            this.style.opacity = '1';
+            
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-crown"></i> BUY THE LEGEND <i class="fas fa-arrow-right"></i>';
+                this.style.background = '';
+                this.classList.remove('buying');
+                this.disabled = false;
+            }, 4000);
 
-        showToast('🎉 Order Confirmed! Welcome to the LUXBRICK family!');
+            showToast('🎉 Order Confirmed! Welcome to the LUXBRICK family!');
+            
+        }, 500); // 500ms delay for processing
     });
 }
 
@@ -988,8 +1007,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ============================================
-// ============================================
-// SCRATCH CARD - সম্পূর্ণ ফিক্সড
+// 16. SCRATCH CARD - সম্পূর্ণ ফিক্সড
 // ============================================
 const scratchBtn = document.getElementById('scratchBtn');
 const scratchModal = document.getElementById('scratchModal');
@@ -1212,9 +1230,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
-// 18. SCROLL ANIMATIONS - FIXED
-// ============================================
-// SCROLL ANIMATIONS - ফিক্সড
+// 18. SCROLL ANIMATIONS - ফিক্সড
 // ============================================
 // Features - ফোর্স ভিজিবিলিটি
 document.querySelectorAll('.feature-card').forEach((card, i) => {
@@ -1270,12 +1286,8 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-console.log('🧱 LUXBRICK™ - The Brick That Built Legends');
-console.log('✦ Features: 360° Viewer, Live Counter, Theme Toggle (G), 3 Games');
-console.log('✦ Keyboard: G = Theme Toggle, R = Reset Game');
-console.log('✦ Built for Grameenphone Academy - Top 80!');
 // ============================================
-// LOADING SCREEN
+// 20. LOADING SCREEN
 // ============================================
 window.addEventListener('load', function() {
     setTimeout(function() {
@@ -1289,12 +1301,7 @@ window.addEventListener('load', function() {
     }, 1500);
 });
 
-// Close modal with Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        const modal = document.getElementById('successModal');
-        if (modal && modal.style.display === 'flex') {
-            modal.style.display = 'none';
-        }
-    }
-});
+console.log('🧱 LUXBRICK™ - The Brick That Built Legends');
+console.log('✦ Features: 360° Viewer, Live Counter, Theme Toggle (G), 3 Games');
+console.log('✦ Keyboard: G = Theme Toggle, R = Reset Game');
+console.log('✦ Built for Grameenphone Academy - Top 80!');

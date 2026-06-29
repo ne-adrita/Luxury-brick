@@ -1881,6 +1881,7 @@ body.gold-theme .game-wrapper {
     font-size: 4rem;
     font-weight: 900;
     letter-spacing: 5px;
+    animation: logoScale 1.5s ease-in-out infinite;
 }
 
 .loader-content p {
@@ -1888,10 +1889,26 @@ body.gold-theme .game-wrapper {
     margin-top: 15px;
     letter-spacing: 4px;
     font-size: 1.1rem;
-    animation: pulse 1.5s ease-in-out infinite;
+    animation: textPulse 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse {
+/* Logo Scale Animation */
+@keyframes logoScale {
+    0% { 
+        transform: scale(1);
+        text-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+    }
+    50% { 
+        transform: scale(1.08);
+        text-shadow: 0 0 60px rgba(255, 215, 0, 0.5);
+    }
+    100% { 
+        transform: scale(1);
+        text-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+    }
+}
+
+@keyframes textPulse {
     0%, 100% { opacity: 0.4; }
     50% { opacity: 1; }
 }
@@ -1921,17 +1938,29 @@ body.gold-theme .game-wrapper {
     width: 90%;
     border: 2px solid rgba(255, 215, 0, 0.3);
     box-shadow: 0 0 80px rgba(255, 215, 0, 0.1);
+    animation: modalPop 0.5s ease;
+}
+
+@keyframes modalPop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
 .success-icon {
-    font-size: 4rem;
+    font-size: 4.5rem;
     display: block;
     margin-bottom: 0.5rem;
+    animation: iconBounce 1s ease infinite;
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
 }
 
 .success-modal-box h2 {
     color: #FFD700;
-    font-size: 2rem;
+    font-size: 2.2rem;
     margin-bottom: 0.5rem;
 }
 
@@ -1943,8 +1972,16 @@ body.gold-theme .game-wrapper {
 
 .success-highlight {
     color: #FFD700 !important;
-    font-size: 1.2rem !important;
+    font-size: 1.3rem !important;
     font-weight: 700;
+}
+
+.success-divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, #C0392B, #FFD700);
+    margin: 0.8rem auto;
+    border-radius: 10px;
 }
 
 .success-sub {
