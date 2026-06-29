@@ -518,6 +518,10 @@ body.gold-theme .game-wrapper {
 .brick-3d.premium .brick-face.bottom {
     background: linear-gradient(135deg, #FFD700, #F39C12) !important;
 }
+/* প্রিমিয়াম ব্রিক রোটেশন */
+.brick-3d.premium.rotating {
+    animation: rotateBrick 20s linear infinite;
+}
 
 /* ===== SCROLL INDICATOR ===== */
 .scroll-indicator {
