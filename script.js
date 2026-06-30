@@ -1026,8 +1026,20 @@ class Cart {
             });
         }
         if (this.heroAddCartBtn) {
-            this.heroAddCartBtn.addEventListener('click', () => this.addItem('LUXBRICK™', 499, '🧱'));
+            this.heroAddCartBtn.addEventListener('click', () => {
+                this.addItem('LUXBRICK™', 499, '🧱');
+                this.animateAddButton(this.heroAddCartBtn);
+            });
         }
+
+        const buyAddCartBtn = document.getElementById('buyAddCartBtn');
+        if (buyAddCartBtn) {
+            buyAddCartBtn.addEventListener('click', () => {
+                this.addItem('LUXBRICK™', 499, '🧱');
+                this.animateAddButton(buyAddCartBtn);
+            });
+        }
+
         if (this.checkoutBtn) {
             this.checkoutBtn.addEventListener('click', () => this.checkout());
         }
@@ -1055,6 +1067,30 @@ class Cart {
         this.save();
         this.updateUI();
         sound.click();
+    }
+
+    increaseQty(name) {
+        const item = this.items.find(i => i.name === name);
+        if (item) {
+            item.qty += 1;
+            this.save();
+            this.updateUI();
+            sound.click();
+        }
+    }
+
+    decreaseQty(name) {
+        const item = this.items.find(i => i.name === name);
+        if (item) {
+            item.qty -= 1;
+            if (item.qty <= 0) {
+                this.removeItem(name);
+                return;
+            }
+            this.save();
+            this.updateUI();
+            sound.click();
+        }
     }
 
     getTotal() {
@@ -1095,8 +1131,14 @@ class Cart {
                 <div class="cart-item">
                     <span class="cart-item-icon">${item.icon}</span>
                     <div class="cart-item-info">
-                        <div class="cart-item-name">${item.name} ${item.qty > 1 ? `×${item.qty}` : ''}</div>
-                        <div class="cart-item-price">$${(item.price * item.qty).toLocaleString()}</div>
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-unit-price">$${item.price.toLocaleString()} each</div>
+                        <div class="cart-item-qty">
+                            <button class="cart-qty-btn" data-action="decrease" data-name="${item.name}">−</button>
+                            <span class="cart-qty-value">${item.qty}</span>
+                            <button class="cart-qty-btn" data-action="increase" data-name="${item.name}">+</button>
+                            <span class="cart-item-line-total">$${(item.price * item.qty).toLocaleString()}</span>
+                        </div>
                     </div>
                     <span class="cart-item-remove" data-name="${item.name}">&times;</span>
                 </div>
@@ -1107,6 +1149,18 @@ class Cart {
 
             this.cartItems.querySelectorAll('.cart-item-remove').forEach(btn => {
                 btn.addEventListener('click', () => this.removeItem(btn.dataset.name));
+            });
+
+            this.cartItems.querySelectorAll('.cart-qty-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const action = btn.dataset.action;
+                    const name = btn.dataset.name;
+                    if (action === 'increase') {
+                        this.increaseQty(name);
+                    } else {
+                        this.decreaseQty(name);
+                    }
+                });
             });
         }
     }
@@ -1124,6 +1178,14 @@ class Cart {
             this.cartModal.style.display = 'none';
             document.body.style.overflow = '';
         }
+    }
+
+    animateAddButton(btn) {
+        if (!btn) return;
+        btn.classList.remove('cart-added');
+        void btn.offsetWidth;
+        btn.classList.add('cart-added');
+        setTimeout(() => btn.classList.remove('cart-added'), 500);
     }
 
     checkout() {
