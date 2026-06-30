@@ -993,7 +993,159 @@ class ReactionTest {
 const reactionTest = new ReactionTest();
 
 // ============================================
-// 15. BUY BUTTON WITH PROCESSING & MODAL
+// 15. CART SYSTEM
+// ============================================
+class Cart {
+    constructor() {
+        this.items = JSON.parse(localStorage.getItem('luxbrick-cart')) || [];
+        this.cartBtn = document.getElementById('cartBtn');
+        this.cartCount = document.getElementById('cartCount');
+        this.cartModal = document.getElementById('cartModal');
+        this.cartItems = document.getElementById('cartItems');
+        this.cartFooter = document.getElementById('cartFooter');
+        this.cartTotal = document.getElementById('cartTotal');
+        this.cartClose = document.getElementById('cartClose');
+        this.checkoutBtn = document.getElementById('checkoutBtn');
+        this.heroAddCartBtn = document.getElementById('heroAddCartBtn');
+
+        this.init();
+    }
+
+    init() {
+        this.updateUI();
+
+        if (this.cartBtn) {
+            this.cartBtn.addEventListener('click', () => this.openCart());
+        }
+        if (this.cartClose) {
+            this.cartClose.addEventListener('click', () => this.closeCart());
+        }
+        if (this.cartModal) {
+            this.cartModal.addEventListener('click', (e) => {
+                if (e.target === this.cartModal) this.closeCart();
+            });
+        }
+        if (this.heroAddCartBtn) {
+            this.heroAddCartBtn.addEventListener('click', () => this.addItem('LUXBRICK™', 499, '🧱'));
+        }
+        if (this.checkoutBtn) {
+            this.checkoutBtn.addEventListener('click', () => this.checkout());
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') this.closeCart();
+        });
+    }
+
+    addItem(name, price, icon = '🧱') {
+        const existing = this.items.find(i => i.name === name);
+        if (existing) {
+            existing.qty += 1;
+        } else {
+            this.items.push({ name, price, icon, qty: 1 });
+        }
+        this.save();
+        this.updateUI();
+        sound.coin();
+        showToast(`🛒 "${name}" added to cart!`);
+    }
+
+    removeItem(name) {
+        this.items = this.items.filter(i => i.name !== name);
+        this.save();
+        this.updateUI();
+        sound.click();
+    }
+
+    getTotal() {
+        return this.items.reduce((sum, i) => sum + i.price * i.qty, 0);
+    }
+
+    getCount() {
+        return this.items.reduce((sum, i) => sum + i.qty, 0);
+    }
+
+    save() {
+        localStorage.setItem('luxbrick-cart', JSON.stringify(this.items));
+    }
+
+    updateUI() {
+        const count = this.getCount();
+        if (this.cartCount) {
+            this.cartCount.textContent = count;
+            if (count > 0) {
+                this.cartCount.classList.add('bump');
+                setTimeout(() => this.cartCount.classList.remove('bump'), 300);
+            }
+        }
+
+        if (!this.cartItems || !this.cartFooter) return;
+
+        if (count === 0) {
+            this.cartItems.innerHTML = `
+                <div class="cart-empty">
+                    <i class="fas fa-box-open"></i>
+                    <p>Your cart is empty</p>
+                    <span>Add some bricks to get started!</span>
+                </div>
+            `;
+            this.cartFooter.style.display = 'none';
+        } else {
+            this.cartItems.innerHTML = this.items.map(item => `
+                <div class="cart-item">
+                    <span class="cart-item-icon">${item.icon}</span>
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name} ${item.qty > 1 ? `×${item.qty}` : ''}</div>
+                        <div class="cart-item-price">$${(item.price * item.qty).toLocaleString()}</div>
+                    </div>
+                    <span class="cart-item-remove" data-name="${item.name}">&times;</span>
+                </div>
+            `).join('');
+
+            this.cartFooter.style.display = 'block';
+            this.cartTotal.textContent = '$' + this.getTotal().toLocaleString();
+
+            this.cartItems.querySelectorAll('.cart-item-remove').forEach(btn => {
+                btn.addEventListener('click', () => this.removeItem(btn.dataset.name));
+            });
+        }
+    }
+
+    openCart() {
+        if (this.cartModal) {
+            this.cartModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            sound.click();
+        }
+    }
+
+    closeCart() {
+        if (this.cartModal) {
+            this.cartModal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+    }
+
+    checkout() {
+        if (this.getCount() === 0) return;
+        sound.success();
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+        showToast('🏆 Order placed! Welcome to LUXBRICK family!');
+        this.items = [];
+        this.save();
+        this.updateUI();
+        setTimeout(() => this.closeCart(), 500);
+    }
+}
+
+const cart = new Cart();
+
+// ============================================
+// 16. BUY BUTTON WITH PROCESSING & MODAL
 // ============================================
 const buyBtn = document.getElementById('buyBtn');
 if (buyBtn) {

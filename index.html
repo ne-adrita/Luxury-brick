@@ -41,6 +41,10 @@
                 <div class="theme-toggle" id="themeToggle">
                     <i class="fas fa-moon"></i>
                 </div>
+                <div class="cart-btn" id="cartBtn">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
                 <ul class="nav-menu">
                     <li><a href="#story">The Story</a></li>
                     <li><a href="#features">Features</a></li>
@@ -92,6 +96,10 @@
                     <button class="hero-btn secondary-btn wishlist-btn" id="wishlistBtn">
                         <i class="fas fa-heart"></i>
                         <span>Wishlist</span>
+                    </button>
+                    <button class="hero-btn secondary-btn add-cart-btn" id="heroAddCartBtn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Add to Cart</span>
                     </button>
                 </div>
             </div>
@@ -476,6 +484,32 @@
         </div>
     </div>
 </footer>
+
+    <!-- ===== CART MODAL ===== -->
+<div class="cart-modal" id="cartModal">
+    <div class="cart-modal-content">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-bag"></i> Your Cart</h3>
+            <span class="cart-modal-close" id="cartClose">&times;</span>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty">
+                <i class="fas fa-box-open"></i>
+                <p>Your cart is empty</p>
+                <span>Add some bricks to get started!</span>
+            </div>
+        </div>
+        <div class="cart-footer" id="cartFooter" style="display: none;">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span class="cart-total-amount" id="cartTotal">$0</span>
+            </div>
+            <button class="cart-checkout-btn" id="checkoutBtn">
+                <i class="fas fa-crown"></i> Checkout
+            </button>
+        </div>
+    </div>
+</div>
 
     <!-- ===== BUY SUCCESS MODAL ===== -->
 <div id="successModal" class="success-modal">
