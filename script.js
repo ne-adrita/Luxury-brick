@@ -266,14 +266,30 @@ gsap.from('.live-counter', {
     delay: 1.3
 });
 
-gsap.from('.floating-brick', {
-    duration: 1.5,
-    scale: 0.5,
-    opacity: 0,
-    rotation: 180,
-    ease: 'power3.out',
-    delay: 0.3
-});
+const heroBrickReveal = gsap.timeline({ delay: 0.2 });
+
+heroBrickReveal
+    .set('.hero-brick', {
+        rotationX: -25,
+        rotationY: 45,
+        scale: 0.4,
+        opacity: 0
+    })
+    .to('.hero-brick', {
+        duration: 1.6,
+        rotationX: -10,
+        rotationY: 15,
+        scale: 1,
+        opacity: 1,
+        ease: 'power4.out'
+    })
+    .to('.hero-brick-container', {
+        duration: 3.5,
+        y: -5,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true
+    }, '+=0.6');
 
 // ============================================
 // HERO BRICK - MOUSE FOLLOW (নতুন)
@@ -299,7 +315,7 @@ if (heroContainer && heroBrick) {
     });
     
     heroContainer.addEventListener('mouseleave', () => {
-        heroBrick.style.transform = 'rotateX(-10deg) rotateY(0deg) translateY(0px)';
+        heroBrick.style.transform = 'rotateX(-10deg) rotateY(15deg) translateY(0px)';
         heroBrick.style.transition = 'transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
     });
 }
@@ -1522,7 +1538,50 @@ document.querySelectorAll('.testimonial-card').forEach((card, i) => {
 });
 
 // ============================================
-// 19. KEYBOARD SHORTCUTS
+// 19. BRICK SCROLL REVEAL - Story
+// ============================================
+const storyBrick = document.querySelector('.story-brick');
+if (storyBrick) {
+    gsap.fromTo(storyBrick,
+        { rotationY: -30, opacity: 0.3 },
+        {
+            scrollTrigger: {
+                trigger: '.story-visual',
+                start: 'top 85%',
+                toggleActions: 'play none none reverse'
+            },
+            duration: 1.8,
+            rotationY: 0,
+            opacity: 1,
+            ease: 'power3.out'
+        }
+    );
+}
+
+// ============================================
+// 20. BRICK SCROLL REVEAL - Premium (Buy Section)
+// ============================================
+const premiumBrick = document.querySelector('.premium-brick-3d');
+if (premiumBrick) {
+    gsap.fromTo(premiumBrick,
+        { rotationY: 40, scale: 0.7, opacity: 0 },
+        {
+            scrollTrigger: {
+                trigger: '.buy-visual',
+                start: 'top 85%',
+                toggleActions: 'play none none reverse'
+            },
+            duration: 1.6,
+            rotationY: 30,
+            scale: 1,
+            opacity: 1,
+            ease: 'power3.out'
+        }
+    );
+}
+
+// ============================================
+// 21. KEYBOARD SHORTCUTS
 // ============================================
 document.addEventListener('keydown', (e) => {
     if (e.key === 'g' || e.key === 'G') {
@@ -1536,19 +1595,143 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ============================================
-// 20. LOADING SCREEN WITH ZOOM-OUT
+// 22. CINEMATIC LOADER ANIMATION
 // ============================================
-window.addEventListener('load', function() {
-    setTimeout(function() {
-        const loader = document.getElementById('loader');
-        if (loader) {
+(function initLoaderAnimation() {
+    const loader = document.getElementById('loader');
+    const container = document.getElementById('loaderBrickContainer');
+    const brand = document.getElementById('loaderBrand');
+    if (!loader || !container) return;
+
+    // Mansion silhouette grid (12 cols x 10 rows)
+    // 0 = empty, 1 = wall brick, 2 = gold accent
+    const mansion = [
+        [0,0,0,0,1,1,1,0,0,0,0,0],
+        [0,0,0,0,1,0,1,0,0,0,0,0],
+        [0,0,0,1,1,1,1,1,0,0,0,0],
+        [0,0,1,1,1,1,1,1,1,0,0,0],
+        [0,0,1,2,1,1,1,1,2,1,0,0],
+        [1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,0,1,0,1,1,1,1,0,1,0,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,0,0,1,1,1,1,1,1,0,0,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1],
+    ];
+
+    const rows = mansion.length;
+    const cols = mansion[0].length;
+    const brickW = 38;
+    const brickH = 24;
+    const gap = 2;
+    const totalW = cols * (brickW + gap);
+    const totalH = rows * (brickH + gap);
+    const offsetX = -totalW / 2 + brickW / 2;
+    const offsetY = -totalH / 2 + brickH / 2;
+
+    const bricks = [];
+    const goldBricks = [];
+
+    mansion.forEach((row, r) => {
+        row.forEach((val, c) => {
+            if (val === 0) return;
+            const el = document.createElement('div');
+            el.className = 'loader-brick' + (val === 2 ? ' accent' : '');
+            el.style.width = brickW + 'px';
+            el.style.height = brickH + 'px';
+            container.appendChild(el);
+            const targetX = c * (brickW + gap) + offsetX + brickW / 2;
+            const targetY = r * (brickH + gap) + offsetY + brickH / 2;
+            bricks.push({ el, targetX, targetY, isGold: val === 2 });
+            if (val === 2) goldBricks.push(el);
+        });
+    });
+
+    // Scatter all bricks to random positions off-screen
+    bricks.forEach((b) => {
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 350 + Math.random() * 450;
+        gsap.set(b.el, {
+            x: b.targetX + Math.cos(angle) * dist,
+            y: b.targetY + Math.sin(angle) * dist,
+            rotationX: (Math.random() - 0.5) * 200,
+            rotationY: (Math.random() - 0.5) * 200,
+            rotationZ: (Math.random() - 0.5) * 200,
+            opacity: 0,
+            scale: 0.3 + Math.random() * 0.5
+        });
+    });
+
+    const allBrickEls = bricks.map(b => b.el);
+
+    // Build the cinematic timeline
+    const tl = gsap.timeline({
+        paused: true,
+        onComplete: () => {
             loader.classList.add('hide');
-            setTimeout(function() {
+            setTimeout(() => {
                 loader.style.display = 'none';
+                AOS.refresh();
             }, 800);
         }
-    }, 1500);
-});
+    });
+
+    // Phase 1: Bricks fly in from all directions with stagger
+    tl.to(allBrickEls, {
+        x: (i) => bricks[i].targetX,
+        y: (i) => bricks[i].targetY,
+        rotationX: 0,
+        rotationY: 0,
+        rotationZ: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 0.9,
+        stagger: { each: 0.02, from: 'random' },
+        ease: 'power3.out'
+    }, 0.15);
+
+    // Phase 2: Gold accents pulse
+    tl.to(goldBricks, {
+        boxShadow: '0 0 24px rgba(255,215,0,0.4), inset 0 1px 0 rgba(255,255,255,0.12)',
+        borderColor: 'rgba(255,215,0,0.6)',
+        duration: 0.5,
+        ease: 'power2.out'
+    }, '+=0.3');
+
+    // Phase 3: Golden shimmer sweep
+    tl.fromTo(allBrickEls, {
+        filter: 'brightness(1) saturate(1)'
+    }, {
+        filter: 'brightness(1.35) saturate(1.2)',
+        duration: 0.7,
+        ease: 'power2.inOut',
+        yoyo: true,
+        repeat: 1
+    }, '+=0.2');
+
+    // Phase 4: Brand text fades in with golden glow
+    tl.to(brand, {
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power2.out'
+    }, '+=0.3');
+
+    // Phase 5: Bricks gently dissolve outward
+    tl.to(allBrickEls, {
+        opacity: 0,
+        scale: 0.7,
+        duration: 0.55,
+        stagger: { each: 0.012, from: 'edges' },
+        ease: 'power2.in'
+    }, '+=1.0');
+
+    // Final hold
+    tl.to({}, { duration: 0.3 });
+
+    // Start the animation after window load
+    window.addEventListener('load', () => {
+        setTimeout(() => tl.play(), 200);
+    });
+})();
 
 console.log('🧱 LUXBRICK™ - The Brick That Built Legends');
 console.log('✦ Features: 360° Viewer, Live Counter, Theme Toggle (G), 3 Games');
