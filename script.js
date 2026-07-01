@@ -1048,8 +1048,7 @@ class Cart {
         }
         if (this.heroAddCartBtn) {
             this.heroAddCartBtn.addEventListener('click', () => {
-                this.addItem('LUXBRICK™', 15, '🧱');
-                this.animateAddButton(this.heroAddCartBtn);
+                openAtcModal();
             });
         }
 
@@ -1228,6 +1227,7 @@ const qtyDecrease = document.getElementById('qtyDecrease');
 const qtyIncrease = document.getElementById('qtyIncrease');
 
 function getDiscount(qty) {
+    if (qty >= 10000) return 5000;
     if (qty >= 5000) return 2000;
     if (qty >= 1000) return 500;
     return 0;
@@ -1288,7 +1288,110 @@ if (qtyIncrease) {
 updateOrderSummary(getQuantity());
 
 // ============================================
-// 17. CHECKOUT MODAL
+// 17. ADD TO CART MODAL
+// ============================================
+const atcModal = document.getElementById('atcModal');
+const atcClose = document.getElementById('atcClose');
+const atcCustomCard = document.getElementById('atcCustomCard');
+const atcCustomWrap = document.getElementById('atcCustomWrap');
+const atcCustomInput = document.getElementById('atcCustomInput');
+const atcContinue = document.getElementById('atcContinue');
+const atcCheckout = document.getElementById('atcCheckout');
+let atcQty = 1000;
+
+function updateAtcPricing(qty) {
+    const subtotal = qty * BRICK_PRICE;
+    const discount = getDiscount(qty);
+    const finalTotal = subtotal - discount;
+
+    document.getElementById('atcSubtotal').textContent = formatBdt(subtotal);
+    document.getElementById('atcDiscount').textContent = discount > 0 ? '-৳' + discount.toLocaleString() : '৳0';
+    document.getElementById('atcFinal').textContent = formatBdt(finalTotal);
+}
+
+function openAtcModal() {
+    if (!atcModal) return;
+    atcQty = 1000;
+    document.querySelectorAll('.atc-card').forEach(c => c.classList.remove('selected'));
+    document.querySelector('.atc-card[data-qty="1000"]').classList.add('selected');
+    atcCustomWrap.style.display = 'none';
+    updateAtcPricing(1000);
+    atcModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    if (typeof sound !== 'undefined') sound.click();
+}
+
+function closeAtcModal() {
+    if (!atcModal) return;
+    atcModal.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+// Quantity option cards
+document.querySelectorAll('.atc-card[data-qty]').forEach(card => {
+    card.addEventListener('click', function() {
+        document.querySelectorAll('.atc-card').forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+        atcCustomWrap.style.display = 'none';
+        atcQty = parseInt(this.dataset.qty);
+        updateAtcPricing(atcQty);
+        if (typeof sound !== 'undefined') sound.click();
+    });
+});
+
+// Custom quantity card
+if (atcCustomCard) {
+    atcCustomCard.addEventListener('click', function() {
+        document.querySelectorAll('.atc-card').forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+        atcCustomWrap.style.display = 'block';
+        atcQty = parseInt(atcCustomInput.value) || 100;
+        updateAtcPricing(atcQty);
+        if (typeof sound !== 'undefined') sound.click();
+    });
+}
+
+// Custom input change
+if (atcCustomInput) {
+    atcCustomInput.addEventListener('input', function() {
+        let val = parseInt(this.value) || 1;
+        if (val < 1) val = 1;
+        if (val > 100000) val = 100000;
+        atcQty = val;
+        updateAtcPricing(atcQty);
+    });
+}
+
+// Close
+if (atcClose) {
+    atcClose.addEventListener('click', closeAtcModal);
+}
+
+if (atcModal) {
+    atcModal.addEventListener('click', function(e) {
+        if (e.target === atcModal) closeAtcModal();
+    });
+}
+
+// Continue Shopping
+if (atcContinue) {
+    atcContinue.addEventListener('click', closeAtcModal);
+}
+
+// Proceed to Checkout
+if (atcCheckout) {
+    atcCheckout.addEventListener('click', function() {
+        closeAtcModal();
+        // Sync the buy section quantity so checkout modal picks it up
+        if (typeof setQuantity === 'function') {
+            setQuantity(atcQty);
+        }
+        setTimeout(() => openCheckout(), 300);
+    });
+}
+
+// ============================================
+// 18. CHECKOUT MODAL
 // ============================================
 const checkoutModal = document.getElementById('checkoutModal');
 const checkoutClose = document.getElementById('checkoutClose');
@@ -1584,7 +1687,7 @@ console.log('🎁 Mystery Box loaded successfully!');
   
 
 // ============================================
-// 18. SMOOTH SCROLL
+// 19. SMOOTH SCROLL
 // ============================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -1600,7 +1703,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
-// 19. SCROLL ANIMATIONS - ফিক্সড
+// 20. SCROLL ANIMATIONS - ফিক্সড
 // ============================================
 // Features - ফোর্স ভিজিবিলিটি
 document.querySelectorAll('.feature-card').forEach((card, i) => {
@@ -1643,7 +1746,7 @@ document.querySelectorAll('.testimonial-card').forEach((card, i) => {
 });
 
 // ============================================
-// 20. BRICK SCROLL REVEAL - Story (Three.js State)
+// 21. BRICK SCROLL REVEAL - Story (Three.js State)
 // ============================================
 const storyBrick = document.querySelector('.story-brick');
 if (storyBrick) {
@@ -1676,7 +1779,7 @@ if (storyBrick) {
 }
 
 // ============================================
-// 21. BRICK SCROLL REVEAL - Premium (Three.js State)
+// 22. BRICK SCROLL REVEAL - Premium (Three.js State)
 // ============================================
 const premiumBrick = document.querySelector('.premium-brick-3d');
 if (premiumBrick) {
@@ -1710,7 +1813,7 @@ if (premiumBrick) {
 }
 
 // ============================================
-// 22. KEYBOARD SHORTCUTS
+// 23. KEYBOARD SHORTCUTS
 // ============================================
 document.addEventListener('keydown', (e) => {
     if (e.key === 'g' || e.key === 'G') {
@@ -1724,7 +1827,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ============================================
-// 23. CINEMATIC LOADER ANIMATION
+// 24. CINEMATIC LOADER ANIMATION
 // ============================================
 (function initLoaderAnimation() {
     const loader = document.getElementById('loader');
@@ -1863,7 +1966,7 @@ document.addEventListener('keydown', (e) => {
 })();
 
 // ============================================
-// 24. SHOWCASE CARD FADE-IN
+// 25. SHOWCASE CARD FADE-IN
 // ============================================
 const showcaseCard = document.querySelector('.showcase-card');
 if (showcaseCard) {
@@ -1932,7 +2035,7 @@ document.querySelectorAll('.payment-card').forEach((card, i) => {
 });
 
 // ============================================
-// 25. SHOWCASE WISHLIST
+// 26. SHOWCASE WISHLIST
 // ============================================
 const showcaseWishlistBtn = document.getElementById('showcaseWishlistBtn');
 if (showcaseWishlistBtn) {

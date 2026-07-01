@@ -620,6 +620,56 @@
     </div>
 </div>
 
+    <!-- ===== ADD TO CART MODAL ===== -->
+<div class="atc-modal" id="atcModal">
+    <div class="atc-modal-box">
+        <button class="atc-close" id="atcClose">&times;</button>
+        <h2 class="atc-title">Select Quantity</h2>
+
+        <div class="atc-options">
+            <button class="atc-card" data-qty="1000">
+                <span class="atc-card-qty">1,000</span>
+                <span class="atc-card-label">Pieces</span>
+                <span class="atc-card-price">৳15,000</span>
+            </button>
+            <button class="atc-card" data-qty="5000">
+                <span class="atc-card-qty">5,000</span>
+                <span class="atc-card-label">Pieces</span>
+                <span class="atc-card-price">৳75,000</span>
+            </button>
+            <button class="atc-card" data-qty="10000">
+                <span class="atc-card-qty">10,000</span>
+                <span class="atc-card-label">Pieces</span>
+                <span class="atc-card-price">৳150,000</span>
+            </button>
+            <button class="atc-card" id="atcCustomCard">
+                <span class="atc-card-qty">Custom</span>
+                <span class="atc-card-label">Quantity</span>
+                <span class="atc-card-price">Set your own</span>
+            </button>
+        </div>
+
+        <!-- Custom quantity input -->
+        <div class="atc-custom-wrap" id="atcCustomWrap" style="display:none;">
+            <label class="atc-custom-label">Enter Quantity (1 – 100,000)</label>
+            <input type="number" class="atc-custom-input" id="atcCustomInput" value="100" min="1" max="100000">
+        </div>
+
+        <!-- Pricing -->
+        <div class="atc-pricing" id="atcPricing">
+            <div class="atc-price-row"><span>Unit Price</span><span>৳15 / piece</span></div>
+            <div class="atc-price-row"><span>Subtotal</span><span id="atcSubtotal">৳15,000</span></div>
+            <div class="atc-price-row atc-discount"><span>Discount</span><span id="atcDiscount">-৳500</span></div>
+            <div class="atc-price-row atc-total"><span>Final Total</span><span id="atcFinal">৳14,500</span></div>
+        </div>
+
+        <div class="atc-actions">
+            <button class="atc-btn atc-btn-secondary" id="atcContinue">Continue Shopping</button>
+            <button class="atc-btn atc-btn-primary" id="atcCheckout">Proceed to Checkout</button>
+        </div>
+    </div>
+</div>
+
     <!-- ===== CHECKOUT MODAL ===== -->
 <div class="checkout-modal" id="checkoutModal">
     <div class="checkout-modal-box">
