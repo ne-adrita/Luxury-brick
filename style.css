@@ -747,11 +747,13 @@ body.gold-theme .showcase-card-title {
 body.gold-theme .showcase-card-desc {
     color: rgba(26, 26, 26, 0.7);
 }
-body.gold-theme .card-price-amount {
+body.gold-theme .showcase-card-subtitle {
+    color: #B8860B;
+}
+body.gold-theme .sp-amount {
     color: #1A1A1A;
 }
-body.gold-theme .card-price-currency,
-body.gold-theme .card-price-cents {
+body.gold-theme .sp-currency {
     color: #B8860B;
 }
 body.gold-theme .showcase-card-rating i {
@@ -760,30 +762,60 @@ body.gold-theme .showcase-card-rating i {
 body.gold-theme .card-rating-text {
     color: rgba(26, 26, 26, 0.5);
 }
-body.gold-theme .card-spec-text {
+body.gold-theme .ss-label {
+    color: rgba(26, 26, 26, 0.45);
+}
+body.gold-theme .ss-value {
+    color: #1A1A1A;
+}
+body.gold-theme .sf-item {
     color: rgba(26, 26, 26, 0.7);
 }
-body.gold-theme .card-spec-bullet {
-    color: #B8860B;
-}
-body.gold-theme .showcase-card-buy {
+body.gold-theme .showcase-btn-primary {
     background: linear-gradient(135deg, #B8860B, #C49A3A);
     color: #FFFDF8;
 }
-body.gold-theme .showcase-card-buy:hover {
+body.gold-theme .showcase-btn-primary:hover {
     box-shadow: 0 0 40px rgba(184, 134, 11, 0.4);
 }
-body.gold-theme .showcase-card-cart {
+body.gold-theme .showcase-btn-secondary {
     border-color: rgba(184, 134, 11, 0.3);
     color: #B8860B;
 }
-body.gold-theme .showcase-card-cart:hover {
+body.gold-theme .showcase-btn-secondary:hover {
     background: rgba(184, 134, 11, 0.08);
+}
+body.gold-theme .showcase-btn-secondary.liked {
+    border-color: #C0392B;
+    color: #C0392B;
+    background: rgba(192, 57, 43, 0.08);
 }
 body.gold-theme .showcase-card-tm {
     color: #C0392B;
 }
-
+body.gold-theme .sp-availability {
+    color: rgba(26, 26, 26, 0.6);
+}
+body.gold-theme .st-badge {
+    color: rgba(26, 26, 26, 0.6);
+    border-color: rgba(212, 175, 55, 0.12);
+    background: rgba(255, 255, 255, 0.5);
+}
+body.gold-theme .payment-section {
+    border-top-color: rgba(212, 175, 55, 0.15);
+}
+body.gold-theme .payment-header {
+    color: rgba(184, 134, 11, 0.6);
+}
+body.gold-theme .sp-title {
+    color: rgba(26, 26, 26, 0.45);
+}
+body.gold-theme .sp-secure {
+    color: rgba(26, 26, 26, 0.4);
+}
+body.gold-theme .sp-note {
+    color: rgba(26, 26, 26, 0.25);
+}
 /* ===== CUSTOM CURSOR - DISABLED ===== */
 .custom-cursor {
     display: none !important;
@@ -2529,6 +2561,166 @@ body.gold-theme .buy-add-cart-btn:hover i {
     color: #FFD700;
 }
 
+.sp-unit {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: rgba(245, 245, 245, 0.4);
+    margin-left: 0.3rem;
+}
+
+/* --- Quantity Selector --- */
+.buy-qty-wrap {
+    margin-bottom: 1rem;
+}
+
+.buy-qty-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(255, 215, 0, 0.5);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.buy-qty {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.buy-qty-btn {
+    width: 46px;
+    height: 48px;
+    border: none;
+    background: transparent;
+    color: #FFD700;
+    font-size: 1.4rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.buy-qty-btn:hover {
+    background: rgba(255, 215, 0, 0.08);
+}
+
+.buy-qty-btn:active {
+    transform: scale(0.9);
+}
+
+.buy-qty-input {
+    width: 90px;
+    height: 48px;
+    border: none;
+    background: transparent;
+    color: #F5F5F5;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-align: center;
+    font-family: inherit;
+    -moz-appearance: textfield;
+}
+
+.buy-qty-input::-webkit-inner-spin-button,
+.buy-qty-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.buy-qty-input:focus {
+    outline: none;
+}
+
+/* --- Order Summary (Buy Section) --- */
+.buy-summary {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 215, 0, 0.06);
+    border-radius: 14px;
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 1rem;
+    max-width: 340px;
+}
+
+.bs-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.35rem 0;
+}
+
+.bs-label {
+    font-size: 0.82rem;
+    color: rgba(245, 245, 245, 0.45);
+    font-weight: 500;
+}
+
+.bs-value {
+    font-size: 0.9rem;
+    color: rgba(245, 245, 245, 0.8);
+    font-weight: 600;
+}
+
+.bs-discount .bs-value {
+    color: #2ECC71;
+}
+
+.bs-total {
+    border-top: 1px solid rgba(255, 215, 0, 0.1);
+    margin-top: 0.3rem;
+    padding-top: 0.5rem;
+}
+
+.bs-total .bs-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #FFD700;
+}
+
+.bs-total .bs-value {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #FFD700;
+}
+
+/* Gold theme overrides */
+body.gold-theme .buy-qty {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(212, 175, 55, 0.15);
+}
+
+body.gold-theme .buy-qty-input {
+    color: #1A1A1A;
+}
+
+body.gold-theme .buy-summary {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(212, 175, 55, 0.12);
+}
+
+body.gold-theme .bs-label {
+    color: rgba(26, 26, 26, 0.5);
+}
+
+body.gold-theme .bs-value {
+    color: rgba(26, 26, 26, 0.8);
+}
+
+body.gold-theme .bs-total .bs-label,
+body.gold-theme .bs-total .bs-value {
+    color: #B8860B;
+}
+
+body.gold-theme .sp-unit {
+    color: rgba(26, 26, 26, 0.4);
+}
+
 .premium-brick {
     display: flex;
     flex-direction: column;
@@ -2726,6 +2918,273 @@ body.gold-theme .buy-add-cart-btn:hover i {
 }
 
 /* ===== BUY SUCCESS MODAL ===== */
+/* ===== CHECKOUT MODAL ===== */
+.checkout-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(24px);
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    animation: modalFade 0.4s ease;
+    padding: 1rem;
+}
+
+.checkout-modal-box {
+    background: linear-gradient(160deg, #1A1A1A, #0B0B0B);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    border-radius: 28px;
+    padding: 2.5rem 2rem;
+    max-width: 520px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0 80px rgba(255, 215, 0, 0.06);
+    position: relative;
+    animation: modalPop 0.4s ease;
+}
+
+.checkout-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    font-size: 1.8rem;
+    color: rgba(245, 245, 245, 0.3);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    line-height: 1;
+}
+
+.checkout-close:hover {
+    color: #F5F5F5;
+}
+
+.checkout-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #F5F5F5;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.co-section {
+    margin-bottom: 1.2rem;
+}
+
+.co-heading {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: rgba(255, 215, 0, 0.5);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+}
+
+.co-summary {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 215, 0, 0.06);
+    border-radius: 14px;
+    padding: 0.8rem 1.2rem;
+}
+
+.co-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.35rem 0;
+    font-size: 0.85rem;
+    color: rgba(245, 245, 245, 0.6);
+}
+
+.co-divider {
+    border-bottom: 1px solid rgba(255, 215, 0, 0.06);
+    padding: 0;
+    margin: 0.2rem 0;
+    min-height: 1px;
+}
+
+.co-discount {
+    color: #2ECC71;
+}
+
+.co-final {
+    border-top: 1px solid rgba(255, 215, 0, 0.1);
+    margin-top: 0.3rem;
+    padding-top: 0.5rem;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #FFD700;
+}
+
+.co-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    border-radius: 12px;
+    color: #F5F5F5;
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+    margin-bottom: 0.6rem;
+}
+
+.co-input::placeholder {
+    color: rgba(245, 245, 245, 0.25);
+}
+
+.co-input:focus {
+    outline: none;
+    border-color: rgba(255, 215, 0, 0.3);
+}
+
+.co-payment-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.co-pay-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 215, 0, 0.08);
+    border-radius: 12px;
+    color: rgba(245, 245, 245, 0.5);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.co-pay-card:hover {
+    border-color: rgba(255, 215, 0, 0.2);
+    background: rgba(255, 255, 255, 0.04);
+    color: #F5F5F5;
+}
+
+.co-pay-card.selected {
+    border-color: #FFD700;
+    background: rgba(255, 215, 0, 0.08);
+    color: #FFD700;
+}
+
+.co-pay-icon {
+    font-size: 1.1rem;
+}
+
+.co-pay-name {
+    font-size: 0.78rem;
+}
+
+.co-confirm-btn {
+    width: 100%;
+    padding: 0.9rem;
+    background: linear-gradient(135deg, #C0392B, #FFD700);
+    border: none;
+    border-radius: 14px;
+    color: #F5F5F5;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.co-confirm-btn:hover:not(:disabled) {
+    transform: scale(1.02) translateY(-1px);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+}
+
+.co-confirm-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.co-note {
+    text-align: center;
+    font-size: 0.7rem;
+    color: rgba(245, 245, 245, 0.2);
+    margin-top: 0.7rem;
+}
+
+/* Gold theme checkout */
+body.gold-theme .checkout-modal-box {
+    background: linear-gradient(160deg, #FFFDF8, #F7F2E8);
+    border-color: rgba(212, 175, 55, 0.2);
+}
+
+body.gold-theme .checkout-title {
+    color: #1A1A1A;
+}
+
+body.gold-theme .co-heading {
+    color: rgba(184, 134, 11, 0.5);
+}
+
+body.gold-theme .co-summary {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(212, 175, 55, 0.1);
+}
+
+body.gold-theme .co-row {
+    color: rgba(26, 26, 26, 0.55);
+}
+
+body.gold-theme .co-final {
+    color: #B8860B;
+}
+
+body.gold-theme .co-input {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(212, 175, 55, 0.12);
+    color: #1A1A1A;
+}
+
+body.gold-theme .co-input::placeholder {
+    color: rgba(26, 26, 26, 0.3);
+}
+
+body.gold-theme .co-pay-card {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(212, 175, 55, 0.12);
+    color: rgba(26, 26, 26, 0.55);
+}
+
+body.gold-theme .co-pay-card:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+body.gold-theme .co-pay-card.selected {
+    background: rgba(212, 175, 55, 0.12);
+    border-color: #B8860B;
+    color: #B8860B;
+}
+
+body.gold-theme .co-note {
+    color: rgba(26, 26, 26, 0.25);
+}
+
+/* ===== SUCCESS MODAL ===== */
 .success-modal {
     display: none;
     position: fixed;
@@ -2800,6 +3259,34 @@ body.gold-theme .buy-add-cart-btn:hover i {
     font-size: 0.85rem !important;
     color: rgba(245, 245, 245, 0.4) !important;
     margin-top: 0.5rem;
+}
+
+.success-delivery {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+    color: rgba(245, 245, 245, 0.55);
+    font-size: 0.9rem;
+}
+
+.success-delivery i {
+    color: #FFD700;
+    font-size: 1rem;
+}
+
+.success-delivery strong {
+    color: #F5F5F5;
+    font-weight: 700;
+}
+
+body.gold-theme .success-delivery {
+    color: rgba(26, 26, 26, 0.5);
+}
+
+body.gold-theme .success-delivery strong {
+    color: #1A1A1A;
 }
 
 .success-btn {
@@ -3486,6 +3973,9 @@ body.gold-theme .buy-add-cart-btn:hover i {
     border-radius: 24px;
     padding: 2.5rem;
     transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .showcase-card:hover {
@@ -3493,14 +3983,10 @@ body.gold-theme .buy-add-cart-btn:hover i {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
-.showcase-card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
 .showcase-card-badge {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     background: rgba(255, 215, 0, 0.08);
     border: 1px solid rgba(255, 215, 0, 0.15);
     color: #FFD700;
@@ -3511,6 +3997,10 @@ body.gold-theme .buy-add-cart-btn:hover i {
     letter-spacing: 2px;
     text-transform: uppercase;
     align-self: flex-start;
+}
+
+.showcase-card-badge i {
+    font-size: 0.65rem;
 }
 
 .showcase-card-title {
@@ -3526,31 +4016,32 @@ body.gold-theme .buy-add-cart-btn:hover i {
     font-weight: 900;
 }
 
-.showcase-card-price {
+/* --- Showcase Price --- */
+.showcase-price {
     display: flex;
     align-items: baseline;
-    gap: 0.1rem;
+    gap: 0.4rem;
+    flex-wrap: wrap;
 }
 
-.card-price-currency {
+.sp-currency {
     font-size: 1.4rem;
     font-weight: 700;
     color: #FFD700;
 }
 
-.card-price-amount {
+.sp-amount {
     font-size: 3rem;
     font-weight: 900;
     color: #F5F5F5;
-    line-height: 1;
+    line-height: 1.1;
 }
 
-.card-price-cents {
-    font-size: 1.2rem;
+.showcase-card-subtitle {
+    font-size: 0.9rem;
     font-weight: 600;
     color: #FFD700;
-    align-self: flex-start;
-    margin-top: 0.3rem;
+    margin-top: -0.3rem;
 }
 
 .showcase-card-rating {
@@ -3561,13 +4052,77 @@ body.gold-theme .buy-add-cart-btn:hover i {
 
 .showcase-card-rating i {
     color: #FFD700;
-    font-size: 1rem;
+    font-size: 0.85rem;
 }
 
 .card-rating-text {
     color: rgba(245, 245, 245, 0.5);
+    font-size: 0.8rem;
+    margin-left: 0.2rem;
+}
+
+.sp-availability {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: rgba(245, 245, 245, 0.6);
+    font-weight: 500;
+}
+
+.sp-availability i {
+    font-size: 0.6rem;
+}
+
+.st-badges {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.sp-secure {
+    font-size: 0.7rem;
+    color: rgba(245, 245, 245, 0.35);
+    margin-top: 0.6rem;
+    line-height: 1.6;
+}
+
+.sp-note {
+    font-size: 0.65rem;
+    color: rgba(255, 215, 0, 0.25);
+    margin-top: 0.3rem;
+    font-style: italic;
+}
+
+.pc-icon {
+    font-size: 1rem;
+}
+
+/* --- Showcase Features Grid --- */
+.showcase-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+}
+
+.sf-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.8rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 215, 0, 0.06);
+    border-radius: 10px;
+    font-size: 0.8rem;
+    color: rgba(245, 245, 245, 0.75);
+    font-weight: 500;
+}
+
+.sf-item i {
+    color: #FFD700;
     font-size: 0.85rem;
-    margin-left: 0.3rem;
+    flex-shrink: 0;
 }
 
 .showcase-card-desc {
@@ -3576,85 +4131,166 @@ body.gold-theme .buy-add-cart-btn:hover i {
     line-height: 1.7;
 }
 
-.showcase-card-specs {
+/* --- Showcase Specs Table --- */
+.showcase-specs {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
-    padding: 1rem 1.2rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 215, 0, 0.06);
-    border-radius: 12px;
+    gap: 0.4rem;
+    padding: 0.8rem 0;
 }
 
-.card-spec-row {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-
-.card-spec-bullet {
-    color: #FFD700;
-    font-size: 0.9rem;
+.specs-header {
+    font-size: 0.7rem;
     font-weight: 700;
-    flex-shrink: 0;
+    color: rgba(255, 215, 0, 0.6);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
 }
 
-.card-spec-text {
-    font-size: 0.85rem;
-    color: rgba(245, 245, 245, 0.7);
+.ss-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.ss-row:last-child {
+    border-bottom: none;
+}
+
+.ss-label {
+    font-size: 0.82rem;
+    color: rgba(245, 245, 245, 0.5);
     font-weight: 500;
 }
 
-.showcase-card-actions {
+.ss-value {
+    font-size: 0.82rem;
+    color: rgba(245, 245, 245, 0.85);
+    font-weight: 600;
+}
+
+/* --- Showcase Trust Badges --- */
+.st-badges {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.st-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 215, 0, 0.08);
+    border-radius: 50px;
+    font-size: 0.7rem;
+    color: rgba(245, 245, 245, 0.6);
+    font-weight: 500;
+}
+
+.st-icon {
+    color: #FFD700;
+    font-size: 0.7rem;
+}
+
+/* --- Showcase Action Buttons --- */
+.showcase-actions {
     display: flex;
     gap: 1rem;
     margin-top: 0.5rem;
     flex-wrap: wrap;
 }
 
-.showcase-card-buy {
-    padding: 0.85rem 2.5rem;
-    background: linear-gradient(135deg, #C0392B, #FFD700);
-    border: none;
+.showcase-btn {
+    padding: 0.85rem 2rem;
     border-radius: 50px;
-    color: #F5F5F5;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.95rem;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
     transition: all 0.3s ease;
-    box-shadow: 0 0 30px rgba(192, 57, 43, 0.3);
     text-decoration: none;
     letter-spacing: 1px;
     text-transform: uppercase;
+    border: none;
+    font-family: inherit;
 }
 
-.showcase-card-buy:hover {
+.showcase-btn-primary {
+    background: linear-gradient(135deg, #C0392B, #FFD700);
+    color: #F5F5F5;
+    box-shadow: 0 0 30px rgba(192, 57, 43, 0.3);
+}
+
+.showcase-btn-primary:hover {
     transform: scale(1.04) translateY(-2px);
     box-shadow: 0 0 60px rgba(255, 215, 0, 0.5);
 }
 
-.showcase-card-cart {
-    padding: 0.85rem 2rem;
-    border-radius: 50px;
-    border: 2px solid rgba(255, 215, 0, 0.25);
+.showcase-btn-secondary {
     background: transparent;
+    border: 2px solid rgba(255, 215, 0, 0.25);
     color: #FFD700;
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    transition: all 0.3s ease;
 }
 
-.showcase-card-cart:hover {
+.showcase-btn-secondary:hover {
     border-color: #FFD700;
     background: rgba(255, 215, 0, 0.08);
     transform: translateY(-2px);
+}
+
+.showcase-btn-secondary.liked {
+    border-color: #E74C3C;
+    color: #E74C3C;
+    background: rgba(231, 76, 60, 0.1);
+}
+
+/* --- Payment Section --- */
+.payment-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 215, 0, 0.08);
+}
+
+.payment-header {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: rgba(255, 215, 0, 0.6);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+}
+
+.payment-cards {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.payment-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    font-size: 0.75rem;
+    color: rgba(245, 245, 245, 0.55);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.payment-card:hover {
+    border-color: rgba(255, 215, 0, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    color: #F5F5F5;
 }
 
 /* ===== SHOWCASE RESPONSIVE ===== */
@@ -3668,8 +4304,11 @@ body.gold-theme .buy-add-cart-btn:hover i {
     .showcase-card-tm {
         font-size: 2.2rem;
     }
-    .card-price-amount {
+    .sp-amount {
         font-size: 2.5rem;
+    }
+    .showcase-features {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -3697,8 +4336,11 @@ body.gold-theme .buy-add-cart-btn:hover i {
     .showcase-card-tm {
         font-size: 2.2rem;
     }
-    .card-price-amount {
+    .sp-amount {
         font-size: 2.5rem;
+    }
+    .showcase-features {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -3722,14 +4364,13 @@ body.gold-theme .buy-add-cart-btn:hover i {
     .showcase-card-tm {
         font-size: 1.8rem;
     }
-    .card-price-amount {
+    .sp-amount {
         font-size: 2rem;
     }
-    .showcase-card-actions {
+    .showcase-actions {
         flex-direction: column;
     }
-    .showcase-card-buy,
-    .showcase-card-cart {
+    .showcase-btn {
         width: 100%;
         justify-content: center;
     }

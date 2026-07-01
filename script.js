@@ -1048,16 +1048,8 @@ class Cart {
         }
         if (this.heroAddCartBtn) {
             this.heroAddCartBtn.addEventListener('click', () => {
-                this.addItem('LUXBRICK™', 499, '🧱');
+                this.addItem('LUXBRICK™', 15, '🧱');
                 this.animateAddButton(this.heroAddCartBtn);
-            });
-        }
-
-        const buyAddCartBtn = document.getElementById('buyAddCartBtn');
-        if (buyAddCartBtn) {
-            buyAddCartBtn.addEventListener('click', () => {
-                this.addItem('LUXBRICK™', 499, '🧱');
-                this.animateAddButton(buyAddCartBtn);
             });
         }
 
@@ -1153,12 +1145,12 @@ class Cart {
                     <span class="cart-item-icon">${item.icon}</span>
                     <div class="cart-item-info">
                         <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-unit-price">$${item.price.toLocaleString()} each</div>
+                        <div class="cart-item-unit-price">৳${item.price.toLocaleString()} each</div>
                         <div class="cart-item-qty">
                             <button class="cart-qty-btn" data-action="decrease" data-name="${item.name}">−</button>
                             <span class="cart-qty-value">${item.qty}</span>
                             <button class="cart-qty-btn" data-action="increase" data-name="${item.name}">+</button>
-                            <span class="cart-item-line-total">$${(item.price * item.qty).toLocaleString()}</span>
+                            <span class="cart-item-line-total">৳${(item.price * item.qty).toLocaleString()}</span>
                         </div>
                     </div>
                     <span class="cart-item-remove" data-name="${item.name}">&times;</span>
@@ -1166,7 +1158,7 @@ class Cart {
             `).join('');
 
             this.cartFooter.style.display = 'block';
-            this.cartTotal.textContent = '$' + this.getTotal().toLocaleString();
+            this.cartTotal.textContent = '৳' + this.getTotal().toLocaleString();
 
             this.cartItems.querySelectorAll('.cart-item-remove').forEach(btn => {
                 btn.addEventListener('click', () => this.removeItem(btn.dataset.name));
@@ -1228,98 +1220,206 @@ class Cart {
 const cart = new Cart();
 
 // ============================================
-// 16. BUY BUTTON WITH PROCESSING & MODAL
+// 16. QUANTITY SELECTOR & DISCOUNT LOGIC
 // ============================================
+const BRICK_PRICE = 15;
+const qtyInput = document.getElementById('qtyInput');
+const qtyDecrease = document.getElementById('qtyDecrease');
+const qtyIncrease = document.getElementById('qtyIncrease');
+
+function getDiscount(qty) {
+    if (qty >= 5000) return 2000;
+    if (qty >= 1000) return 500;
+    return 0;
+}
+
+function formatBdt(n) {
+    return '৳' + n.toLocaleString();
+}
+
+function updateOrderSummary(qty) {
+    const subtotal = qty * BRICK_PRICE;
+    const discount = getDiscount(qty);
+    const finalTotal = subtotal - discount;
+
+    const bsSubtotal = document.getElementById('bsSubtotal');
+    const bsDiscount = document.getElementById('bsDiscount');
+    const bsFinal = document.getElementById('bsFinal');
+    if (bsSubtotal) bsSubtotal.textContent = formatBdt(subtotal);
+    if (bsDiscount) bsDiscount.textContent = discount > 0 ? '-৳' + discount.toLocaleString() : '৳0';
+    if (bsFinal) bsFinal.textContent = formatBdt(finalTotal);
+
+    // Update checkout modal if open
+    const coQty = document.getElementById('coQty');
+    const coSubtotal = document.getElementById('coSubtotal');
+    const coDiscount = document.getElementById('coDiscount');
+    const coFinal = document.getElementById('coFinal');
+    if (coQty) coQty.textContent = qty.toLocaleString();
+    if (coSubtotal) coSubtotal.textContent = formatBdt(subtotal);
+    if (coDiscount) coDiscount.textContent = discount > 0 ? '-৳' + discount.toLocaleString() : '৳0';
+    if (coFinal) coFinal.textContent = formatBdt(finalTotal);
+}
+
+function getQuantity() {
+    return Math.max(1, parseInt(qtyInput ? qtyInput.value : 1000) || 1000);
+}
+
+function setQuantity(val) {
+    if (!qtyInput) return;
+    qtyInput.value = Math.max(1, val);
+    updateOrderSummary(getQuantity());
+}
+
+if (qtyDecrease) {
+    qtyDecrease.addEventListener('click', () => {
+        setQuantity(getQuantity() - 1);
+        if (typeof sound !== 'undefined') sound.click();
+    });
+}
+
+if (qtyIncrease) {
+    qtyIncrease.addEventListener('click', () => {
+        setQuantity(getQuantity() + 1);
+        if (typeof sound !== 'undefined') sound.click();
+    });
+}
+
+// Initialize
+updateOrderSummary(getQuantity());
+
+// ============================================
+// 17. CHECKOUT MODAL
+// ============================================
+const checkoutModal = document.getElementById('checkoutModal');
+const checkoutClose = document.getElementById('checkoutClose');
+const coConfirmBtn = document.getElementById('coConfirmBtn');
+const coAddress = document.getElementById('coAddress');
+const coPhone = document.getElementById('coPhone');
+let selectedPayment = null;
+
+// Open checkout from BUY NOW buttons
+function openCheckout() {
+    if (!checkoutModal) return;
+    updateOrderSummary(getQuantity());
+    selectedPayment = null;
+    coConfirmBtn.disabled = true;
+    if (coAddress) coAddress.value = '';
+    if (coPhone) coPhone.value = '';
+    document.querySelectorAll('.co-pay-card').forEach(c => c.classList.remove('selected'));
+    checkoutModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    if (typeof sound !== 'undefined') sound.click();
+}
+
+function closeCheckout() {
+    if (!checkoutModal) return;
+    checkoutModal.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+// BUY NOW buttons
 const buyBtn = document.getElementById('buyBtn');
 if (buyBtn) {
     buyBtn.addEventListener('click', function() {
-        this.disabled = true;
-        this.innerHTML = '⏳ Processing...';
-        this.style.opacity = '0.7';
-        showToast('⏳ Processing your order...');
+        openCheckout();
+    });
+}
 
-        setTimeout(() => {
-            sound.success();
-            this.classList.add('buying');
+const showcaseCtaBtn = document.getElementById('showcaseCtaBtn');
+if (showcaseCtaBtn) {
+    showcaseCtaBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        openCheckout();
+    });
+}
 
-            const state = window.threeBricks.premium;
-            const origRotationX = state.rotationX;
-            const origRotationY = state.rotationY;
-            const origScale = state.scale;
+// Close checkout
+if (checkoutClose) {
+    checkoutClose.addEventListener('click', closeCheckout);
+}
 
-            gsap.to(state, {
-                rotationX: 360,
-                rotationY: 720,
-                scale: 1.1,
-                duration: 1.5,
-                ease: 'power2.out'
+if (checkoutModal) {
+    checkoutModal.addEventListener('click', function(e) {
+        if (e.target === checkoutModal) closeCheckout();
+    });
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeCheckout();
+});
+
+// Validate inputs
+function validateCheckout() {
+    const address = coAddress ? coAddress.value.trim() : '';
+    const phone = coPhone ? coPhone.value.trim() : '';
+    coConfirmBtn.disabled = !(address.length > 0 && phone.length > 0 && selectedPayment);
+}
+
+if (coAddress) {
+    coAddress.addEventListener('input', validateCheckout);
+}
+
+if (coPhone) {
+    coPhone.addEventListener('input', validateCheckout);
+}
+
+// Payment selection
+document.querySelectorAll('.co-pay-card').forEach(card => {
+    card.addEventListener('click', function() {
+        document.querySelectorAll('.co-pay-card').forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedPayment = this.dataset.payment;
+        validateCheckout();
+        if (typeof sound !== 'undefined') sound.click();
+    });
+});
+
+// Confirm order
+if (coConfirmBtn) {
+    coConfirmBtn.addEventListener('click', function() {
+        if (this.disabled) return;
+
+        // Play success sound
+        if (typeof sound !== 'undefined') sound.success();
+
+        // Confetti burst
+        const duration = 3 * 1000;
+        const end = Date.now() + duration;
+        (function frame() {
+            confetti({
+                particleCount: 8,
+                startVelocity: 40,
+                spread: 360,
+                origin: { y: 0.6 }
             });
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        })();
 
-            const duration = 4 * 1000;
-            const end = Date.now() + duration;
-            (function frame() {
-                confetti({
-                    particleCount: 15,
-                    startVelocity: 45,
-                    spread: 360,
-                    origin: { y: 0.6 }
-                });
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            })();
-
-        }, 800);
-
+        // Multi burst
         setTimeout(() => {
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 6; i++) {
                 setTimeout(() => {
-                    const x = Math.random();
-                    const y = Math.random() * 0.5;
                     confetti({
-                        particleCount: 50,
+                        particleCount: 60,
                         spread: 100,
-                        origin: { x, y },
+                        origin: { x: Math.random(), y: Math.random() * 0.5 },
                         colors: ['#FFD700', '#C0392B', '#F5F5F5', '#FF6B6B']
                     });
-                }, i * 300);
+                }, i * 200);
             }
+        }, 400);
 
-            document.body.style.animation = 'shake 0.5s ease';
-            setTimeout(() => {
-                document.body.style.animation = '';
-            }, 500);
-
-        }, 1200);
-
+        // Close checkout, show success modal
         setTimeout(() => {
+            closeCheckout();
             const modal = document.getElementById('successModal');
-            if (modal) {
-                modal.style.display = 'flex';
+            if (modal) modal.style.display = 'flex';
+            if (typeof showToast !== 'undefined') {
+                showToast('🎉 Order Confirmed! Thank you for choosing LUXBRICK™');
             }
-
-            this.innerHTML = '✓ ORDER CONFIRMED!';
-            this.style.background = 'linear-gradient(135deg, #27AE60, #2ECC71)';
-            this.style.opacity = '1';
-
-            setTimeout(() => {
-                this.innerHTML = '<i class="fas fa-crown"></i> BUY THE LEGEND <i class="fas fa-arrow-right"></i>';
-                this.style.background = '';
-                this.classList.remove('buying');
-                this.disabled = false;
-
-                const state = window.threeBricks.premium;
-                gsap.to(state, {
-                    rotationX: -10,
-                    rotationY: 30,
-                    scale: 1,
-                    duration: 1,
-                    ease: 'power2.out'
-                });
-            }, 4000);
-            showToast('🎉 Order Confirmed! Welcome to the LUXBRICK family!');
-
-        }, 1800);
+        }, 800);
     });
 }
 
@@ -1484,7 +1584,7 @@ console.log('🎁 Mystery Box loaded successfully!');
   
 
 // ============================================
-// 17. SMOOTH SCROLL
+// 18. SMOOTH SCROLL
 // ============================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -1500,7 +1600,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
-// 18. SCROLL ANIMATIONS - ফিক্সড
+// 19. SCROLL ANIMATIONS - ফিক্সড
 // ============================================
 // Features - ফোর্স ভিজিবিলিটি
 document.querySelectorAll('.feature-card').forEach((card, i) => {
@@ -1543,7 +1643,7 @@ document.querySelectorAll('.testimonial-card').forEach((card, i) => {
 });
 
 // ============================================
-// 19. BRICK SCROLL REVEAL - Story (Three.js State)
+// 20. BRICK SCROLL REVEAL - Story (Three.js State)
 // ============================================
 const storyBrick = document.querySelector('.story-brick');
 if (storyBrick) {
@@ -1576,7 +1676,7 @@ if (storyBrick) {
 }
 
 // ============================================
-// 20. BRICK SCROLL REVEAL - Premium (Three.js State)
+// 21. BRICK SCROLL REVEAL - Premium (Three.js State)
 // ============================================
 const premiumBrick = document.querySelector('.premium-brick-3d');
 if (premiumBrick) {
@@ -1610,7 +1710,7 @@ if (premiumBrick) {
 }
 
 // ============================================
-// 21. KEYBOARD SHORTCUTS
+// 22. KEYBOARD SHORTCUTS
 // ============================================
 document.addEventListener('keydown', (e) => {
     if (e.key === 'g' || e.key === 'G') {
@@ -1624,7 +1724,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ============================================
-// 22. CINEMATIC LOADER ANIMATION
+// 23. CINEMATIC LOADER ANIMATION
 // ============================================
 (function initLoaderAnimation() {
     const loader = document.getElementById('loader');
@@ -1763,7 +1863,7 @@ document.addEventListener('keydown', (e) => {
 })();
 
 // ============================================
-// 23. SHOWCASE CARD FADE-IN
+// 24. SHOWCASE CARD FADE-IN
 // ============================================
 const showcaseCard = document.querySelector('.showcase-card');
 if (showcaseCard) {
@@ -1784,7 +1884,7 @@ if (showcaseCard) {
 }
 
 // Spec rows stagger
-document.querySelectorAll('.card-spec-row').forEach((row, i) => {
+document.querySelectorAll('.ss-row').forEach((row, i) => {
     gsap.from(row, {
         scrollTrigger: {
             trigger: row,
@@ -1799,19 +1899,58 @@ document.querySelectorAll('.card-spec-row').forEach((row, i) => {
     });
 });
 
+// Trust badges stagger
+document.querySelectorAll('.st-badge').forEach((badge, i) => {
+    gsap.from(badge, {
+        scrollTrigger: {
+            trigger: badge,
+            start: 'top 95%',
+            toggleActions: 'play none none none'
+        },
+        duration: 0.4,
+        y: 10,
+        opacity: 0,
+        delay: i * 0.08,
+        ease: 'power3.out'
+    });
+});
+
+// Payment cards stagger
+document.querySelectorAll('.payment-card').forEach((card, i) => {
+    gsap.from(card, {
+        scrollTrigger: {
+            trigger: '.payment-cards',
+            start: 'top 95%',
+            toggleActions: 'play none none none'
+        },
+        duration: 0.3,
+        scale: 0.9,
+        opacity: 0,
+        delay: i * 0.06,
+        ease: 'back.out(1.7)'
+    });
+});
+
 // ============================================
-// 24. SHOWCASE ADD TO CART
+// 25. SHOWCASE WISHLIST
 // ============================================
-const showcaseAddCartBtn = document.getElementById('showcaseAddCartBtn');
-if (showcaseAddCartBtn && typeof cart !== 'undefined') {
-    showcaseAddCartBtn.addEventListener('click', () => {
-        cart.addItem('LUXBRICK™ Premium Edition', 999, '🧱');
-        showcaseAddCartBtn.classList.add('cart-added');
-        setTimeout(() => showcaseAddCartBtn.classList.remove('cart-added'), 500);
+const showcaseWishlistBtn = document.getElementById('showcaseWishlistBtn');
+if (showcaseWishlistBtn) {
+    showcaseWishlistBtn.addEventListener('click', () => {
+        showcaseWishlistBtn.classList.toggle('liked');
+        if (typeof sound !== 'undefined') sound.click();
+        if (typeof showToast !== 'undefined') {
+            if (showcaseWishlistBtn.classList.contains('liked')) {
+                showToast('❤️ Added to Wishlist');
+            } else {
+                showToast('Removed from Wishlist');
+            }
+        }
     });
 }
 
 console.log('🧱 LUXBRICK™ - The Brick That Built Legends');
 console.log('✦ Features: 360° Viewer, Live Counter, Theme Toggle (G), 3 Games');
 console.log('✦ Keyboard: G = Theme Toggle, R = Reset Game');
+console.log('✦ Checkout: Bulk pricing with qty/discount modal flow');
 console.log('✦ Built for Grameenphone Academy - Top 80!');
