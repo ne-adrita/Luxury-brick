@@ -1048,7 +1048,7 @@ class Cart {
         }
         if (this.heroAddCartBtn) {
             this.heroAddCartBtn.addEventListener('click', () => {
-                openAtcModal();
+                this.addItem('LUXBRICK™', 999, '🧱');
             });
         }
 
@@ -1064,10 +1064,10 @@ class Cart {
     addItem(name, price, icon = '🧱') {
         const existing = this.items.find(i => i.name === name);
         if (existing) {
-            existing.qty += 1;
-        } else {
-            this.items.push({ name, price, icon, qty: 1 });
+            showToast('This luxury brick is already in your cart.');
+            return;
         }
+        this.items.push({ name, price, icon, qty: 1 });
         this.save();
         this.updateUI();
         sound.coin();
@@ -1082,27 +1082,12 @@ class Cart {
     }
 
     increaseQty(name) {
-        const item = this.items.find(i => i.name === name);
-        if (item) {
-            item.qty += 1;
-            this.save();
-            this.updateUI();
-            sound.click();
-        }
+        // Max 1 item per customer
+        showToast('This luxury brick is already in your cart.');
     }
 
     decreaseQty(name) {
-        const item = this.items.find(i => i.name === name);
-        if (item) {
-            item.qty -= 1;
-            if (item.qty <= 0) {
-                this.removeItem(name);
-                return;
-            }
-            this.save();
-            this.updateUI();
-            sound.click();
-        }
+        this.removeItem(name);
     }
 
     getTotal() {
@@ -1144,13 +1129,7 @@ class Cart {
                     <span class="cart-item-icon">${item.icon}</span>
                     <div class="cart-item-info">
                         <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-unit-price">৳${item.price.toLocaleString()} each</div>
-                        <div class="cart-item-qty">
-                            <button class="cart-qty-btn" data-action="decrease" data-name="${item.name}">−</button>
-                            <span class="cart-qty-value">${item.qty}</span>
-                            <button class="cart-qty-btn" data-action="increase" data-name="${item.name}">+</button>
-                            <span class="cart-item-line-total">৳${(item.price * item.qty).toLocaleString()}</span>
-                        </div>
+                        <div class="cart-item-unit-price">৳${item.price.toLocaleString()}</div>
                     </div>
                     <span class="cart-item-remove" data-name="${item.name}">&times;</span>
                 </div>
@@ -1161,18 +1140,6 @@ class Cart {
 
             this.cartItems.querySelectorAll('.cart-item-remove').forEach(btn => {
                 btn.addEventListener('click', () => this.removeItem(btn.dataset.name));
-            });
-
-            this.cartItems.querySelectorAll('.cart-qty-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const action = btn.dataset.action;
-                    const name = btn.dataset.name;
-                    if (action === 'increase') {
-                        this.increaseQty(name);
-                    } else {
-                        this.decreaseQty(name);
-                    }
-                });
             });
         }
     }
@@ -1202,212 +1169,32 @@ class Cart {
 
     checkout() {
         if (this.getCount() === 0) return;
-        sound.success();
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
-        showToast('🏆 Order placed! Welcome to LUXBRICK family!');
-        this.items = [];
-        this.save();
-        this.updateUI();
-        setTimeout(() => this.closeCart(), 500);
+        this.closeCart();
+        openCheckout();
     }
 }
 
 const cart = new Cart();
 
 // ============================================
-// 16. QUANTITY SELECTOR & DISCOUNT LOGIC
-// ============================================
-const BRICK_PRICE = 15;
-const qtyInput = document.getElementById('qtyInput');
-const qtyDecrease = document.getElementById('qtyDecrease');
-const qtyIncrease = document.getElementById('qtyIncrease');
-
-function getDiscount(qty) {
-    if (qty >= 10000) return 5000;
-    if (qty >= 5000) return 2000;
-    if (qty >= 1000) return 500;
-    return 0;
-}
-
-function formatBdt(n) {
-    return '৳' + n.toLocaleString();
-}
-
-function updateOrderSummary(qty) {
-    const subtotal = qty * BRICK_PRICE;
-    const discount = getDiscount(qty);
-    const finalTotal = subtotal - discount;
-
-    const bsSubtotal = document.getElementById('bsSubtotal');
-    const bsDiscount = document.getElementById('bsDiscount');
-    const bsFinal = document.getElementById('bsFinal');
-    if (bsSubtotal) bsSubtotal.textContent = formatBdt(subtotal);
-    if (bsDiscount) bsDiscount.textContent = discount > 0 ? '-৳' + discount.toLocaleString() : '৳0';
-    if (bsFinal) bsFinal.textContent = formatBdt(finalTotal);
-
-    // Update checkout modal if open
-    const coQty = document.getElementById('coQty');
-    const coSubtotal = document.getElementById('coSubtotal');
-    const coDiscount = document.getElementById('coDiscount');
-    const coFinal = document.getElementById('coFinal');
-    if (coQty) coQty.textContent = qty.toLocaleString();
-    if (coSubtotal) coSubtotal.textContent = formatBdt(subtotal);
-    if (coDiscount) coDiscount.textContent = discount > 0 ? '-৳' + discount.toLocaleString() : '৳0';
-    if (coFinal) coFinal.textContent = formatBdt(finalTotal);
-}
-
-function getQuantity() {
-    return Math.max(1, parseInt(qtyInput ? qtyInput.value : 1000) || 1000);
-}
-
-function setQuantity(val) {
-    if (!qtyInput) return;
-    qtyInput.value = Math.max(1, val);
-    updateOrderSummary(getQuantity());
-}
-
-if (qtyDecrease) {
-    qtyDecrease.addEventListener('click', () => {
-        setQuantity(getQuantity() - 1);
-        if (typeof sound !== 'undefined') sound.click();
-    });
-}
-
-if (qtyIncrease) {
-    qtyIncrease.addEventListener('click', () => {
-        setQuantity(getQuantity() + 1);
-        if (typeof sound !== 'undefined') sound.click();
-    });
-}
-
-// Initialize
-updateOrderSummary(getQuantity());
-
-// ============================================
-// 17. ADD TO CART MODAL
-// ============================================
-const atcModal = document.getElementById('atcModal');
-const atcClose = document.getElementById('atcClose');
-const atcCustomCard = document.getElementById('atcCustomCard');
-const atcCustomWrap = document.getElementById('atcCustomWrap');
-const atcCustomInput = document.getElementById('atcCustomInput');
-const atcContinue = document.getElementById('atcContinue');
-const atcCheckout = document.getElementById('atcCheckout');
-let atcQty = 1000;
-
-function updateAtcPricing(qty) {
-    const subtotal = qty * BRICK_PRICE;
-    const discount = getDiscount(qty);
-    const finalTotal = subtotal - discount;
-
-    document.getElementById('atcSubtotal').textContent = formatBdt(subtotal);
-    document.getElementById('atcDiscount').textContent = discount > 0 ? '-৳' + discount.toLocaleString() : '৳0';
-    document.getElementById('atcFinal').textContent = formatBdt(finalTotal);
-}
-
-function openAtcModal() {
-    if (!atcModal) return;
-    atcQty = 1000;
-    document.querySelectorAll('.atc-card').forEach(c => c.classList.remove('selected'));
-    document.querySelector('.atc-card[data-qty="1000"]').classList.add('selected');
-    atcCustomWrap.style.display = 'none';
-    updateAtcPricing(1000);
-    atcModal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    if (typeof sound !== 'undefined') sound.click();
-}
-
-function closeAtcModal() {
-    if (!atcModal) return;
-    atcModal.style.display = 'none';
-    document.body.style.overflow = '';
-}
-
-// Quantity option cards
-document.querySelectorAll('.atc-card[data-qty]').forEach(card => {
-    card.addEventListener('click', function() {
-        document.querySelectorAll('.atc-card').forEach(c => c.classList.remove('selected'));
-        this.classList.add('selected');
-        atcCustomWrap.style.display = 'none';
-        atcQty = parseInt(this.dataset.qty);
-        updateAtcPricing(atcQty);
-        if (typeof sound !== 'undefined') sound.click();
-    });
-});
-
-// Custom quantity card
-if (atcCustomCard) {
-    atcCustomCard.addEventListener('click', function() {
-        document.querySelectorAll('.atc-card').forEach(c => c.classList.remove('selected'));
-        this.classList.add('selected');
-        atcCustomWrap.style.display = 'block';
-        atcQty = parseInt(atcCustomInput.value) || 100;
-        updateAtcPricing(atcQty);
-        if (typeof sound !== 'undefined') sound.click();
-    });
-}
-
-// Custom input change
-if (atcCustomInput) {
-    atcCustomInput.addEventListener('input', function() {
-        let val = parseInt(this.value) || 1;
-        if (val < 1) val = 1;
-        if (val > 100000) val = 100000;
-        atcQty = val;
-        updateAtcPricing(atcQty);
-    });
-}
-
-// Close
-if (atcClose) {
-    atcClose.addEventListener('click', closeAtcModal);
-}
-
-if (atcModal) {
-    atcModal.addEventListener('click', function(e) {
-        if (e.target === atcModal) closeAtcModal();
-    });
-}
-
-// Continue Shopping
-if (atcContinue) {
-    atcContinue.addEventListener('click', closeAtcModal);
-}
-
-// Proceed to Checkout
-if (atcCheckout) {
-    atcCheckout.addEventListener('click', function() {
-        closeAtcModal();
-        // Sync the buy section quantity so checkout modal picks it up
-        if (typeof setQuantity === 'function') {
-            setQuantity(atcQty);
-        }
-        setTimeout(() => openCheckout(), 300);
-    });
-}
-
-// ============================================
-// 18. CHECKOUT MODAL
+// 16. CHECKOUT MODAL
 // ============================================
 const checkoutModal = document.getElementById('checkoutModal');
 const checkoutClose = document.getElementById('checkoutClose');
 const coConfirmBtn = document.getElementById('coConfirmBtn');
-const coAddress = document.getElementById('coAddress');
+const coName = document.getElementById('coName');
 const coPhone = document.getElementById('coPhone');
+const coAddress = document.getElementById('coAddress');
 let selectedPayment = null;
 
 // Open checkout from BUY NOW buttons
 function openCheckout() {
     if (!checkoutModal) return;
-    updateOrderSummary(getQuantity());
     selectedPayment = null;
     coConfirmBtn.disabled = true;
-    if (coAddress) coAddress.value = '';
+    if (coName) coName.value = '';
     if (coPhone) coPhone.value = '';
+    if (coAddress) coAddress.value = '';
     document.querySelectorAll('.co-pay-card').forEach(c => c.classList.remove('selected'));
     checkoutModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -1453,17 +1240,22 @@ document.addEventListener('keydown', function(e) {
 
 // Validate inputs
 function validateCheckout() {
-    const address = coAddress ? coAddress.value.trim() : '';
+    const name = coName ? coName.value.trim() : '';
     const phone = coPhone ? coPhone.value.trim() : '';
-    coConfirmBtn.disabled = !(address.length > 0 && phone.length > 0 && selectedPayment);
+    const address = coAddress ? coAddress.value.trim() : '';
+    coConfirmBtn.disabled = !(name.length > 0 && phone.length > 0 && address.length > 0 && selectedPayment);
 }
 
-if (coAddress) {
-    coAddress.addEventListener('input', validateCheckout);
+if (coName) {
+    coName.addEventListener('input', validateCheckout);
 }
 
 if (coPhone) {
     coPhone.addEventListener('input', validateCheckout);
+}
+
+if (coAddress) {
+    coAddress.addEventListener('input', validateCheckout);
 }
 
 // Payment selection
@@ -1476,6 +1268,13 @@ document.querySelectorAll('.co-pay-card').forEach(card => {
         if (typeof sound !== 'undefined') sound.click();
     });
 });
+
+// Generate Order ID
+function generateOrderId() {
+    const year = '2026';
+    const num = String(Math.floor(1000 + Math.random() * 9000));
+    return `LB-${year}-${num}`;
+}
 
 // Confirm order
 if (coConfirmBtn) {
@@ -1513,6 +1312,13 @@ if (coConfirmBtn) {
                 }, i * 200);
             }
         }, 400);
+
+        // Generate Order ID
+        const orderId = generateOrderId();
+        const orderDisplay = document.getElementById('orderIdDisplay');
+        if (orderDisplay) {
+            orderDisplay.textContent = `Order ID: ${orderId}`;
+        }
 
         // Close checkout, show success modal
         setTimeout(() => {
@@ -1687,7 +1493,7 @@ console.log('🎁 Mystery Box loaded successfully!');
   
 
 // ============================================
-// 19. SMOOTH SCROLL
+// 17. SMOOTH SCROLL
 // ============================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -1703,7 +1509,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================
-// 20. SCROLL ANIMATIONS - ফিক্সড
+// 18. SCROLL ANIMATIONS - ফিক্সড
 // ============================================
 // Features - ফোর্স ভিজিবিলিটি
 document.querySelectorAll('.feature-card').forEach((card, i) => {
@@ -1746,7 +1552,7 @@ document.querySelectorAll('.testimonial-card').forEach((card, i) => {
 });
 
 // ============================================
-// 21. BRICK SCROLL REVEAL - Story (Three.js State)
+// 19. BRICK SCROLL REVEAL - Story (Three.js State)
 // ============================================
 const storyBrick = document.querySelector('.story-brick');
 if (storyBrick) {
@@ -1779,7 +1585,7 @@ if (storyBrick) {
 }
 
 // ============================================
-// 22. BRICK SCROLL REVEAL - Premium (Three.js State)
+// 20. BRICK SCROLL REVEAL - Premium (Three.js State)
 // ============================================
 const premiumBrick = document.querySelector('.premium-brick-3d');
 if (premiumBrick) {
@@ -1813,7 +1619,7 @@ if (premiumBrick) {
 }
 
 // ============================================
-// 23. KEYBOARD SHORTCUTS
+// 21. KEYBOARD SHORTCUTS
 // ============================================
 document.addEventListener('keydown', (e) => {
     if (e.key === 'g' || e.key === 'G') {
@@ -1827,7 +1633,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ============================================
-// 24. CINEMATIC LOADER ANIMATION
+// 22. CINEMATIC LOADER ANIMATION
 // ============================================
 (function initLoaderAnimation() {
     const loader = document.getElementById('loader');
@@ -1966,7 +1772,7 @@ document.addEventListener('keydown', (e) => {
 })();
 
 // ============================================
-// 25. SHOWCASE CARD FADE-IN
+// 23. SHOWCASE CARD FADE-IN
 // ============================================
 const showcaseCard = document.querySelector('.showcase-card');
 if (showcaseCard) {
@@ -2035,7 +1841,7 @@ document.querySelectorAll('.payment-card').forEach((card, i) => {
 });
 
 // ============================================
-// 26. SHOWCASE WISHLIST
+// 24. SHOWCASE WISHLIST
 // ============================================
 const showcaseWishlistBtn = document.getElementById('showcaseWishlistBtn');
 if (showcaseWishlistBtn) {
@@ -2055,5 +1861,5 @@ if (showcaseWishlistBtn) {
 console.log('🧱 LUXBRICK™ - The Brick That Built Legends');
 console.log('✦ Features: 360° Viewer, Live Counter, Theme Toggle (G), 3 Games');
 console.log('✦ Keyboard: G = Theme Toggle, R = Reset Game');
-console.log('✦ Checkout: Bulk pricing with qty/discount modal flow');
+console.log('✦ Single-brick luxury checkout: ৳999, max 1 per customer');
 console.log('✦ Built for Grameenphone Academy - Top 80!');

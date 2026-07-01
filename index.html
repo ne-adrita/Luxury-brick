@@ -449,17 +449,16 @@
                     <!-- Price -->
                     <div class="showcase-price">
                         <span class="sp-currency">৳</span>
-                        <span class="sp-amount">15</span>
-                        <span class="sp-unit">/ piece</span>
+                        <span class="sp-amount">999</span>
                     </div>
 
                     <!-- Availability -->
                     <div class="sp-availability">
                         <span>★★★★★ 4.9</span>
                         <span>•</span>
-                        <span>Bulk pricing available</span>
+                        <span>Limited Collector's Edition</span>
                         <span>•</span>
-                        <span>🔥 Volume discounts on 1000+</span>
+                        <span>🔥 Only 1 Left in Stock</span>
                         <span>•</span>
                         <span>🚚 Free Delivery Across Bangladesh</span>
                     </div>
@@ -467,8 +466,8 @@
                     <!-- Trust Badges -->
                     <div class="st-badges">
                         <div class="st-badge"><i class="fas fa-truck"></i> Free Delivery</div>
-                        <div class="st-badge"><i class="fas fa-undo-alt"></i> Bulk Returns Accepted</div>
-                        <div class="st-badge"><i class="fas fa-gift"></i> Wholesale Pricing</div>
+                        <div class="st-badge"><i class="fas fa-gift"></i> Premium Gift Box</div>
+                        <div class="st-badge"><i class="fas fa-certificate"></i> Certificate of Authenticity</div>
                     </div>
 
                     <!-- Action Buttons -->
@@ -493,31 +492,13 @@
     <section id="buy" class="buy-section">
         <div class="buy-container">
             <div class="buy-content" data-aos="fade-up">
-                <div class="buy-badge">✦ BRICK PRICING</div>
-                <h2 class="buy-title">Build Your <span class="highlight">Collection</span></h2>
+                <div class="buy-badge">✦ COLLECTOR'S ITEM</div>
+                <h2 class="buy-title">Own a Piece of <span class="highlight">History</span></h2>
                 <div class="buy-price">
-                    <span class="current-price" style="font-size:3.2rem;">৳15</span>
-                    <span class="sp-unit" style="font-size:1.4rem; color:rgba(245,245,245,0.5); font-weight:600;">/ piece</span>
-                </div>
-                
-                <!-- Quantity Selector -->
-                <div class="buy-qty-wrap">
-                    <label class="buy-qty-label">Quantity</label>
-                    <div class="buy-qty">
-                        <button class="buy-qty-btn" id="qtyDecrease">−</button>
-                        <input type="number" class="buy-qty-input" id="qtyInput" value="1000" min="1" readonly>
-                        <button class="buy-qty-btn" id="qtyIncrease">+</button>
-                    </div>
+                    <span class="current-price" style="font-size:3.2rem;">৳999</span>
                 </div>
 
-                <!-- Order Summary -->
-                <div class="buy-summary" id="buySummary">
-                    <div class="bs-row"><span class="bs-label">Subtotal</span><span class="bs-value" id="bsSubtotal">৳15,000</span></div>
-                    <div class="bs-row bs-discount"><span class="bs-label">Discount</span><span class="bs-value" id="bsDiscount">-৳500</span></div>
-                    <div class="bs-row bs-total"><span class="bs-label">Final Total</span><span class="bs-value" id="bsFinal">৳14,500</span></div>
-                </div>
-
-                <p class="buy-desc">Bulk pricing for serious builders. No minimum order. Free delivery across Bangladesh.</p>
+                <p class="buy-desc">Limited to one purchase per customer. Includes premium gift box, certificate of authenticity, lifetime ownership, and free delivery.</p>
                 <div class="buy-actions">
                     <button class="buy-btn" id="buyBtn">
                         <i class="fas fa-crown"></i>
@@ -529,9 +510,10 @@
                     </button>
                 </div>
                 <div class="buy-features">
-                    <span><i class="fas fa-check"></i> 100% Authentic</span>
+                    <span><i class="fas fa-check"></i> Premium Gift Box</span>
+                    <span><i class="fas fa-check"></i> Certificate of Authenticity</span>
+                    <span><i class="fas fa-check"></i> Lifetime Ownership</span>
                     <span><i class="fas fa-check"></i> Free Delivery</span>
-                    <span><i class="fas fa-check"></i> Bulk Discounts</span>
                 </div>
             </div>
             <div class="buy-visual" data-aos="fade-left" data-aos-delay="200">
@@ -624,56 +606,6 @@
     </div>
 </div>
 
-    <!-- ===== ADD TO CART MODAL ===== -->
-<div class="atc-modal" id="atcModal">
-    <div class="atc-modal-box">
-        <button class="atc-close" id="atcClose">&times;</button>
-        <h2 class="atc-title">Select Quantity</h2>
-
-        <div class="atc-options">
-            <button class="atc-card" data-qty="1000">
-                <span class="atc-card-qty">1,000</span>
-                <span class="atc-card-label">Pieces</span>
-                <span class="atc-card-price">৳15,000</span>
-            </button>
-            <button class="atc-card" data-qty="5000">
-                <span class="atc-card-qty">5,000</span>
-                <span class="atc-card-label">Pieces</span>
-                <span class="atc-card-price">৳75,000</span>
-            </button>
-            <button class="atc-card" data-qty="10000">
-                <span class="atc-card-qty">10,000</span>
-                <span class="atc-card-label">Pieces</span>
-                <span class="atc-card-price">৳150,000</span>
-            </button>
-            <button class="atc-card" id="atcCustomCard">
-                <span class="atc-card-qty">Custom</span>
-                <span class="atc-card-label">Quantity</span>
-                <span class="atc-card-price">Set your own</span>
-            </button>
-        </div>
-
-        <!-- Custom quantity input -->
-        <div class="atc-custom-wrap" id="atcCustomWrap" style="display:none;">
-            <label class="atc-custom-label">Enter Quantity (1 – 100,000)</label>
-            <input type="number" class="atc-custom-input" id="atcCustomInput" value="100" min="1" max="100000">
-        </div>
-
-        <!-- Pricing -->
-        <div class="atc-pricing" id="atcPricing">
-            <div class="atc-price-row"><span>Unit Price</span><span>৳15 / piece</span></div>
-            <div class="atc-price-row"><span>Subtotal</span><span id="atcSubtotal">৳15,000</span></div>
-            <div class="atc-price-row atc-discount"><span>Discount</span><span id="atcDiscount">-৳500</span></div>
-            <div class="atc-price-row atc-total"><span>Final Total</span><span id="atcFinal">৳14,500</span></div>
-        </div>
-
-        <div class="atc-actions">
-            <button class="atc-btn atc-btn-secondary" id="atcContinue">Continue Shopping</button>
-            <button class="atc-btn atc-btn-primary" id="atcCheckout">Proceed to Checkout</button>
-        </div>
-    </div>
-</div>
-
     <!-- ===== CHECKOUT MODAL ===== -->
 <div class="checkout-modal" id="checkoutModal">
     <div class="checkout-modal-box">
@@ -684,20 +616,21 @@
         <div class="co-section">
             <h3 class="co-heading">Order Summary</h3>
             <div class="co-summary">
-                <div class="co-row"><span>Quantity</span><span id="coQty">1,000</span></div>
-                <div class="co-row"><span>Unit Price</span><span>৳15 / piece</span></div>
+                <div class="co-row"><span>Product</span><span>LUXBRICK™ Premium Edition</span></div>
+                <div class="co-row"><span>Quantity</span><span id="coQty">1</span></div>
+                <div class="co-row"><span>Price</span><span>৳999</span></div>
                 <div class="co-row co-divider"></div>
-                <div class="co-row"><span>Subtotal</span><span id="coSubtotal">৳15,000</span></div>
-                <div class="co-row co-discount"><span>Discount</span><span id="coDiscount">-৳500</span></div>
-                <div class="co-row co-final"><span>Final Total</span><span id="coFinal">৳14,500</span></div>
+                <div class="co-row"><span>Delivery</span><span style="color:#2ECC71;">FREE</span></div>
+                <div class="co-row co-final"><span>Total</span><span id="coFinal">৳999</span></div>
             </div>
         </div>
 
         <!-- Delivery Details -->
         <div class="co-section">
             <h3 class="co-heading">Delivery Details</h3>
-            <input type="text" class="co-input" id="coAddress" placeholder="Delivery Address *">
+            <input type="text" class="co-input" id="coName" placeholder="Full Name *">
             <input type="tel" class="co-input" id="coPhone" placeholder="Phone Number *">
+            <input type="text" class="co-input" id="coAddress" placeholder="Delivery Address *">
         </div>
 
         <!-- Payment Method -->
@@ -739,11 +672,14 @@
     <div class="success-modal-box">
         <div class="success-icon">🎉</div>
         <h2>Order Confirmed</h2>
-        <p>Thank you for choosing LUXBRICK™</p>
+        <p>Congratulations!</p>
+        <p>You are now the owner of</p>
+        <p class="success-highlight">The World's Most Luxurious Brick.</p>
         <div class="success-divider"></div>
+        <p class="success-order-id" id="orderIdDisplay">Order ID: LB-2026-0000</p>
         <div class="success-delivery">
             <i class="fas fa-truck"></i>
-            <span>Estimated Delivery: <strong>1–3 Business Days</strong></span>
+            <span>Estimated Delivery: <strong>2–4 Business Days</strong></span>
         </div>
         <button class="success-btn" onclick="closeSuccessModal()">Continue Shopping</button>
     </div>
