@@ -2,16 +2,15 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 const textureLoader = new THREE.TextureLoader();
-const texBase = 'textures/castle_brick_';
 
 let _tex = null;
 function getTextures() {
     if (_tex) return _tex;
     _tex = {
-        map: textureLoader.load(texBase + 'diff.jpg'),
-        normal: textureLoader.load(texBase + 'nor_gl.jpg'),
-        roughness: textureLoader.load(texBase + 'rough.jpg'),
-        ao: textureLoader.load(texBase + 'ao.jpg'),
+        map: textureLoader.load('textures/red-brick.jpg'),
+        normal: textureLoader.load('textures/castle_brick_nor_gl.jpg'),
+        roughness: textureLoader.load('textures/castle_brick_rough.jpg'),
+        ao: textureLoader.load('textures/castle_brick_ao.jpg'),
     };
     Object.values(_tex).forEach(t => {
         t.wrapS = t.wrapT = THREE.RepeatWrapping;
@@ -215,6 +214,57 @@ function initBrick(name, selector, isGold = false) {
 
     window.threeBricks[name] = state;
 
+    // Showcase auto-rotate state
+    let autoAngle = 0;
+    let isDragging = false;
+    let prevX = 0;
+    let prevRot = 0;
+
+    if (name === 'showcase') {
+        renderer.domElement.style.pointerEvents = 'auto';
+        renderer.domElement.style.cursor = 'grab';
+
+        renderer.domElement.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            prevX = e.clientX;
+            prevRot = autoAngle;
+            renderer.domElement.style.cursor = 'grabbing';
+        });
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const dx = e.clientX - prevX;
+            autoAngle = prevRot + dx * 0.008;
+        });
+        window.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                renderer.domElement.style.cursor = 'grab';
+            }
+        });
+
+        renderer.domElement.addEventListener('wheel', (e) => e.preventDefault(), { passive: false });
+
+        let touchId = null;
+        renderer.domElement.addEventListener('touchstart', (e) => {
+            const t = e.changedTouches[0];
+            touchId = t.identifier;
+            isDragging = true;
+            prevX = t.clientX;
+            prevRot = autoAngle;
+        }, { passive: true });
+        renderer.domElement.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const t = Array.from(e.changedTouches).find(t => t.identifier === touchId);
+            if (!t) return;
+            const dx = t.clientX - prevX;
+            autoAngle = prevRot + dx * 0.008;
+        }, { passive: true });
+        renderer.domElement.addEventListener('touchend', () => {
+            isDragging = false;
+            touchId = null;
+        }, { passive: true });
+    }
+
     let animId = null;
     function render(now) {
         state.update();
@@ -225,6 +275,12 @@ function initBrick(name, selector, isGold = false) {
             const breathe = 1 + Math.sin(t * 0.3) * 0.0015;
             const s = state.scale * breathe;
             mesh.scale.set(s, s, s);
+        }
+        if (name === 'showcase') {
+            if (!isDragging) {
+                autoAngle += 0.003;
+            }
+            mesh.rotation.y = autoAngle;
         }
         renderer.render(scene, camera);
         animId = requestAnimationFrame(render);
@@ -248,175 +304,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initBrick('hero', '.hero-brick');
     initBrick('story', '.story-brick');
     initBrick('premium', '.premium-brick-3d', true);
+    initBrick('showcase', '.showcase-brick-3d');
 });
-
-// ===== SHOWCASE BRICK — dedicated scene =====
-function setupShowcaseBrick() {
-    const el = document.querySelector('.showcase-brick-3d');
-    if (!el) return;
-
-    const rect = el.getBoundingClientRect();
-    const w = rect.width || 280;
-    const h = rect.height || 280;
-    const aspect = w / h;
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(w, h);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.8;
-    renderer.domElement.style.display = 'block';
-    renderer.domElement.style.pointerEvents = 'auto';
-    renderer.domElement.style.cursor = 'grab';
-    el.appendChild(renderer.domElement);
-
-    const scene = new THREE.Scene();
-
-    const camera = new THREE.PerspectiveCamera(16, aspect, 0.1, 50);
-    camera.position.set(2.6, 1.1, 3.8);
-    camera.lookAt(0, 0, 0);
-
-    // Same geometry + textures as hero brick
-    const geo = new RoundedBoxGeometry(2.0, 0.6, 1.0, 8, 0.065);
-    displaceVertices(geo, 0.0035);
-
-    // Load the real red brick photo as the color map
-    const showcaseTex = textureLoader.load('textures/red-brick.jpg');
-    showcaseTex.colorSpace = THREE.SRGBColorSpace;
-    showcaseTex.wrapS = showcaseTex.wrapT = THREE.RepeatWrapping;
-    showcaseTex.repeat.set(1.2, 0.8);
-    showcaseTex.offset.set(0, 0.1);
-
-    // Procedural normal from the old textures if they exist, else just use flat
-    const tex = getTextures();
-    const mat = new THREE.MeshStandardMaterial({
-        map: showcaseTex,
-        normalMap: tex.normal,
-        normalScale: new THREE.Vector2(1.2, 1.2),
-        roughnessMap: tex.roughness,
-        roughness: 0.85,
-        aoMap: tex.ao,
-        aoMapIntensity: 0.6,
-        envMapIntensity: 0.5,
-    });
-
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    scene.add(mesh);
-
-    // Environment map
-    const pmrem = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmrem.fromEquirectangular(buildEnvMap(1024)).texture;
-    pmrem.dispose();
-
-    // Studio lighting
-    const ambient = new THREE.AmbientLight(0xffffff, 0.15);
-    scene.add(ambient);
-
-    const hemi = new THREE.HemisphereLight(0xffeedd, 0x4a2c1a, 0.25);
-    scene.add(hemi);
-
-    const key = new THREE.DirectionalLight(0xfff0e6, 1.8);
-    key.position.set(3.5, 5, 3);
-    scene.add(key);
-
-    const fill = new THREE.DirectionalLight(0xffccaa, 0.3);
-    fill.position.set(-2.5, 0.8, 2);
-    scene.add(fill);
-
-    const rim = new THREE.DirectionalLight(0xeef4ff, 0.4);
-    rim.position.set(-0.5, 1.8, -4);
-    scene.add(rim);
-
-    const back = new THREE.DirectionalLight(0xffeedd, 0.15);
-    back.position.set(1.2, 0.5, -4.5);
-    scene.add(back);
-
-    // Shadow plane
-    const plane = new THREE.Mesh(
-        new THREE.PlaneGeometry(8, 8),
-        new THREE.ShadowMaterial({ opacity: 0.25, color: 0x000000 })
-    );
-    plane.rotation.x = -Math.PI / 2;
-    plane.position.y = -0.38;
-    plane.receiveShadow = true;
-    scene.add(plane);
-
-    // Auto-rotate state
-    let autoAngle = 0;
-    let targetY = 0;
-    let isDragging = false;
-    let prevX = 0;
-    let prevRot = 0;
-    let velocity = 0;
-
-    // Mouse drag
-    renderer.domElement.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        prevX = e.clientX;
-        prevRot = autoAngle;
-        velocity = 0;
-        renderer.domElement.style.cursor = 'grabbing';
-    });
-    window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const dx = e.clientX - prevX;
-        autoAngle = prevRot + dx * 0.008;
-    });
-    window.addEventListener('mouseup', () => {
-        if (isDragging) {
-            isDragging = false;
-            renderer.domElement.style.cursor = 'grab';
-            if (Math.abs(velocity) < 0.001) velocity = 0;
-        }
-    });
-
-    // Disable wheel zoom
-    renderer.domElement.addEventListener('wheel', (e) => e.preventDefault(), { passive: false });
-
-    // Touch support
-    let touchId = null;
-    renderer.domElement.addEventListener('touchstart', (e) => {
-        const t = e.changedTouches[0];
-        touchId = t.identifier;
-        isDragging = true;
-        prevX = t.clientX;
-        prevRot = autoAngle;
-        velocity = 0;
-    }, { passive: true });
-    renderer.domElement.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        const t = Array.from(e.changedTouches).find(t => t.identifier === touchId);
-        if (!t) return;
-        const dx = t.clientX - prevX;
-        autoAngle = prevRot + dx * 0.008;
-    }, { passive: true });
-    renderer.domElement.addEventListener('touchend', (e) => {
-        const t = Array.from(e.changedTouches).find(t => t.identifier === touchId);
-        if (t) { isDragging = false; touchId = null; }
-    }, { passive: true });
-
-    function render(now) {
-        if (!isDragging) {
-            autoAngle += 0.003;
-        }
-        mesh.rotation.y = autoAngle;
-        renderer.render(scene, camera);
-        requestAnimationFrame(render);
-    }
-    render(performance.now());
-
-    const ro = new ResizeObserver(() => {
-        const r = el.getBoundingClientRect();
-        if (r.width > 0 && r.height > 0) {
-            camera.aspect = r.width / r.height;
-            camera.updateProjectionMatrix();
-            renderer.setSize(r.width, r.height);
-        }
-    });
-    ro.observe(el);
-}
-
-setupShowcaseBrick();
