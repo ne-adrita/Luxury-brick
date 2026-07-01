@@ -728,6 +728,62 @@ body.gold-theme ::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, #B8860B, #C49A3A);
 }
 
+/* ===== SHOWCASE - GOLD THEME ===== */
+body.gold-theme .showcase-section {
+    background: linear-gradient(180deg, #FFFDF8, #F7F2E8);
+}
+body.gold-theme .showcase-frame {
+    border-color: rgba(212, 175, 55, 0.2);
+    background: rgba(255, 255, 255, 0.3);
+}
+body.gold-theme .showcase-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(212, 175, 55, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+}
+body.gold-theme .showcase-card-title {
+    color: #1A1A1A;
+}
+body.gold-theme .showcase-card-desc {
+    color: rgba(26, 26, 26, 0.7);
+}
+body.gold-theme .card-price-amount {
+    color: #1A1A1A;
+}
+body.gold-theme .card-price-currency,
+body.gold-theme .card-price-cents {
+    color: #B8860B;
+}
+body.gold-theme .showcase-card-rating i {
+    color: #B8860B;
+}
+body.gold-theme .card-rating-text {
+    color: rgba(26, 26, 26, 0.5);
+}
+body.gold-theme .card-spec-text {
+    color: rgba(26, 26, 26, 0.7);
+}
+body.gold-theme .card-spec-bullet {
+    color: #B8860B;
+}
+body.gold-theme .showcase-card-buy {
+    background: linear-gradient(135deg, #B8860B, #C49A3A);
+    color: #FFFDF8;
+}
+body.gold-theme .showcase-card-buy:hover {
+    box-shadow: 0 0 40px rgba(184, 134, 11, 0.4);
+}
+body.gold-theme .showcase-card-cart {
+    border-color: rgba(184, 134, 11, 0.3);
+    color: #B8860B;
+}
+body.gold-theme .showcase-card-cart:hover {
+    background: rgba(184, 134, 11, 0.08);
+}
+body.gold-theme .showcase-card-tm {
+    color: #C0392B;
+}
+
 /* ===== CUSTOM CURSOR - DISABLED ===== */
 .custom-cursor {
     display: none !important;
@@ -1520,213 +1576,17 @@ body.gold-theme .theme-toggle .fa-moon {
     justify-content: center;
     align-items: center;
     position: relative;
-    perspective: 1000px;
     transition: transform 0.1s ease-out;
 }
 
 .floating-brick {
-    transform-style: preserve-3d;
-    perspective: 1000px;
     will-change: transform;
 }
 
-.floating-brick .brick-3d {
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.brick-hint {
-    text-align: center;
-    color: rgba(245, 245, 245, 0.3);
-    font-size: 0.8rem;
-    margin-top: 1rem;
-    letter-spacing: 1px;
-}
-
-/* ===== BRICK 3D - Cinemaic GSAP Reveal ===== */
-
-/* Hero Brick - Static tilt, GSAP-driven */
 .hero-brick {
     width: 200px;
-    height: 120px;
+    height: 200px;
     position: relative;
-    transform-style: preserve-3d;
-    transform: rotateX(-10deg) rotateY(15deg);
-}
-
-/* Story Brick - Static tilt, GSAP scroll reveal */
-.story-brick {
-    width: 250px;
-    height: 150px;
-    position: relative;
-    transform-style: preserve-3d;
-    transform: rotateX(-10deg) rotateY(0deg);
-}
-
-/* Premium Brick - Static tilt + Golden Aura */
-.premium-brick-3d {
-    width: 200px;
-    height: 120px;
-    position: relative;
-    transform-style: preserve-3d;
-    transform: rotateX(-15deg) rotateY(30deg);
-}
-
-.premium-brick-3d::after {
-    content: '';
-    position: absolute;
-    inset: -20px;
-    border-radius: 16px;
-    background: radial-gradient(ellipse, rgba(255, 215, 0, 0.2), transparent 70%);
-    animation: goldBreath 3s ease-in-out infinite;
-    pointer-events: none;
-}
-
-@keyframes goldBreath {
-    0%, 100% { opacity: 0.4; transform: scale(1); }
-    50% { opacity: 0.8; transform: scale(1.08); }
-}
-
-/* ===== BRICK FACES (সব ব্রিকের জন্য) ===== */
-.brick-face {
-    position: absolute;
-    border-radius: 8px;
-    backface-visibility: visible;
-}
-
-/* Hero Brick Faces */
-.hero-brick .brick-face.front {
-    background: linear-gradient(135deg, #C0392B, #E74C3C);
-    width: 200px;
-    height: 120px;
-    transform: translateZ(60px);
-    box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
-}
-.hero-brick .brick-face.back {
-    background: linear-gradient(135deg, #A93226, #C0392B);
-    width: 200px;
-    height: 120px;
-    transform: rotateY(180deg) translateZ(60px);
-}
-.hero-brick .brick-face.left {
-    background: linear-gradient(135deg, #922B21, #A93226);
-    width: 120px;
-    height: 120px;
-    transform: rotateY(-90deg) translateZ(60px);
-}
-.hero-brick .brick-face.right {
-    background: linear-gradient(135deg, #A93226, #C0392B);
-    width: 120px;
-    height: 120px;
-    transform: rotateY(90deg) translateZ(140px);
-}
-.hero-brick .brick-face.top {
-    background: linear-gradient(135deg, #C0392B, #E74C3C);
-    width: 200px;
-    height: 120px;
-    transform: rotateX(90deg) translateZ(60px);
-}
-.hero-brick .brick-face.bottom {
-    background: linear-gradient(135deg, #922B21, #A93226);
-    width: 200px;
-    height: 120px;
-    transform: rotateX(-90deg) translateZ(60px);
-}
-
-/* Story Brick Faces */
-.story-brick .brick-face.front {
-    background: linear-gradient(135deg, #C0392B, #E74C3C);
-    width: 250px;
-    height: 150px;
-    transform: translateZ(75px);
-    box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
-}
-.story-brick .brick-face.back {
-    background: linear-gradient(135deg, #A93226, #C0392B);
-    width: 250px;
-    height: 150px;
-    transform: rotateY(180deg) translateZ(75px);
-}
-.story-brick .brick-face.left {
-    background: linear-gradient(135deg, #922B21, #A93226);
-    width: 150px;
-    height: 150px;
-    transform: rotateY(-90deg) translateZ(75px);
-}
-.story-brick .brick-face.right {
-    background: linear-gradient(135deg, #A93226, #C0392B);
-    width: 150px;
-    height: 150px;
-    transform: rotateY(90deg) translateZ(175px);
-}
-.story-brick .brick-face.top {
-    background: linear-gradient(135deg, #C0392B, #E74C3C);
-    width: 250px;
-    height: 150px;
-    transform: rotateX(90deg) translateZ(75px);
-}
-.story-brick .brick-face.bottom {
-    background: linear-gradient(135deg, #922B21, #A93226);
-    width: 250px;
-    height: 150px;
-    transform: rotateX(-90deg) translateZ(75px);
-}
-
-/* Premium Brick Faces - Golden */
-.premium-brick-3d .brick-face.front,
-.premium-brick-3d .brick-face.back,
-.premium-brick-3d .brick-face.left,
-.premium-brick-3d .brick-face.right,
-.premium-brick-3d .brick-face.top,
-.premium-brick-3d .brick-face.bottom {
-    background: linear-gradient(135deg, #FFD700, #F39C12) !important;
-}
-
-.premium-brick-3d .brick-face.front {
-    width: 200px;
-    height: 120px;
-    transform: translateZ(60px);
-    box-shadow: inset 0 0 30px rgba(0,0,0,0.2), 0 0 40px rgba(255,215,0,0.2);
-}
-.premium-brick-3d .brick-face.back {
-    width: 200px;
-    height: 120px;
-    transform: rotateY(180deg) translateZ(60px);
-}
-.premium-brick-3d .brick-face.left {
-    width: 120px;
-    height: 120px;
-    transform: rotateY(-90deg) translateZ(60px);
-}
-.premium-brick-3d .brick-face.right {
-    width: 120px;
-    height: 120px;
-    transform: rotateY(90deg) translateZ(140px);
-}
-.premium-brick-3d .brick-face.top {
-    width: 200px;
-    height: 120px;
-    transform: rotateX(90deg) translateZ(60px);
-}
-.premium-brick-3d .brick-face.bottom {
-    width: 200px;
-    height: 120px;
-    transform: rotateX(-90deg) translateZ(60px);
-}
-
-/* ===== ROTATING BRICK CONTAINER (Story) ===== */
-.rotating-brick {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* ===== PREMIUM BRICK CONTAINER (Buy) ===== */
-.premium-brick {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    margin-top: 1rem;
 }
 
 /* ===== SCROLL INDICATOR ===== */
@@ -1832,42 +1692,53 @@ body.gold-theme .theme-toggle .fa-moon {
     align-items: center;
 }
 
-.rotating-brick .brick-3d {
+.rotating-brick {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.story-brick {
     width: 250px;
-    height: 150px;
+    height: 200px;
+    position: relative;
 }
 
-.rotating-brick .brick-face {
-    width: 250px;
-    height: 150px;
+.premium-brick {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1rem;
 }
 
-.rotating-brick .brick-face.left,
-.rotating-brick .brick-face.right {
-    width: 150px;
-    height: 150px;
+.premium-brick-3d {
+    width: 200px;
+    height: 200px;
+    position: relative;
 }
 
-.rotating-brick .brick-face.left {
-    transform: rotateY(-90deg) translateZ(75px);
+.premium-brick-3d::after {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    border-radius: 16px;
+    background: radial-gradient(ellipse, rgba(255, 215, 0, 0.2), transparent 70%);
+    animation: goldBreath 3s ease-in-out infinite;
+    pointer-events: none;
 }
 
-.rotating-brick .brick-face.right {
-    transform: rotateY(90deg) translateZ(175px);
+@keyframes goldBreath {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.08); }
 }
 
-.rotating-brick .brick-face.front {
-    transform: translateZ(75px);
-}
-
-.rotating-brick .brick-face.back {
-    transform: rotateY(180deg) translateZ(75px);
-}
-
-.rotating-brick .brick-face.top,
-.rotating-brick .brick-face.bottom {
-    width: 250px;
-    height: 150px;
+.brick-hint {
+    text-align: center;
+    color: rgba(245, 245, 245, 0.3);
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    letter-spacing: 1px;
 }
 
 /* ===== FEATURES SECTION ===== */
@@ -3558,5 +3429,309 @@ body.gold-theme .buy-add-cart-btn:hover i {
     }
     .prize-text {
         font-size: 1.2rem;
+    }
+}
+
+/* ===== SHOWCASE SECTION ===== */
+.showcase-section {
+    padding: 6rem 2rem;
+    background: linear-gradient(180deg, #0B0B0B, #1A1A1A);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.showcase-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.showcase-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+/* --- LEFT: 3D Brick --- */
+.showcase-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.showcase-frame {
+    width: 100%;
+    max-width: 440px;
+    aspect-ratio: 1;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    background: rgba(255, 255, 255, 0.015);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.showcase-brick-3d {
+    width: 280px;
+    height: 280px;
+    position: relative;
+}
+
+/* --- RIGHT: Product Details Card --- */
+.showcase-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 215, 0, 0.08);
+    border-radius: 24px;
+    padding: 2.5rem;
+    transition: all 0.4s ease;
+}
+
+.showcase-card:hover {
+    border-color: rgba(255, 215, 0, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.showcase-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.showcase-card-badge {
+    display: inline-block;
+    background: rgba(255, 215, 0, 0.08);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    color: #FFD700;
+    padding: 0.3rem 1rem;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    align-self: flex-start;
+}
+
+.showcase-card-title {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: #F5F5F5;
+    line-height: 1.1;
+}
+
+.showcase-card-tm {
+    color: #C0392B;
+    font-size: 2.6rem;
+    font-weight: 900;
+}
+
+.showcase-card-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.1rem;
+}
+
+.card-price-currency {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #FFD700;
+}
+
+.card-price-amount {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #F5F5F5;
+    line-height: 1;
+}
+
+.card-price-cents {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #FFD700;
+    align-self: flex-start;
+    margin-top: 0.3rem;
+}
+
+.showcase-card-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.showcase-card-rating i {
+    color: #FFD700;
+    font-size: 1rem;
+}
+
+.card-rating-text {
+    color: rgba(245, 245, 245, 0.5);
+    font-size: 0.85rem;
+    margin-left: 0.3rem;
+}
+
+.showcase-card-desc {
+    font-size: 0.95rem;
+    color: rgba(245, 245, 245, 0.65);
+    line-height: 1.7;
+}
+
+.showcase-card-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 1.2rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 215, 0, 0.06);
+    border-radius: 12px;
+}
+
+.card-spec-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.card-spec-bullet {
+    color: #FFD700;
+    font-size: 0.9rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.card-spec-text {
+    font-size: 0.85rem;
+    color: rgba(245, 245, 245, 0.7);
+    font-weight: 500;
+}
+
+.showcase-card-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.showcase-card-buy {
+    padding: 0.85rem 2.5rem;
+    background: linear-gradient(135deg, #C0392B, #FFD700);
+    border: none;
+    border-radius: 50px;
+    color: #F5F5F5;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 30px rgba(192, 57, 43, 0.3);
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.showcase-card-buy:hover {
+    transform: scale(1.04) translateY(-2px);
+    box-shadow: 0 0 60px rgba(255, 215, 0, 0.5);
+}
+
+.showcase-card-cart {
+    padding: 0.85rem 2rem;
+    border-radius: 50px;
+    border: 2px solid rgba(255, 215, 0, 0.25);
+    background: transparent;
+    color: #FFD700;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: all 0.3s ease;
+}
+
+.showcase-card-cart:hover {
+    border-color: #FFD700;
+    background: rgba(255, 215, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+/* ===== SHOWCASE RESPONSIVE ===== */
+@media (max-width: 1024px) {
+    .showcase-grid {
+        gap: 3rem;
+    }
+    .showcase-card-title {
+        font-size: 2rem;
+    }
+    .showcase-card-tm {
+        font-size: 2.2rem;
+    }
+    .card-price-amount {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .showcase-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+    .showcase-visual {
+        order: -1;
+    }
+    .showcase-frame {
+        max-width: 340px;
+    }
+    .showcase-brick-3d {
+        width: 220px;
+        height: 220px;
+    }
+    .showcase-card {
+        padding: 2rem;
+    }
+    .showcase-card-title {
+        font-size: 2rem;
+    }
+    .showcase-card-tm {
+        font-size: 2.2rem;
+    }
+    .card-price-amount {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .showcase-grid {
+        gap: 2rem;
+    }
+    .showcase-frame {
+        max-width: 280px;
+    }
+    .showcase-brick-3d {
+        width: 180px;
+        height: 180px;
+    }
+    .showcase-card {
+        padding: 1.5rem;
+    }
+    .showcase-card-title {
+        font-size: 1.6rem;
+    }
+    .showcase-card-tm {
+        font-size: 1.8rem;
+    }
+    .card-price-amount {
+        font-size: 2rem;
+    }
+    .showcase-card-actions {
+        flex-direction: column;
+    }
+    .showcase-card-buy,
+    .showcase-card-cart {
+        width: 100%;
+        justify-content: center;
     }
 }

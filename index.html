@@ -9,6 +9,16 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Three.js Import Map -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -52,6 +62,7 @@
                     <li><a href="#features">Features</a></li>
                     <li><a href="#game">Games</a></li>
                     <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#showcase">Showcase</a></li>
                     <li><a href="#buy" class="nav-cta">Buy Now</a></li>
                 </ul>
                 <div class="hamburger">
@@ -107,15 +118,8 @@
             </div>
             <div class="hero-brick-container">
                 <div class="floating-brick" id="brickViewer">
-                    <div class="brick-3d hero-brick">
-                        <div class="brick-face front"></div>
-                        <div class="brick-face back"></div>
-                        <div class="brick-face left"></div>
-                        <div class="brick-face right"></div>
-                        <div class="brick-face top"></div>
-                        <div class="brick-face bottom"></div>
-                    </div>
-                    <div class="brick-hint">🖱 Drag to rotate</div>
+                    <div class="hero-brick"></div>
+
                 </div>
             </div>
         </div>
@@ -158,14 +162,7 @@
             </div>
             <div class="story-visual" data-aos="fade-left" data-aos-delay="200">
                 <div class="rotating-brick">
-                    <div class="brick-3d story-brick">
-                        <div class="brick-face front"></div>
-                        <div class="brick-face back"></div>
-                        <div class="brick-face left"></div>
-                        <div class="brick-face right"></div>
-                        <div class="brick-face top"></div>
-                        <div class="brick-face bottom"></div>
-                    </div>
+                    <div class="story-brick"></div>
                 </div>
             </div>
         </div>
@@ -389,7 +386,94 @@
         </div>
     </section>
 
-    <!-- ===== SECTION 6: BUY ===== -->
+    <!-- ===== SECTION 6: PRODUCT SHOWCASE ===== -->
+    <section id="showcase" class="showcase-section">
+        <div class="showcase-container">
+            <div class="showcase-grid">
+
+                <!-- LEFT: Auto-rotating 3D Brick -->
+                <div class="showcase-visual" data-aos="fade-right">
+                    <div class="showcase-frame">
+                        <div class="showcase-brick-3d"></div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Product Details Card -->
+                <div class="showcase-card" data-aos="fade-left" data-aos-delay="150">
+
+                    <div class="showcase-card-body">
+
+                        <div class="showcase-card-badge">✦ PREMIUM EDITION</div>
+
+                        <h2 class="showcase-card-title">LUXBRICK<span class="showcase-card-tm">™</span></h2>
+
+                        <div class="showcase-card-price">
+                            <span class="card-price-currency">$</span>
+                            <span class="card-price-amount">999</span>
+                            <span class="card-price-cents">.99</span>
+                        </div>
+
+                        <div class="showcase-card-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span class="card-rating-text">(4.9/5)</span>
+                        </div>
+
+                        <p class="showcase-card-desc">
+                            Crafted from premium clay and engineered for timeless durability.
+                            Designed for luxury architecture with unmatched strength, fire resistance,
+                            and handcrafted finishing.
+                        </p>
+
+                        <div class="showcase-card-specs">
+                            <div class="card-spec-row">
+                                <span class="card-spec-bullet">•</span>
+                                <span class="card-spec-text">Premium Clay</span>
+                            </div>
+                            <div class="card-spec-row">
+                                <span class="card-spec-bullet">•</span>
+                                <span class="card-spec-text">Fire Resistant</span>
+                            </div>
+                            <div class="card-spec-row">
+                                <span class="card-spec-bullet">•</span>
+                                <span class="card-spec-text">Weather Proof</span>
+                            </div>
+                            <div class="card-spec-row">
+                                <span class="card-spec-bullet">•</span>
+                                <span class="card-spec-text">Lifetime Strength</span>
+                            </div>
+                            <div class="card-spec-row">
+                                <span class="card-spec-bullet">•</span>
+                                <span class="card-spec-text">Hand Finished</span>
+                            </div>
+                            <div class="card-spec-row">
+                                <span class="card-spec-bullet">•</span>
+                                <span class="card-spec-text">Weight: 3.2kg</span>
+                            </div>
+                        </div>
+
+                        <div class="showcase-card-actions">
+                            <a href="#buy" class="showcase-card-buy" id="showcaseCtaBtn">
+                                <i class="fas fa-crown"></i>
+                                Buy Now
+                            </a>
+                            <button class="showcase-card-cart" id="showcaseAddCartBtn">
+                                <i class="fas fa-shopping-bag"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION 7: BUY ===== -->
     <section id="buy" class="buy-section">
         <div class="buy-container">
             <div class="buy-content" data-aos="fade-up">
@@ -421,14 +505,7 @@
             </div>
             <div class="buy-visual" data-aos="fade-left" data-aos-delay="200">
                 <div class="premium-brick">
-                    <div class="brick-3d premium-brick-3d">
-                        <div class="brick-face front"></div>
-                        <div class="brick-face back"></div>
-                        <div class="brick-face left"></div>
-                        <div class="brick-face right"></div>
-                        <div class="brick-face top"></div>
-                        <div class="brick-face bottom"></div>
-                    </div>
+                    <div class="premium-brick-3d"></div>
                     <div class="premium-tag">✦ PREMIUM</div>
                 </div>
             </div>
@@ -561,5 +638,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
     <script src="script.js"></script>
+    <script type="module" src="brick-renderer.js"></script>
 </body>
 </html>

@@ -7,6 +7,14 @@ AOS.init({
     disable: 'mobile'
 });
 
+// Three.js state objects (pre-initialized for GSAP integration)
+window.threeBricks = {
+    hero: { rotationX: -25, rotationY: -30, scale: 0.4 },
+    story: { rotationX: -10, rotationY: 0, scale: 1 },
+    premium: { rotationX: -10, rotationY: 40, scale: 0.7 },
+    showcase: { rotationX: -10, rotationY: 30, scale: 0.9 }
+};
+
 // AOS রিফ্রেশ (নিশ্চিত করে যে সব element visible)
 setTimeout(() => {
     AOS.refresh();
@@ -167,36 +175,38 @@ if (themeToggle) {
 }
 
 // ============================================
-// 4. 360° BRICK VIEWER
+// 4. 360° BRICK VIEWER (Three.js State)
 // ============================================
 const brickViewer = document.getElementById('brickViewer');
 let isDragging = false;
 let prevX = 0;
 let prevY = 0;
-let rotateX = -20;
-let rotateY = 30;
+let dragRotateX = -10;
+let dragRotateY = 15;
 
 if (brickViewer) {
-    const brick3d = brickViewer.querySelector('.brick-3d');
-    
     brickViewer.addEventListener('mousedown', (e) => {
+        if (!heroReady) return;
         isDragging = true;
         prevX = e.clientX;
         prevY = e.clientY;
+        dragRotateX = heroState.rotationX;
+        dragRotateY = heroState.rotationY;
     });
-    
+
     document.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
         const dx = e.clientX - prevX;
         const dy = e.clientY - prevY;
-        rotateY += dx * 0.5;
-        rotateX += dy * 0.3;
-        rotateX = Math.max(-80, Math.min(80, rotateX));
-        brick3d.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        dragRotateY += dx * 0.5;
+        dragRotateX += dy * 0.3;
+        dragRotateX = Math.max(-80, Math.min(80, dragRotateX));
+        heroState.rotationX = dragRotateX;
+        heroState.rotationY = dragRotateY;
         prevX = e.clientX;
         prevY = e.clientY;
     });
-    
+
     document.addEventListener('mouseup', () => {
         isDragging = false;
     });
@@ -266,23 +276,19 @@ gsap.from('.live-counter', {
     delay: 1.3
 });
 
+const heroState = window.threeBricks.hero;
 const heroBrickReveal = gsap.timeline({ delay: 0.2 });
 
 heroBrickReveal
-    .set('.hero-brick', {
-        rotationX: -25,
-        rotationY: 45,
-        scale: 0.4,
-        opacity: 0
-    })
-    .to('.hero-brick', {
-        duration: 1.6,
+    .set('.hero-brick', { opacity: 0 })
+    .to('.hero-brick', { opacity: 1, duration: 0.3 })
+    .to(heroState, {
         rotationX: -10,
         rotationY: 15,
         scale: 1,
-        opacity: 1,
+        duration: 1.6,
         ease: 'power4.out'
-    })
+    }, '-=0.1')
     .to('.hero-brick-container', {
         duration: 3.5,
         y: -5,
@@ -292,31 +298,30 @@ heroBrickReveal
     }, '+=0.6');
 
 // ============================================
-// HERO BRICK - MOUSE FOLLOW (নতুন)
+// HERO BRICK - MOUSE FOLLOW (Three.js State)
 // ============================================
 const heroContainer = document.querySelector('.hero-brick-container');
 const heroBrick = document.querySelector('.hero-brick');
+let heroReady = false;
+
+heroBrickReveal.eventCallback('onComplete', () => {
+    heroReady = true;
+});
 
 if (heroContainer && heroBrick) {
-    // Remove the float animation when interacting
-    heroBrick.style.animation = 'none';
-    
     heroContainer.addEventListener('mousemove', (e) => {
+        if (!heroReady) return;
         const rect = heroContainer.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
-        
-        const rotateY = x * 20;
-        const rotateX = -y * 15;
-        const translateY = -y * 10;
-        
-        heroBrick.style.transform = `rotateX(${-10 + rotateX}deg) rotateY(${rotateY}deg) translateY(${translateY}px)`;
-        heroBrick.style.transition = 'transform 0.1s ease-out';
+        heroState.rotationX = -10 + (-y * 12);
+        heroState.rotationY = 15 + (x * 18);
     });
-    
+
     heroContainer.addEventListener('mouseleave', () => {
-        heroBrick.style.transform = 'rotateX(-10deg) rotateY(15deg) translateY(0px)';
-        heroBrick.style.transition = 'transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        if (!heroReady) return;
+        heroState.rotationX = -10;
+        heroState.rotationY = 15;
     });
 }
 
@@ -1228,25 +1233,28 @@ const cart = new Cart();
 const buyBtn = document.getElementById('buyBtn');
 if (buyBtn) {
     buyBtn.addEventListener('click', function() {
-        // Step 1: Disable & Show Processing
         this.disabled = true;
         this.innerHTML = '⏳ Processing...';
         this.style.opacity = '0.7';
         showToast('⏳ Processing your order...');
-        
-        // Step 2: After 800ms - Brick rotates + Confetti starts
+
         setTimeout(() => {
             sound.success();
             this.classList.add('buying');
-            
-            // Rotate the premium brick
-            const premiumBrick = document.querySelector('.premium-brick .brick-3d');
-            if (premiumBrick) {
-                premiumBrick.style.transition = 'transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                premiumBrick.style.transform = 'rotateX(360deg) rotateY(720deg) scale(1.1)';
-            }
-            
-            // Confetti starts
+
+            const state = window.threeBricks.premium;
+            const origRotationX = state.rotationX;
+            const origRotationY = state.rotationY;
+            const origScale = state.scale;
+
+            gsap.to(state, {
+                rotationX: 360,
+                rotationY: 720,
+                scale: 1.1,
+                duration: 1.5,
+                ease: 'power2.out'
+            });
+
             const duration = 4 * 1000;
             const end = Date.now() + duration;
             (function frame() {
@@ -1260,12 +1268,10 @@ if (buyBtn) {
                     requestAnimationFrame(frame);
                 }
             })();
-            
+
         }, 800);
-            
-              // Step 3: After 1200ms - Fireworks + Screen Shake
+
         setTimeout(() => {
-            // Fireworks
             for (let i = 0; i < 5; i++) {
                 setTimeout(() => {
                     const x = Math.random();
@@ -1278,44 +1284,43 @@ if (buyBtn) {
                     });
                 }, i * 300);
             }
-            
-               // Screen shake
-               document.body.style.animation = 'shake 0.5s ease';
-               setTimeout(() => {
-                   document.body.style.animation = '';
-               }, 500);
-               
-           }, 1200);
 
-           // Step 4: After 1800ms - Success Modal
+            document.body.style.animation = 'shake 0.5s ease';
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 500);
+
+        }, 1200);
+
         setTimeout(() => {
             const modal = document.getElementById('successModal');
             if (modal) {
                 modal.style.display = 'flex';
             }
-            
-        // Update button
-        this.innerHTML = '✓ ORDER CONFIRMED!';
-        this.style.background = 'linear-gradient(135deg, #27AE60, #2ECC71)';
-        this.style.opacity = '1';
-        
-        setTimeout(() => {
-            this.innerHTML = '<i class="fas fa-crown"></i> BUY THE LEGEND <i class="fas fa-arrow-right"></i>';
-            this.style.background = '';
-            this.classList.remove('buying');
-            this.disabled = false;
-            
-            // Reset brick rotation
-            const premiumBrick = document.querySelector('.premium-brick .brick-3d');
-            if (premiumBrick) {
-                premiumBrick.style.transition = 'transform 1s ease';
-                premiumBrick.style.transform = 'rotateX(-20deg) rotateY(30deg)';
-            }
-        }, 4000);
-        showToast('🎉 Order Confirmed! Welcome to the LUXBRICK family!');
-            
-    }, 1800);
-});
+
+            this.innerHTML = '✓ ORDER CONFIRMED!';
+            this.style.background = 'linear-gradient(135deg, #27AE60, #2ECC71)';
+            this.style.opacity = '1';
+
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-crown"></i> BUY THE LEGEND <i class="fas fa-arrow-right"></i>';
+                this.style.background = '';
+                this.classList.remove('buying');
+                this.disabled = false;
+
+                const state = window.threeBricks.premium;
+                gsap.to(state, {
+                    rotationX: -10,
+                    rotationY: 30,
+                    scale: 1,
+                    duration: 1,
+                    ease: 'power2.out'
+                });
+            }, 4000);
+            showToast('🎉 Order Confirmed! Welcome to the LUXBRICK family!');
+
+        }, 1800);
+    });
 }
 
 // ===== CLOSE SUCCESS MODAL =====
@@ -1538,12 +1543,25 @@ document.querySelectorAll('.testimonial-card').forEach((card, i) => {
 });
 
 // ============================================
-// 19. BRICK SCROLL REVEAL - Story
+// 19. BRICK SCROLL REVEAL - Story (Three.js State)
 // ============================================
 const storyBrick = document.querySelector('.story-brick');
 if (storyBrick) {
     gsap.fromTo(storyBrick,
-        { rotationY: -30, opacity: 0.3 },
+        { opacity: 0.3 },
+        {
+            scrollTrigger: {
+                trigger: '.story-visual',
+                start: 'top 85%',
+                toggleActions: 'play none none reverse'
+            },
+            duration: 1.8,
+            opacity: 1,
+            ease: 'power3.out'
+        }
+    );
+    gsap.fromTo(window.threeBricks.story,
+        { rotationY: -30 },
         {
             scrollTrigger: {
                 trigger: '.story-visual',
@@ -1552,19 +1570,31 @@ if (storyBrick) {
             },
             duration: 1.8,
             rotationY: 0,
-            opacity: 1,
             ease: 'power3.out'
         }
     );
 }
 
 // ============================================
-// 20. BRICK SCROLL REVEAL - Premium (Buy Section)
+// 20. BRICK SCROLL REVEAL - Premium (Three.js State)
 // ============================================
 const premiumBrick = document.querySelector('.premium-brick-3d');
 if (premiumBrick) {
     gsap.fromTo(premiumBrick,
-        { rotationY: 40, scale: 0.7, opacity: 0 },
+        { opacity: 0 },
+        {
+            scrollTrigger: {
+                trigger: '.buy-visual',
+                start: 'top 85%',
+                toggleActions: 'play none none reverse'
+            },
+            duration: 1.6,
+            opacity: 1,
+            ease: 'power3.out'
+        }
+    );
+    gsap.fromTo(window.threeBricks.premium,
+        { rotationY: 40, scale: 0.7 },
         {
             scrollTrigger: {
                 trigger: '.buy-visual',
@@ -1574,7 +1604,6 @@ if (premiumBrick) {
             duration: 1.6,
             rotationY: 30,
             scale: 1,
-            opacity: 1,
             ease: 'power3.out'
         }
     );
@@ -1732,6 +1761,55 @@ document.addEventListener('keydown', (e) => {
         setTimeout(() => tl.play(), 200);
     });
 })();
+
+// ============================================
+// 23. SHOWCASE CARD FADE-IN
+// ============================================
+const showcaseCard = document.querySelector('.showcase-card');
+if (showcaseCard) {
+    gsap.fromTo(showcaseCard,
+        { opacity: 0, y: 40 },
+        {
+            scrollTrigger: {
+                trigger: '.showcase-visual',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            duration: 1.2,
+            opacity: 1,
+            y: 0,
+            ease: 'power3.out'
+        }
+    );
+}
+
+// Spec rows stagger
+document.querySelectorAll('.card-spec-row').forEach((row, i) => {
+    gsap.from(row, {
+        scrollTrigger: {
+            trigger: row,
+            start: 'top 95%',
+            toggleActions: 'play none none none'
+        },
+        duration: 0.4,
+        x: -15,
+        opacity: 0,
+        delay: i * 0.05,
+        ease: 'power3.out'
+    });
+});
+
+// ============================================
+// 24. SHOWCASE ADD TO CART
+// ============================================
+const showcaseAddCartBtn = document.getElementById('showcaseAddCartBtn');
+if (showcaseAddCartBtn && typeof cart !== 'undefined') {
+    showcaseAddCartBtn.addEventListener('click', () => {
+        cart.addItem('LUXBRICK™ Premium Edition', 999, '🧱');
+        showcaseAddCartBtn.classList.add('cart-added');
+        setTimeout(() => showcaseAddCartBtn.classList.remove('cart-added'), 500);
+    });
+}
 
 console.log('🧱 LUXBRICK™ - The Brick That Built Legends');
 console.log('✦ Features: 360° Viewer, Live Counter, Theme Toggle (G), 3 Games');
