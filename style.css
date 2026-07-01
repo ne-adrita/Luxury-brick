@@ -3462,7 +3462,7 @@ body.gold-theme .buy-add-cart-btn:hover i {
 
 .showcase-frame {
     width: 100%;
-    max-width: 440px;
+    max-width: 520px;
     aspect-ratio: 1;
     border-radius: 30px;
     border: 1px solid rgba(255, 215, 0, 0.1);
@@ -3471,12 +3471,11 @@ body.gold-theme .buy-add-cart-btn:hover i {
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
 }
 
 .showcase-brick-3d {
-    width: 280px;
-    height: 280px;
+    width: 100%;
+    height: 100%;
     position: relative;
 }
 
@@ -3683,11 +3682,11 @@ body.gold-theme .buy-add-cart-btn:hover i {
         order: -1;
     }
     .showcase-frame {
-        max-width: 340px;
+        max-width: 420px;
     }
     .showcase-brick-3d {
-        width: 220px;
-        height: 220px;
+        width: 100%;
+        height: 100%;
     }
     .showcase-card {
         padding: 2rem;
@@ -3708,11 +3707,11 @@ body.gold-theme .buy-add-cart-btn:hover i {
         gap: 2rem;
     }
     .showcase-frame {
-        max-width: 280px;
+        max-width: 335px;
     }
     .showcase-brick-3d {
-        width: 180px;
-        height: 180px;
+        width: 100%;
+        height: 100%;
     }
     .showcase-card {
         padding: 1.5rem;

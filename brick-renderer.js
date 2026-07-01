@@ -1,26 +1,7 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
-const textureLoader = new THREE.TextureLoader();
-
-let _tex = null;
-function getTextures() {
-    if (_tex) return _tex;
-    _tex = {
-        map: textureLoader.load('textures/red-brick.jpg'),
-        normal: textureLoader.load('textures/castle_brick_nor_gl.jpg'),
-        roughness: textureLoader.load('textures/castle_brick_rough.jpg'),
-        ao: textureLoader.load('textures/castle_brick_ao.jpg'),
-    };
-    Object.values(_tex).forEach(t => {
-        t.wrapS = t.wrapT = THREE.RepeatWrapping;
-        t.repeat.set(1, 1);
-    });
-    _tex.map.colorSpace = THREE.SRGBColorSpace;
-    return _tex;
-}
-
-function displaceVertices(geo, strength = 0.0035) {
+function displaceVertices(geo, strength = 0.004) {
     geo.computeVertexNormals();
     const pos = geo.attributes.position;
     const nor = geo.attributes.normal;
@@ -78,25 +59,10 @@ function buildEnvMap(width = 1024) {
     return tex;
 }
 
-function buildBackground(width = 512) {
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = width;
-    const ctx = canvas.getContext('2d');
-    const g = ctx.createRadialGradient(width * 0.48, width * 0.52, 15, width * 0.48, width * 0.52, width * 0.72);
-    g.addColorStop(0, '#1a1410');
-    g.addColorStop(0.25, '#100c08');
-    g.addColorStop(0.6, '#080504');
-    g.addColorStop(1, '#010101');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, width, width);
-    const gold = ctx.createRadialGradient(width * 0.38, width * 0.42, 5, width * 0.38, width * 0.42, width * 0.22);
-    gold.addColorStop(0, 'rgba(200,170,120,0.025)');
-    gold.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = gold;
-    ctx.fillRect(0, 0, width, width);
-    return new THREE.CanvasTexture(canvas);
-}
+const MAX_X = Math.PI / 4;
+const FRICTION = 0.94;
+const MIN_VEL = 0.0001;
+const MOMENTUM_SCALE = 0.4;
 
 function setupBrickScene(containerEl, isGold = false) {
     const rect = containerEl.getBoundingClientRect();
@@ -116,29 +82,24 @@ function setupBrickScene(containerEl, isGold = false) {
     containerEl.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    scene.background = buildBackground();
 
     const camera = new THREE.PerspectiveCamera(18, aspect, 0.1, 50);
-    camera.position.set(2.6, 1.1, 3.8);
+    camera.position.set(4.8, 2.2, 7.0);
     camera.lookAt(0, 0, 0);
 
     const geo = new RoundedBoxGeometry(2.0, 0.6, 1.0, 8, 0.065);
-    displaceVertices(geo, 0.0035);
+    displaceVertices(geo, 0.004);
 
-    const tex = !isGold ? getTextures() : null;
-    const mat = new THREE.MeshStandardMaterial(
+    const mat = new THREE.MeshPhysicalMaterial(
         isGold
-            ? { color: 0xFFD700, metalness: 0.35, roughness: 0.12, envMapIntensity: 1.5 }
+            ? { color: 0xFFD700, metalness: 0.35, roughness: 0.12, envMapIntensity: 1.5, clearcoat: 0.0 }
             : {
-                  map: tex.map,
-                  normalMap: tex.normal,
-                  normalScale: new THREE.Vector2(1.8, 1.8),
-                  roughnessMap: tex.roughness,
-                  roughness: 0.9,
-                  aoMap: tex.ao,
-                  aoMapIntensity: 1.0,
-                  color: 0xf5e0d0,
-                  envMapIntensity: 0.35,
+                  color: 0xB0412E,
+                  roughness: 0.8,
+                  metalness: 0.0,
+                  clearcoat: 0.05,
+                  clearcoatRoughness: 0.3,
+                  envMapIntensity: 0.6,
               }
     );
 
@@ -157,7 +118,7 @@ function setupBrickScene(containerEl, isGold = false) {
     const hemi = new THREE.HemisphereLight(0xffeedd, 0x4a2c1a, 0.2);
     scene.add(hemi);
 
-    const key = new THREE.DirectionalLight(0xfff0e6, 1.5);
+    const key = new THREE.DirectionalLight(0xfff0e6, 1.8);
     key.position.set(3.5, 5, 3);
     key.castShadow = true;
     key.shadow.mapSize.width = 2048;
@@ -172,11 +133,11 @@ function setupBrickScene(containerEl, isGold = false) {
     key.shadow.radius = 8;
     scene.add(key);
 
-    const fill = new THREE.DirectionalLight(0xffccaa, 0.12);
+    const fill = new THREE.DirectionalLight(0xffccaa, 0.15);
     fill.position.set(-2.5, 0.8, 2);
     scene.add(fill);
 
-    const rim = new THREE.DirectionalLight(0xeef4ff, 0.25);
+    const rim = new THREE.DirectionalLight(0xeef4ff, 0.3);
     rim.position.set(-0.5, 1.8, -4);
     scene.add(rim);
 
@@ -196,93 +157,160 @@ function setupBrickScene(containerEl, isGold = false) {
     shadowPlane.receiveShadow = true;
     scene.add(shadowPlane);
 
-    return { renderer, scene, camera, mesh };
+    return { renderer, scene, camera, mesh, shadowPlane };
 }
 
 function initBrick(name, selector, isGold = false) {
     const el = document.querySelector(selector);
     if (!el) return null;
 
-    const { renderer, scene, camera, mesh } = setupBrickScene(el, isGold);
+    const { renderer, scene, camera, mesh, shadowPlane } = setupBrickScene(el, isGold);
 
     const state = window.threeBricks[name] || { rotationX: 0, rotationY: 0, scale: 1 };
+
+    let angleY = 0;
+    let angleX = 0;
+    let velY = 0;
+    let velX = 0;
+    let isDragging = false;
+    let prevX = 0;
+    let prevY = 0;
+    let prevAngleY = 0;
+    let prevAngleX = 0;
+    let lastAngleY = 0;
+    let lastAngleX = 0;
+
     state.update = () => {
-        mesh.rotation.x = state.rotationX * Math.PI / 180;
-        mesh.rotation.y = state.rotationY * Math.PI / 180;
-        const s = state.scale;
-        mesh.scale.set(s, s, s);
+        mesh.rotation.x = (state.rotationX * Math.PI / 180) + angleX;
+        mesh.rotation.y = (state.rotationY * Math.PI / 180) + angleY;
+        mesh.scale.set(state.scale, state.scale, state.scale);
     };
 
     window.threeBricks[name] = state;
 
-    // Showcase auto-rotate state
-    let autoAngle = 0;
-    let isDragging = false;
-    let prevX = 0;
-    let prevRot = 0;
+    const dom = renderer.domElement;
+    dom.style.pointerEvents = 'auto';
+    dom.style.cursor = 'grab';
+    dom.style.touchAction = 'none';
 
-    if (name === 'showcase') {
-        renderer.domElement.style.pointerEvents = 'auto';
-        renderer.domElement.style.cursor = 'grab';
+    let hoverScale = 1;
+    const defaultShadowOpacity = shadowPlane.material.opacity;
 
-        renderer.domElement.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            prevX = e.clientX;
-            prevRot = autoAngle;
-            renderer.domElement.style.cursor = 'grabbing';
-        });
-        window.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            const dx = e.clientX - prevX;
-            autoAngle = prevRot + dx * 0.008;
-        });
-        window.addEventListener('mouseup', () => {
-            if (isDragging) {
-                isDragging = false;
-                renderer.domElement.style.cursor = 'grab';
-            }
-        });
+    dom.addEventListener('mouseenter', () => {
+        hoverScale = 1.03;
+        shadowPlane.material.opacity = 0.45;
+    });
 
-        renderer.domElement.addEventListener('wheel', (e) => e.preventDefault(), { passive: false });
+    dom.addEventListener('mouseleave', () => {
+        hoverScale = 1;
+        shadowPlane.material.opacity = defaultShadowOpacity;
+    });
 
-        let touchId = null;
-        renderer.domElement.addEventListener('touchstart', (e) => {
-            const t = e.changedTouches[0];
-            touchId = t.identifier;
-            isDragging = true;
-            prevX = t.clientX;
-            prevRot = autoAngle;
-        }, { passive: true });
-        renderer.domElement.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            const t = Array.from(e.changedTouches).find(t => t.identifier === touchId);
-            if (!t) return;
-            const dx = t.clientX - prevX;
-            autoAngle = prevRot + dx * 0.008;
-        }, { passive: true });
-        renderer.domElement.addEventListener('touchend', () => {
+    dom.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        prevX = e.clientX;
+        prevY = e.clientY;
+        prevAngleY = angleY;
+        prevAngleX = angleX;
+        lastAngleY = angleY;
+        lastAngleX = angleX;
+        velY = 0;
+        velX = 0;
+        dom.style.cursor = 'grabbing';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - prevX;
+        const dy = e.clientY - prevY;
+        const nextY = prevAngleY + dx * 0.008;
+        const nextX = prevAngleX - dy * 0.008;
+        velY = (nextY - lastAngleY) * MOMENTUM_SCALE;
+        velX = (nextX - lastAngleX) * MOMENTUM_SCALE;
+        lastAngleY = nextY;
+        lastAngleX = nextX;
+        angleY = nextY;
+        angleX = Math.max(-MAX_X, Math.min(MAX_X, nextX));
+    });
+
+    window.addEventListener('mouseup', () => {
+        if (isDragging) {
             isDragging = false;
-            touchId = null;
-        }, { passive: true });
-    }
+            dom.style.cursor = 'grab';
+        }
+    });
+
+    dom.addEventListener('wheel', (e) => e.preventDefault(), { passive: false });
+
+    let touchId = null;
+    dom.addEventListener('touchstart', (e) => {
+        const t = e.changedTouches[0];
+        touchId = t.identifier;
+        isDragging = true;
+        prevX = t.clientX;
+        prevY = t.clientY;
+        prevAngleY = angleY;
+        prevAngleX = angleX;
+        lastAngleY = angleY;
+        lastAngleX = angleX;
+        velY = 0;
+        velX = 0;
+    }, { passive: true });
+
+    dom.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const t = Array.from(e.changedTouches).find(t => t.identifier === touchId);
+        if (!t) return;
+        const dx = t.clientX - prevX;
+        const dy = t.clientY - prevY;
+        const nextY = prevAngleY + dx * 0.008;
+        const nextX = prevAngleX - dy * 0.008;
+        velY = (nextY - lastAngleY) * MOMENTUM_SCALE;
+        velX = (nextX - lastAngleX) * MOMENTUM_SCALE;
+        lastAngleY = nextY;
+        lastAngleX = nextX;
+        angleY = nextY;
+        angleX = Math.max(-MAX_X, Math.min(MAX_X, nextX));
+    }, { passive: true });
+
+    dom.addEventListener('touchend', () => {
+        isDragging = false;
+        touchId = null;
+    }, { passive: true });
 
     let animId = null;
     function render(now) {
+        if (!isDragging) {
+            if (Math.abs(velY) > MIN_VEL || Math.abs(velX) > MIN_VEL) {
+                angleY += velY;
+                velY *= FRICTION;
+                angleX += velX;
+                velX *= FRICTION;
+                angleX = Math.max(-MAX_X, Math.min(MAX_X, angleX));
+                if (angleX <= -MAX_X || angleX >= MAX_X) velX = 0;
+                if (Math.abs(velY) < MIN_VEL) velY = 0;
+                if (Math.abs(velX) < MIN_VEL) velX = 0;
+            } else {
+                velY = 0;
+                velX = 0;
+                angleY += 0.003;
+            }
+        }
+
         state.update();
+
         if (name === 'hero') {
             const t = now * 0.00015;
             mesh.rotation.z = Math.sin(t) * 0.003;
             mesh.position.y = Math.sin(t * 0.5 + 0.5) * 0.004;
             const breathe = 1 + Math.sin(t * 0.3) * 0.0015;
-            const s = state.scale * breathe;
+            const s = state.scale * breathe * hoverScale;
+            mesh.scale.set(s, s, s);
+        } else {
+            const s = state.scale * hoverScale;
             mesh.scale.set(s, s, s);
         }
-        if (name === 'showcase') {
-            if (!isDragging) {
-                autoAngle += 0.003;
-            }
-            mesh.rotation.y = autoAngle;
-        }
+
         renderer.render(scene, camera);
         animId = requestAnimationFrame(render);
     }
