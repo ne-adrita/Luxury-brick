@@ -41,9 +41,10 @@ function displaceVertices(geo, strength = 0.0035) {
 }
 
 function buildEnvMap(width = 1024) {
+    const height = width / 2;
     const canvas = document.createElement('canvas');
     canvas.width = width;
-    canvas.height = width / 2;
+    canvas.height = height;
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#0a0704';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
