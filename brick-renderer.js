@@ -281,16 +281,23 @@ function setupShowcaseBrick() {
     const geo = new RoundedBoxGeometry(2.0, 0.6, 1.0, 8, 0.065);
     displaceVertices(geo, 0.0035);
 
+    // Load the real red brick photo as the color map
+    const showcaseTex = textureLoader.load('textures/red-brick.jpg');
+    showcaseTex.colorSpace = THREE.SRGBColorSpace;
+    showcaseTex.wrapS = showcaseTex.wrapT = THREE.RepeatWrapping;
+    showcaseTex.repeat.set(1.2, 0.8);
+    showcaseTex.offset.set(0, 0.1);
+
+    // Procedural normal from the old textures if they exist, else just use flat
     const tex = getTextures();
     const mat = new THREE.MeshStandardMaterial({
-        map: tex.map,
+        map: showcaseTex,
         normalMap: tex.normal,
-        normalScale: new THREE.Vector2(1.8, 1.8),
+        normalScale: new THREE.Vector2(1.2, 1.2),
         roughnessMap: tex.roughness,
-        roughness: 0.9,
+        roughness: 0.85,
         aoMap: tex.ao,
-        aoMapIntensity: 1.0,
-        color: 0xf5e0d0,
+        aoMapIntensity: 0.6,
         envMapIntensity: 0.5,
     });
 
